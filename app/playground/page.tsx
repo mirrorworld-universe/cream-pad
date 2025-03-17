@@ -247,7 +247,9 @@ export default function Page() {
       </div>
 
       <div className="bg-slate-600 rounded p-5 flex flex-col h-[400px]">
-        <p className="text-center sonic-title1">Sales Ratio & Actual Price</p>
+        <p className="text-center sonic-title1">
+          Sales Performance vs Price Dynamics
+        </p>
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
             width={800}
@@ -262,8 +264,8 @@ export default function Page() {
             }}
           >
             <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="Auction_Round" scale="band" />
-            <YAxis yAxisId="left" orientation="left" stroke="#22c55e" />
+            <XAxis dataKey="Auction_Round" scale="band" stroke="#f5f5f5" />
+            <YAxis yAxisId="left" orientation="left" stroke="#2ca02c" />
             <YAxis yAxisId="right" orientation="right" stroke="#ff7300" />
             <Tooltip />
             <Legend />
@@ -271,13 +273,58 @@ export default function Page() {
               yAxisId="left"
               dataKey="Sales_Ratio"
               barSize={20}
-              fill="#22c55e"
+              fill="#2ca02c"
             />
             <Line
               yAxisId="right"
               type="monotone"
               dataKey="Actual_Price"
               stroke="#ff7300"
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="bg-slate-600 rounded p-5 flex flex-col h-[400px]">
+        <p className="text-center sonic-title1">
+          Price Dynamics and Boost Effects
+        </p>
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart
+            width={800}
+            height={400}
+            data={result}
+            className="mx-auto"
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20
+            }}
+          >
+            <CartesianGrid stroke="#f5f5f5" />
+            <XAxis dataKey="Auction_Round" scale="band" stroke="#f5f5f5" />
+            <YAxis yAxisId="left" orientation="left" stroke="#22c55e" />
+            <YAxis yAxisId="right" orientation="right" stroke="#ff7300" />
+            <Tooltip />
+            <Legend />
+            <Bar
+              yAxisId="left"
+              dataKey="Boost_Factor"
+              barSize={20}
+              fill="#17becf"
+            />
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="Actual_Price"
+              stroke="#ff7300"
+            />
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="Theoretical_Price"
+              stroke="yellow"
             />
           </ComposedChart>
         </ResponsiveContainer>

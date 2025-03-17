@@ -82,7 +82,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Total Supply</p>
             <Input
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               type="number"
               placeholder=""
               onChange={(e) =>
@@ -94,7 +94,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Auction Percentage</p>
             <Input
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               placeholder=""
               type="number"
               value={state.auction_percentage}
@@ -106,7 +106,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Starting Price</p>
             <Input
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               placeholder=""
               type="number"
               onChange={(e) => setState({ P0: +e.target.value })}
@@ -116,7 +116,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Ending Price</p>
             <Input
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               type="number"
               placeholder=""
               onChange={(e) => setState({ P_tmax: +e.target.value })}
@@ -126,7 +126,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Number of Auction Rounds </p>
             <Input
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               type="number"
               placeholder=""
               onChange={(e) => setState({ T_max: +e.target.value })}
@@ -137,7 +137,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Auction Price Decay Model </p>
             <Select
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               onChange={(e) => setState({ decay_model: e.target.value })}
               value={state.decay_model}
             >
@@ -148,7 +148,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Boost Score </p>
             <Input
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               type="number"
               onChange={(e) => setState({ alpha: +e.target.value })}
               value={state.alpha}
@@ -157,7 +157,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Penalty Score </p>
             <Input
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               type="number"
               placeholder=""
               onChange={(e) => setState({ time_shift_max: +e.target.value })}
@@ -174,7 +174,7 @@ export default function Page() {
           <FormControl className="flex flex-col gap-2">
             <p className="sonic-body3">Auction Scenarios </p>
             <Select
-              className="rounded-none"
+              className="rounded-sm border-white/30"
               value={state.sale_type}
               onChange={(e) => {
                 const sale_type = e.target.value;
@@ -195,7 +195,7 @@ export default function Page() {
             <FormControl className="flex flex-col gap-2">
               <p className="sonic-body3">lower Bound </p>
               <Input
-                className="rounded-none"
+                className="rounded-sm border-white/30"
                 type="number"
                 isDisabled={state.sale_type !== "user_defined"}
                 onChange={(e) => setState({ sim_range0: +e.target.value })}
@@ -206,7 +206,7 @@ export default function Page() {
             <FormControl className="flex flex-col gap-2">
               <p className="sonic-body3">Upper Bound </p>
               <Input
-                className="rounded-none"
+                className="rounded-sm border-white/30"
                 type="number"
                 isDisabled={state.sale_type !== "user_defined"}
                 onChange={(e) => setState({ sim_range1: +e.target.value })}
@@ -343,7 +343,7 @@ export default function Page() {
         {result.map((item, index) => (
           <div
             key={index}
-            className="grid grid-cols-6 sonic-body3 py-2 border-b"
+            className="grid grid-cols-6 sonic-body3 py-2 border-b border-white/20"
           >
             <div>{item.Auction_Round} </div>
             <div>{item.Theoretical_Price} </div>

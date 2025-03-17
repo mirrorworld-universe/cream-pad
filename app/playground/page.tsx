@@ -354,7 +354,7 @@ export default function Page() {
           >
             <div>{item.Auction_Round} </div>
             <div>{item.Theoretical_Price} </div>
-            <div>{item.Sales_Ratio} </div>
+            <div>{(item.Sales_Ratio * 100).toFixed(0) + "%"} </div>
             <div>{item.Sales_Amount} </div>
             <div>{item.Boost_Factor} </div>
             <div>{item.Actual_Price}</div>

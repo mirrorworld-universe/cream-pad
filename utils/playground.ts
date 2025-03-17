@@ -137,20 +137,3 @@ export function simulate({
 
   return df;
 }
-
-// // 4. 执行模拟并输出结果
-// const simulationResults = simulate(
-//   P0,
-//   P_tmax,
-//   T_max,
-//   alpha,
-//   total_supply,
-//   auction_percentage,
-//   sim_range0,
-//   sim_range1,
-//   time_shift_max,
-//   decay_model,
-//   oversold
-// );
-
-// console.log(simulationResults);

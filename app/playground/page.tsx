@@ -254,7 +254,7 @@ export default function Page() {
       </div>
 
       <div className="bg-slate-600 rounded p-5 flex flex-col h-[400px]">
-        <p className="text-center sonic-title1">
+        <p className="text-center sonic-title1 mb-1">
           Sales Performance vs Price Dynamics
         </p>
         <ResponsiveContainer width="100%" height="100%">
@@ -287,7 +287,7 @@ export default function Page() {
       </div>
 
       <div className="bg-slate-600 rounded p-5 flex flex-col h-[400px]">
-        <p className="text-center sonic-title1">
+        <p className="text-center sonic-title1 mb-1">
           Price Dynamics and Boost Effects
         </p>
         <ResponsiveContainer width="100%" height="100%">

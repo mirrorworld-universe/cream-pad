@@ -265,18 +265,18 @@ export default function Page() {
           >
             <CartesianGrid stroke="#f5f5f5" />
             <XAxis dataKey="Auction_Round" scale="band" stroke="#f5f5f5" />
-            <YAxis yAxisId="left" orientation="left" stroke="#2ca02c" />
-            <YAxis yAxisId="right" orientation="right" stroke="#ff7300" />
+            <YAxis yAxisId="left" orientation="left" stroke="#ff7300" />
+            <YAxis yAxisId="right" orientation="right" stroke="#2ca02c" />
             <Tooltip />
             <Legend />
             <Bar
-              yAxisId="left"
+              yAxisId="right"
               dataKey="Sales_Ratio"
               barSize={20}
               fill="#2ca02c"
             />
             <Line
-              yAxisId="right"
+              yAxisId="left"
               type="monotone"
               dataKey="Actual_Price"
               stroke="#ff7300"
@@ -304,24 +304,25 @@ export default function Page() {
           >
             <CartesianGrid stroke="#f5f5f5" />
             <XAxis dataKey="Auction_Round" scale="band" stroke="#f5f5f5" />
+
             <YAxis yAxisId="left" orientation="left" stroke="#22c55e" />
             <YAxis yAxisId="right" orientation="right" stroke="#ff7300" />
             <Tooltip />
             <Legend />
             <Bar
-              yAxisId="left"
+              yAxisId="right"
               dataKey="Boost_Factor"
               barSize={20}
               fill="#17becf"
             />
             <Line
-              yAxisId="right"
+              yAxisId="left"
               type="monotone"
               dataKey="Actual_Price"
               stroke="#ff7300"
             />
             <Line
-              yAxisId="right"
+              yAxisId="left"
               type="monotone"
               dataKey="Theoretical_Price"
               stroke="yellow"

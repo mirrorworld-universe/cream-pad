@@ -176,6 +176,7 @@ export default function Page() {
               <option value="undersold">undersold</option>
               <option value="moderate">moderate</option>
               <option value="oversold">oversold</option>
+              <option value="user_defined">user defined</option>
             </Select>
           </FormControl>
 
@@ -185,8 +186,9 @@ export default function Page() {
               <Input
                 className="rounded-none"
                 type="number"
-                placeholder=""
-                defaultValue={state.sim_range0}
+                isDisabled={state.sale_type !== "user_defined"}
+                onChange={(e) => setState({ sim_range0: +e.target.value })}
+                value={state.sim_range0}
               />
             </FormControl>
 
@@ -195,8 +197,9 @@ export default function Page() {
               <Input
                 className="rounded-none"
                 type="number"
-                placeholder=""
-                defaultValue={state.sim_range1}
+                isDisabled={state.sale_type !== "user_defined"}
+                onChange={(e) => setState({ sim_range1: +e.target.value })}
+                value={state.sim_range1}
               />
             </FormControl>
           </div>

@@ -3,6 +3,17 @@ import { simulate } from "@/utils/playground";
 import { Button, FormControl, Input, Select } from "@chakra-ui/react";
 import { useState } from "react";
 import { useMount, useSetState } from "react-use";
+import {
+  Line,
+  XAxis,
+  YAxis,
+  ResponsiveContainer,
+  ComposedChart,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  Bar
+} from "recharts";
 
 const mapData = {
   undersold: {
@@ -235,6 +246,42 @@ export default function Page() {
         </Button>
       </div>
 
+      <div className="bg-slate-600 rounded p-5 flex flex-col h-[400px]">
+        <p className="text-center sonic-title1">Sales Ratio & Actual Price</p>
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart
+            width={800}
+            height={400}
+            data={result}
+            className="mx-auto"
+            margin={{
+              top: 20,
+              right: 20,
+              bottom: 20,
+              left: 20
+            }}
+          >
+            <CartesianGrid stroke="#f5f5f5" />
+            <XAxis dataKey="Auction_Round" scale="band" />
+            <YAxis yAxisId="left" orientation="left" stroke="#22c55e" />
+            <YAxis yAxisId="right" orientation="right" stroke="#ff7300" />
+            <Tooltip />
+            <Legend />
+            <Bar
+              yAxisId="left"
+              dataKey="Sales_Ratio"
+              barSize={20}
+              fill="#22c55e"
+            />
+            <Line
+              yAxisId="right"
+              type="monotone"
+              dataKey="Actual_Price"
+              stroke="#ff7300"
+            />
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
       <div className="bg-slate-600 rounded p-5 flex flex-col">
         <div className="grid grid-cols-6 sonic-title3 pb-1">
           <div>Auction Round </div>

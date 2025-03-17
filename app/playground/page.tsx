@@ -61,18 +61,25 @@ export default function Page() {
   return (
     <div className="py-5 bg-[#1f2935] text-primary flex flex-col gap-5">
       <a
-        href=""
+        href="https://github.com/jackPanyj/oos/blob/main/uPic/Cream_Pad___Whitepaper.pdf"
+        target="_blank"
         className="flex justify-center py-2 text-center bg-green-500 sonic-title1 rounded"
       >
         Read The Paper Here
       </a>
       <div className="text-center bg-slate-600 rounded p-5 flex flex-col gap-2">
-        <div className="sonic-title1">CreamPad Dutch Dual-Track Auctions</div>
+        <div className="sonic-title1">
+          Cream Pad: Transforming Token Launches with Dutch Dual-Track Auctions
+        </div>
         <p className="sonic-body3 text-left">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Illum vel
-          totam nam necessitatibus rerum distinctio autem enim sit, quas, hic
-          obcaecati blanditiis maxime exercitationem illo impedit officia
-          dolorum, laudantium sequi.
+          Cream Pad is a cutting-edge asset launchpad on Sonic SVM, redefining
+          token distribution with its Dutch Dual-Track Auction. This innovative
+          mechanism merges a descending price curve with real-time market
+          feedback, delivering fair, efficient, and transparent price discovery.
+          Designed to prevent manipulation and adapt to market dynamics, Cream
+          Pad's multi-round auction structure offers flexibility for token
+          purchases, empowering both projects and investors. It's the future of
+          market-driven token launches.
         </p>
       </div>
 
@@ -229,7 +236,7 @@ export default function Page() {
             Minimal Final FDV: {Math.floor(state.total_supply * state.P_tmax)}
           </p>
           <p>
-            MAX $Sonics Secured:{" "}
+            Max $Sonic Secured :{" "}
             {Math.floor(
               result.at(-1)?.Actual_Price *
                 state.total_supply *

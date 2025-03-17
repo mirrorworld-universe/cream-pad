@@ -130,7 +130,7 @@ export function simulate({
     Auction_Round: round + 1,
     Theoretical_Price: p_theoretical[i].toFixed(2),
     Sales_Ratio: sales_ratio_period[i].toFixed(2),
-    Sales_Amount: sales_per_period[i].toFixed(2),
+    Sales_Amount: sales_per_period[i].toFixed(0),
     Boost_Factor: boost[i].toFixed(2),
     Actual_Price: p_simulate_price[i].toFixed(2)
   }));

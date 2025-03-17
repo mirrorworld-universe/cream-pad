@@ -270,8 +270,8 @@ export default function Page() {
               left: 20
             }}
           >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="Auction_Round" scale="band" stroke="#f5f5f5" />
+            <CartesianGrid stroke="white" opacity={0.2} />
+            <XAxis dataKey="Auction_Round" stroke="#f5f5f5" />
             <YAxis yAxisId="left" orientation="left" stroke="#ff7300" />
             <YAxis yAxisId="right" orientation="right" stroke="#2ca02c" />
             <Tooltip />
@@ -309,8 +309,8 @@ export default function Page() {
               left: 20
             }}
           >
-            <CartesianGrid stroke="#f5f5f5" />
-            <XAxis dataKey="Auction_Round" scale="band" stroke="#f5f5f5" />
+            <CartesianGrid stroke="white" opacity={0.2} />
+            <XAxis dataKey="Auction_Round" stroke="#f5f5f5" />
 
             <YAxis yAxisId="left" orientation="left" stroke="#22c55e" />
             <YAxis yAxisId="right" orientation="right" stroke="#ff7300" />
@@ -332,7 +332,7 @@ export default function Page() {
               yAxisId="left"
               type="monotone"
               dataKey="Theoretical_Price"
-              stroke="yellow"
+              stroke="#e53e3e"
             />
           </ComposedChart>
         </ResponsiveContainer>

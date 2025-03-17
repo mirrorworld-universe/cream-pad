@@ -230,7 +230,7 @@ export default function Page() {
           <p>Initial FDV: {Math.floor(state.total_supply * state.P0)}</p>
           <p>
             Optimal Final FDV:{" "}
-            {result.at(-1)?.Actual_Price * state.total_supply}{" "}
+            {Math.round(result.at(-1)?.Actual_Price * state.total_supply)}{" "}
           </p>
           <p>
             Minimal Final FDV: {Math.floor(state.total_supply * state.P_tmax)}

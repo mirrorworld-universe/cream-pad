@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title:
     "Cream Pad: Transforming Token Launches with Dutch Dual-Track Auctions",
   icons: {
-    icon: "https://storage.sonic.game/strapi/production/favicon_e0c81c06c9.ico"
+    icon: "/images/logo.svg"
   },
   description:
     "Cream Pad is a cutting-edge asset launchpad on Sonic SVM, redefining token distribution with its Dutch Dual-Track Auction."
@@ -24,13 +24,13 @@ const manrope = Manrope({
   variable: "--font-manrope"
 });
 
-const orbitron = Orbitron({
-  weight: ["400", "500", "600", "700"],
-  style: ["normal"],
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-orbitron"
-});
+// const orbitron = Orbitron({
+//   weight: ["400", "500", "600", "700"],
+//   style: ["normal"],
+//   subsets: ["latin"],
+//   display: "swap",
+//   variable: "--font-orbitron"
+// });
 
 export default function RootLayout({
   children
@@ -39,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body id="app" className={`${manrope.variable} ${orbitron.variable}`}>
+      <body id="app" className={`${manrope.variable}`}>
         <Providers>
           <div className="bg-[#1f2935] h-screen flex flex-col overflow-auto">
             {/* <Header /> */}

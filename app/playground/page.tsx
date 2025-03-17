@@ -263,12 +263,6 @@ export default function Page() {
             height={400}
             data={result}
             className="mx-auto"
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20
-            }}
           >
             <CartesianGrid stroke="white" opacity={0.2} />
             <XAxis dataKey="Auction_Round" stroke="#f5f5f5" />
@@ -302,12 +296,6 @@ export default function Page() {
             height={400}
             data={result}
             className="mx-auto"
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 20
-            }}
           >
             <CartesianGrid stroke="white" opacity={0.2} />
             <XAxis dataKey="Auction_Round" stroke="#f5f5f5" />

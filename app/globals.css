@@ -27,7 +27,7 @@
 }
 
 html {
-  @apply bg-black font-manrope;
+  @apply bg-black font-baloo2;
 }
 
 body {
@@ -39,7 +39,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 0;
   height: 100%;
   background-color: transparent;
   opacity: 0;

@@ -1,10 +1,7 @@
 import type { Metadata } from "next";
-import { Manrope, Orbitron } from "next/font/google";
+import { Manrope, Baloo_2 } from "next/font/google";
 import "./globals.css";
-import Providers from "./providers";
-import Header from "./components/common/Header";
-import SonicFooter from "./components/common/SonicFooter";
-import WalletConnectModal from "./components/common/WalletConnectModal";
+import WrapLayout from "./wrap-layout";
 
 export const metadata: Metadata = {
   title:
@@ -24,13 +21,13 @@ const manrope = Manrope({
   variable: "--font-manrope"
 });
 
-// const orbitron = Orbitron({
-//   weight: ["400", "500", "600", "700"],
-//   style: ["normal"],
-//   subsets: ["latin"],
-//   display: "swap",
-//   variable: "--font-orbitron"
-// });
+const baloo2 = Baloo_2({
+  weight: ["400", "500", "600", "700"],
+  style: ["normal"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-baloo2"
+});
 
 export default function RootLayout({
   children
@@ -39,17 +36,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body id="app" className={`${manrope.variable}`}>
-        <Providers>
-          <div className="bg-[#1f2935] h-screen flex flex-col overflow-auto">
-            {/* <Header /> */}
-            <div className="grow max-w-view px-4 mx-auto w-full flex flex-col">
-              {children}
-            </div>
-            {/* <WalletConnectModal /> */}
-            {/* <SonicFooter /> */}
-          </div>
-        </Providers>
+      <body id="app" className={`${manrope.variable} ${baloo2.variable}`}>
+        <WrapLayout>{children}</WrapLayout>
       </body>
     </html>
   );

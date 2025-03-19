@@ -18,11 +18,11 @@ export default function Pagination({
     <>
       <ReactPaginate
         className={clsx("react-paginate font-orbitron", className)}
-        breakLabel={null}
+        breakLabel={"..."}
         nextLabel={<ArrowIcon />}
         onPageChange={onPageChange}
-        pageRangeDisplayed={9}
-        marginPagesDisplayed={0}
+        pageRangeDisplayed={4}
+        marginPagesDisplayed={2}
         pageCount={total}
         previousLabel={<ArrowIcon className="rotate-180" />}
         renderOnZeroPageCount={null}

@@ -58,14 +58,8 @@ body {
   align-items: center;
   height: 24px;
   gap: 4px;
-  li > a {
-    display: flex;
-    width: 32px;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    color: #666;
-    font-weight: 400;
+  li {
+    @apply bg-white rounded-lg size-8 flex items-center justify-center text-[#121212] transition-colors duration-300;
   }
 
   li.previous a,
@@ -76,10 +70,10 @@ body {
     width: 24px;
   }
   li.selected a {
-    color: white;
+    color: #e8e8e7;
   }
   li a:hover {
-    color: white;
+    color: #e8e8e7;
   }
 
   li.disabled a {

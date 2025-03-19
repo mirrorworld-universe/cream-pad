@@ -1,10 +1,16 @@
 import { cn } from "@/utils";
 import { Box } from "@chakra-ui/react";
 import { AuctionData } from "@/app/data/auctions";
+import { useRouter } from "next/navigation";
 
 export default function Card({ data }: { data: AuctionData }) {
+  const router = useRouter();
+
   return (
-    <div className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors">
+    <div
+      onClick={() => router.push(`/auction/${data.id}`)}
+      className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors"
+    >
       <img className="h-[320px] w-[535px]" src={data.image} alt="" />
 
       <div className="flex flex-col gap-6 grow">

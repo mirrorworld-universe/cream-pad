@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Baloo_2, Manrope, Inter } from "next/font/google";
 import "./globals.css";
-import WrapLayout from "./wrap-layout";
 
 export const metadata: Metadata = {
   title:
@@ -48,7 +47,7 @@ export default function RootLayout({
         id="app"
         className={`${manrope.variable} ${baloo2.variable} ${inter.variable}`}
       >
-        <WrapLayout>{children}</WrapLayout>
+        {children}
       </body>
     </html>
   );

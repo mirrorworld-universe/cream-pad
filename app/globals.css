@@ -31,7 +31,7 @@ html {
 }
 
 body {
-  @apply text-primary;
+  @apply text-primary m-0 p-0;
 }
 
 .no-scrollbar::-webkit-scrollbar {

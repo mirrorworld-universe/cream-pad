@@ -5,7 +5,7 @@ import Footer from "../components/common/Footer";
 import Providers from "../providers";
 import WalletConnectModal from "../components/common/WalletConnectModal";
 
-export default function WrapLayout({ children }) {
+export default function Layout({ children }) {
   return (
     <Providers>
       <div

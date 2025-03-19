@@ -22,7 +22,8 @@ const config: Config = {
       fontFamily: {
         manrope: ["var(--font-manrope)"],
         orbitron: ["var(--font-orbitron)"],
-        baloo2: ["var(--font-baloo2)"]
+        baloo2: ["var(--font-baloo2)"],
+        inter: ["var(--font-inter)"]
       },
       colors: {
         bg1: "hsl(var(--bg1))",

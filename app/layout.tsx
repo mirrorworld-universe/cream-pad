@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Baloo_2 } from "next/font/google";
+import { Baloo_2, Manrope, Inter } from "next/font/google";
 import "./globals.css";
 import WrapLayout from "./wrap-layout";
 
@@ -29,6 +29,14 @@ const baloo2 = Baloo_2({
   variable: "--font-baloo2"
 });
 
+const inter = Inter({
+  weight: ["400", "500", "600", "700"],
+  style: ["normal"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter"
+});
+
 export default function RootLayout({
   children
 }: Readonly<{
@@ -36,7 +44,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body id="app" className={`${manrope.variable} ${baloo2.variable}`}>
+      <body
+        id="app"
+        className={`${manrope.variable} ${baloo2.variable} ${inter.variable}`}
+      >
         <WrapLayout>{children}</WrapLayout>
       </body>
     </html>

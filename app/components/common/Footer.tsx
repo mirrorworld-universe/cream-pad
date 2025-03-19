@@ -28,17 +28,17 @@ export default function Footer() {
             <p className="font-baloo2 text-2xl/[1.2] font-bold mb-1">
               Products
             </p>
-            <span>Auction</span>
-            <span>AI Agent</span>
-            <span>BounceX Exchange</span>
+            <a href="#">Auction</a>
+            <a href="#">AI Agent</a>
+            <a href="#">BounceX Exchange</a>
           </div>
           <div className="flex flex-col gap-4 text-sm">
             <p className="font-baloo2 text-2xl/[1.2] font-bold mb-1">
               Resources
             </p>
-            <span>Help Center</span>
-            <span>Become a Partner</span>
-            <span>Contract Us</span>
+            <a href="#">Help Center</a>
+            <a href="#">Become a Partner</a>
+            <a href="#">Contract Us</a>
           </div>
         </div>
       </div>
@@ -50,8 +50,8 @@ export default function Footer() {
           ©{new Date().getFullYear()} Cream PAD Ltd. All rights reserved.
         </span>
         <div className="flex gap-10 text-sm">
-          <span>Terms of Service</span>
-          <span>Privacy Policy</span>
+          <a href="#">Terms of Service</a>
+          <a href="#">Privacy Policy</a>
         </div>
       </div>
     </div>

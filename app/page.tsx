@@ -20,7 +20,7 @@ export default function Home() {
         <img className="w-[672px]" src="/images/welcome.png" alt="" />
         <PrimaryButton
           onClick={() => router.push("/auction")}
-          className="h-[66px] w-[414px] text-[32px]/normal border-none"
+          className="h-[66px] w-[414px] text-[32px]/normal border-none gap-4 font-baloo2"
         >
           <img src="/images/action.svg" alt="" />
           Auction Now

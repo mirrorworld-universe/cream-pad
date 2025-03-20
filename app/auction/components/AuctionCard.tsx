@@ -9,7 +9,7 @@ export default function Card({ data }: { data: AuctionData }) {
   return (
     <div
       onClick={() => router.push(`/auction/${data.id}`)}
-      className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors"
+      className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors group/card"
     >
       <img className="h-[320px] w-[535px]" src={data.image} alt="" />
 
@@ -43,7 +43,7 @@ export default function Card({ data }: { data: AuctionData }) {
                 {data.saleProgress}%
               </span>
             </div>
-            <div className="w-full h-2.5 rounded-full bg-[#ECECEC]">
+            <div className="w-full h-2.5 rounded-full bg-[#ECECEC] group-hover/card:bg-white">
               <Box
                 bg={"linear-gradient(90deg, #C49AFF 0%, #FFB055 100%)"}
                 width={"40%"}

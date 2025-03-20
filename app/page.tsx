@@ -8,7 +8,7 @@ export default function Home() {
   return (
     <Box
       bg={"linear-gradient(180deg, #6457FD 0%, #E2A9FE 50%, #FFDFE1 100%);"}
-      className="w-full h-screen relative flex items-center justify-between"
+      className="w-full h-screen relative flex items-center justify-between min-w-[1280px]"
     >
       <div className="flex items-center justify-between min-w-[1280px] max-w-[1728px] w-full mx-auto h-full relative">
         <img

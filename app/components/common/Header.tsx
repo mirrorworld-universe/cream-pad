@@ -62,7 +62,7 @@ export default function Header() {
             isOpen={isOpen}
             onClose={onClose}
             onOpen={onOpen}
-            trigger="hover"
+            trigger="click"
             placement="bottom-end"
           >
             <PopoverTrigger>

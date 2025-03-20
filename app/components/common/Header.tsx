@@ -6,6 +6,8 @@ import { MODAL_HASH_MAP, openModalDirectly } from "@/app/hooks/useModalHash";
 import { formatStr } from "@/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ArrowDownIcon from "../icons/ArrowDownIcon";
+import ArrowIcon from "../icons/ArrowIcon";
 export default function Header() {
   const { connected, publicKey } = useWallet();
   const router = useRouter();
@@ -15,7 +17,7 @@ export default function Header() {
       <div className="flex items-center gap-2">
         <img
           onClick={() => router.push("/")}
-          className="h-10 cursor-pointer"
+          className="h-[46px] cursor-pointer"
           src="/images/logo-cream-pad.svg"
           alt="logo"
         />
@@ -37,11 +39,11 @@ export default function Header() {
           }
           className="font-bold px-6 py-2 cursor-pointer"
         >
-          Doc
+          Documentation
         </div>
       </div>
 
-      <div className="w-[295px] flex items-center justify-end">
+      <div className="flex items-center justify-end">
         {!connected ? (
           <PrimaryButton
             className="text-xl"
@@ -53,13 +55,14 @@ export default function Header() {
           <div className="flex items-center gap-2">
             <div className="p-3 bg-[#F6F6F3] rounded-full">
               <img
-                className="size-8"
+                className="size-6"
                 src="/images/sonic-token.png"
                 alt="sonic"
               />
             </div>
-            <PrimaryButton className="text-xl bg-[#F6F6F3] text-[#121212]">
+            <PrimaryButton className="text-base bg-[#F6F6F3] text-[#121212] gap-2">
               {formatStr(publicKey?.toString())}
+              <ArrowIcon className="rotate-90 size-5" />
             </PrimaryButton>
           </div>
         )}

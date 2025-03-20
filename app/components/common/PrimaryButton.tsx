@@ -4,7 +4,7 @@ export default function PrimaryButton({ className, ...props }: ButtonProps) {
   return (
     <Button
       className={cn(
-        "h-14 px-6 font-bold text-white bg-black rounded-full cursor-pointer",
+        "h-12 px-6 font-bold text-white bg-black rounded-full cursor-pointer",
         className
       )}
       {...props}

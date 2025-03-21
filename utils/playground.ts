@@ -3,7 +3,7 @@ const total_supply = 100000; // Auction 销售 token 总量
 const auction_percentage = 0.5; // Auction 的百分比
 const P0 = 30; // 理论价格上限
 const P_tmax = 10; // 理论价格下限
-const T_max = 9; // Auction round 总数
+const T_max = 6; // Auction round 总数
 const decay_model = "linear"; // Auction 曲线选择 'linear' 或 'exponential'
 const alpha = 2; // 超售时可以在定价曲线上上调多少步，必须为正数
 const time_shift_max = 3; // 最大退回多少步的价格，可以设为 null，必须为正数
@@ -132,8 +132,23 @@ export function simulate({
     Sales_Ratio: sales_ratio_period[i].toFixed(2),
     Sales_Amount: sales_per_period[i].toFixed(0),
     Boost_Factor: boost[i].toFixed(2),
-    Actual_Price: p_simulate_price[i].toFixed(2)
+    Actual_Price: p_simulate_price[i].toFixed(2),
+    Standard_Ratio: 1,
+    Sales_Ratio_Percentage: Math.round(sales_ratio_period[i] * 100) + "%"
   }));
 
   return df;
 }
+
+export const dataMock = simulate({
+  P0,
+  P_tmax,
+  T_max,
+  alpha,
+  total_supply,
+  auction_percentage,
+  sim_range0,
+  sim_range1,
+  decay_model,
+  oversold
+});

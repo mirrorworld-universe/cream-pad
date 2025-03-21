@@ -2,6 +2,7 @@
 import PrimaryButton from "@/app/components/common/PrimaryButton";
 import ArrowIcon from "@/app/components/icons/ArrowIcon";
 import CloseIcon from "@/app/components/icons/CloseIcon";
+import { dataMock } from "@/utils/playground";
 import {
   Box,
   Input,
@@ -10,6 +11,14 @@ import {
   PopoverTrigger,
   useDisclosure
 } from "@chakra-ui/react";
+import {
+  Bar,
+  ComposedChart,
+  Label,
+  LabelList,
+  ResponsiveContainer,
+  XAxis
+} from "recharts";
 
 const options = [
   {
@@ -34,7 +43,120 @@ export default function Chart() {
         chart
       </div>
       <div className="p-8 rounded-[40px] bg-white flex gap-8">
-        <div className="w-[658px] h-[428px] bg-slate-300"></div>
+        <div className="w-[658px] h-[428px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <ComposedChart
+              width={500}
+              height={400}
+              data={dataMock}
+              margin={{
+                top: 20,
+                right: 13,
+                bottom: 20,
+                left: 13
+              }}
+            >
+              <defs>
+                <pattern
+                  id="diagonalHatch"
+                  patternUnits="userSpaceOnUse"
+                  width="8" // 斜线间距
+                  height="8"
+                  patternTransform="rotate(45)" // 斜线角度
+                >
+                  {/* 背景矩形，填充绿色 */}
+                  <rect
+                    x="0"
+                    y="0"
+                    width="8"
+                    height="8"
+                    fill="#121212"
+                    fillOpacity={0.1} // 绿色背景
+                  />
+                  {/* 白色斜线 */}
+                  <line
+                    x1="0"
+                    y1="0"
+                    x2="0"
+                    y2="8"
+                    strokeOpacity={0.3}
+                    stroke="#fff" // 斜线颜色
+                    strokeWidth="2" // 斜线粗细
+                  />
+                </pattern>
+              </defs>
+              <XAxis
+                dataKey="Auction_Round"
+                axisLine={false} // 隐藏轴线
+                tickLine={false}
+              >
+                <Label
+                  value="Auction Rounds"
+                  offset={-10}
+                  position="insideBottom"
+                  className="font-inter"
+                  style={{ fill: "#000", fontSize: 12 }}
+                />
+              </XAxis>
+              <Bar
+                dataKey="Sales_Ratio"
+                barSize={65}
+                radius={20}
+                yAxisId={0}
+                shape={(props) => {
+                  const { x, y, width, height } = props;
+
+                  return (
+                    <g>
+                      {/* 背景柱 - 高度固定为1 */}
+                      {props.value < 1 && (
+                        <rect
+                          x={x}
+                          y={79.6667}
+                          width={width}
+                          height={298}
+                          fill="url(#diagonalHatch)"
+                          rx={20}
+                          ry={20}
+                        />
+                      )}
+                      {/* 前景柱 */}
+                      <rect
+                        x={x}
+                        y={y}
+                        width={width}
+                        height={height}
+                        fill={Number(props.value) > 1 ? "#DEF26B" : "#D6BEF2"}
+                        rx={20}
+                        ry={20}
+                      />
+
+                      {/* 背景柱 - 高度固定为1 */}
+                      {props.value >= 1 && (
+                        <rect
+                          x={x}
+                          y={79.6667}
+                          width={width}
+                          height={298}
+                          fill="url(#diagonalHatch)"
+                          rx={20}
+                          ry={20}
+                        />
+                      )}
+                    </g>
+                  );
+                }}
+              >
+                <LabelList
+                  dataKey="Sales_Ratio_Percentage"
+                  position="insideTop"
+                  style={{ fill: "#121212", fontSize: 12 }}
+                  offset={10}
+                />
+              </Bar>
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
         <div className="flex flex-col gap-8 grow">
           <div className="flex flex-col gap-4">
             <p className="font-medium">

@@ -16,7 +16,9 @@ import {
   ComposedChart,
   Label,
   LabelList,
+  Line,
   ResponsiveContainer,
+  Tooltip,
   XAxis
 } from "recharts";
 
@@ -98,6 +100,7 @@ export default function Chart() {
                   style={{ fill: "#000", fontSize: 12 }}
                 />
               </XAxis>
+              <Tooltip />
               <Bar
                 dataKey="Sales_Ratio"
                 barSize={65}
@@ -154,6 +157,20 @@ export default function Chart() {
                   offset={10}
                 />
               </Bar>
+              <Line
+                dataKey="Actual_Price"
+                yAxisId={1}
+                fill="#FF9011"
+                stroke="#FF9011"
+                strokeWidth={4}
+                type={"monotone"}
+                dot={{
+                  stroke: "#FF9011",
+                  strokeWidth: 2,
+                  r: 4,
+                  fill: "#FF9011"
+                }}
+              />
             </ComposedChart>
           </ResponsiveContainer>
         </div>

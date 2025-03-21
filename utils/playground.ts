@@ -133,7 +133,6 @@ export function simulate({
     Sales_Amount: sales_per_period[i].toFixed(0),
     Boost_Factor: boost[i].toFixed(2),
     Actual_Price: p_simulate_price[i].toFixed(2),
-    Standard_Ratio: 1,
     Sales_Ratio_Percentage: Math.round(sales_ratio_period[i] * 100) + "%"
   }));
 

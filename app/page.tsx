@@ -3,6 +3,22 @@ import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import PrimaryButton from "./components/common/PrimaryButton";
 import { cn } from "@/utils";
+import Link from "next/link";
+import { whitepaper } from "./data/auctions";
+
+const tabs = [
+  {
+    label: "Whitepaper",
+    href: whitepaper,
+    target: "_blank"
+  },
+  {
+    label: "Playground",
+    href: "/playground",
+    target: "_blank"
+  }
+];
+
 export default function Home() {
   const router = useRouter();
 
@@ -18,8 +34,16 @@ export default function Home() {
           src="/images/logo-cream-pad.svg"
           alt=""
         />
-        <div className="absolute left-0 right-0 w-fit mx-auto top-7">
-          <a className="text-white bg-[#121212]">Whitepaper</a>
+        <div className="absolute left-0 right-0 w-fit mx-auto top-7 font-baloo2 font-bold space-x-10">
+          {tabs.map((tab) => (
+            <Link
+              href={tab.href}
+              target={tab.target}
+              className="text-white bg-[#121212] rounded-full px-6 py-2 no-underline hover:bg-[#292929] transition-all duration-300 hover:shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
+            >
+              {tab.label}
+            </Link>
+          ))}
         </div>
         <div className="ml-20 flex flex-col gap-24">
           <img className="w-[672px]" src="/images/welcome.png" alt="" />

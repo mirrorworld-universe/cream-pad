@@ -30,11 +30,11 @@ export default function Home() {
       <div className="flex items-center justify-between min-w-[1280px] max-w-[1728px] w-full mx-auto h-full relative">
         <img
           onClick={() => router.push("/")}
-          className="h-10 absolute top-7 left-20"
+          className="h-10 absolute top-5 left-20"
           src="/images/logo-cream-pad.svg"
           alt=""
         />
-        <div className="absolute left-0 right-0 w-fit mx-auto top-7 font-baloo2 font-bold space-x-10">
+        <div className="absolute left-0 right-0 w-fit h-auto mx-auto top-6 font-baloo2 font-bold flex items-center gap-10">
           {tabs.map((tab) => (
             <Link
               href={tab.href}

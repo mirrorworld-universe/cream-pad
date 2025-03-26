@@ -39,6 +39,7 @@ export default function Home() {
             <Link
               href={tab.href}
               target={tab.target}
+              key={tab.label}
               className="text-white bg-[#121212] rounded-full px-6 py-2 no-underline hover:bg-[#292929] transition-all duration-300 hover:shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]"
             >
               {tab.label}

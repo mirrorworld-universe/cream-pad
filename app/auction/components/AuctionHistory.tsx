@@ -1,13 +1,33 @@
+"use client";
 import Pagination from "@/app/components/common/Pagination";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
 import { cn } from "@/utils";
+import { useState } from "react";
 
 export default function AuctionHistory() {
+  const [active, setActive] = useState<"all" | "my">("all");
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-2">
-        <PrimaryButton className={cn("h-9 px-8")}>All</PrimaryButton>
-        <PrimaryButton className={cn("h-9 px-8 bg-white text-[#212121]")}>
+        <PrimaryButton
+          className={cn(
+            "h-9 px-8",
+            active !== "all" &&
+              "bg-white text-[#121212] hover:bg-[#292929] hover:text-white"
+          )}
+          onClick={() => setActive("all")}
+        >
+          All
+        </PrimaryButton>
+        <PrimaryButton
+          className={cn(
+            "h-9 px-8 ",
+            active !== "my" &&
+              "bg-white text-[#121212] hover:bg-[#292929] hover:text-white"
+          )}
+          onClick={() => setActive("my")}
+        >
           My
         </PrimaryButton>
       </div>

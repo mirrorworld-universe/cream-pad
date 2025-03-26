@@ -32,7 +32,6 @@ const config: Config = {
           tag: "hsl(var(--bg-tag))",
           mask: "hsl(var(--bg-mask))"
         },
-
         primary: {
           DEFAULT: "hsl(var(--primary))",
           blue: "hsl(var(--primary-blue))"

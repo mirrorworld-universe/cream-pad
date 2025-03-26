@@ -59,7 +59,7 @@ export default function Page() {
   });
 
   return (
-    <div className="py-5 bg-[#1f2935] text-primary flex flex-col gap-5">
+    <div className="py-5 bg-[#1f2935] text-white flex flex-col gap-5">
       <a
         href="https://github.com/jackPanyj/oos/blob/main/uPic/CreamPad_Whitepaper.pdf"
         target="_blank"

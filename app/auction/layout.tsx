@@ -15,9 +15,7 @@ export default function Layout({ children }) {
       >
         <Header />
 
-        <div className="grow max-w-view px-4 mx-auto w-full flex flex-col">
-          {children}
-        </div>
+        <div className="grow flex flex-col">{children}</div>
         <Footer />
         <WalletConnectModal />
       </div>

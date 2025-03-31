@@ -41,16 +41,32 @@ const FallingBall = () => {
         }
       ),
       // 左边界
-      Bodies.rectangle(0, window.innerHeight / 2, 60, window.innerHeight, {
-        isStatic: true,
-        render: { fillStyle: "transparent" }
-      }),
+      Bodies.rectangle(
+        0,
+        window.innerHeight / 2,
+        60,
+        window.innerHeight + 1000,
+        {
+          isStatic: true,
+          render: { fillStyle: "transparent" }
+        }
+      ),
       // 右边界
       Bodies.rectangle(
         window.innerWidth,
         window.innerHeight / 2,
         60,
-        window.innerHeight,
+        window.innerHeight + 1000,
+        {
+          isStatic: true,
+          render: { fillStyle: "transparent" }
+        }
+      ),
+      Bodies.rectangle(
+        window.innerWidth / 2,
+        -300, // 位置稍微往上移，这样不会看到边界
+        window.innerWidth,
+        20,
         {
           isStatic: true,
           render: { fillStyle: "transparent" }
@@ -76,8 +92,9 @@ const FallingBall = () => {
         render: {
           sprite: {
             texture: `/images/balls/ball${i + 1}.png`, // 使用编号的图片
-            xScale: 0.5,
-            yScale: 0.5
+            xScale: 0.25,
+            yScale: 0.25,
+            quality: "high"
           }
         }
       });

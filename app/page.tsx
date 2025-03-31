@@ -28,7 +28,7 @@ export default function Home() {
       bg={"linear-gradient(180deg, #6457FD 0%, #E2A9FE 50%, #FFDFE1 100%);"}
       className="w-full h-screen relative flex items-center justify-between min-w-[1280px] overflow-x-auto"
     >
-      <div className="fixed z-50">
+      <div className="fixed z-20">
         <FallingBall />
       </div>
       <div className="flex items-center justify-between min-w-[1280px] max-w-[1728px] w-full mx-auto h-full relative">
@@ -38,7 +38,7 @@ export default function Home() {
           src="/images/logo-cream-pad.svg"
           alt=""
         />
-        <div className="absolute left-0 right-0 w-fit h-auto mx-auto top-6 font-baloo2 font-bold flex items-center gap-10">
+        <div className="absolute z-30 left-0 right-0 w-fit h-auto mx-auto top-6 font-baloo2 font-bold flex items-center gap-10">
           {tabs.map((tab) => (
             <Link
               href={tab.href}
@@ -54,7 +54,7 @@ export default function Home() {
           <img className="w-[672px]" src="/images/welcome.png" alt="" />
           <div
             className={cn(
-              "rounded-full cursor-not-allowed w-fit flex items-center gap-8 bg-white py-2 text-black pl-8 pr-3 font-baloo2 font-bold text-[32px]"
+              "rounded-full relative z-30 cursor-not-allowed w-fit flex items-center gap-8 bg-white py-2 text-black pl-8 pr-3 font-baloo2 font-bold text-[32px]"
             )}
           >
             Coming Soon

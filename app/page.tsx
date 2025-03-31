@@ -6,6 +6,7 @@ import { cn } from "@/utils";
 import Link from "next/link";
 import { whitepaper } from "./data/auctions";
 import FallingBall from "./components/common/FallingBall";
+import { useEffect } from "react";
 
 const tabs = [
   {
@@ -22,6 +23,32 @@ const tabs = [
 
 export default function Home() {
   const router = useRouter();
+  useEffect(() => {
+    const eyes = document.querySelectorAll(".eye");
+
+    document.addEventListener("mousemove", (e) => {
+      eyes.forEach((eye) => {
+        const pupil: any = eye.querySelector(".pupil");
+        const rect = eye.getBoundingClientRect();
+
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const dx = e.clientX - centerX;
+        const dy = e.clientY - centerY;
+
+        // 椭圆限制范围
+        const rx = 25;
+        const ry = 15;
+
+        const angle = Math.atan2(dy, dx);
+        const x = Math.cos(angle) * rx;
+        const y = Math.sin(angle) * ry;
+
+        pupil.style.transform = `translate(${x}px, ${y}px)`;
+      });
+    });
+  }, []);
 
   return (
     <Box
@@ -69,7 +96,15 @@ export default function Home() {
             Auction Now
           </PrimaryButton> */}
         </div>
-        <img className="w-[660px] mr-20" src="/images/cloud.png" alt="" />
+        <div className="relative w-[609px] h-[516px] mr-20">
+          <div className="eye left">
+            <div className="pupil"></div>
+          </div>
+          <div className="eye right">
+            <div className="pupil"></div>
+          </div>
+          <img className="size-full" src="/images/cloud.png" alt="" />
+        </div>
       </div>
     </Box>
   );

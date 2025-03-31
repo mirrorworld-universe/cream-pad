@@ -84,3 +84,40 @@ body {
     cursor: default;
   }
 }
+
+.eye {
+  width: 58px;
+  height: 70px;
+  border-radius: 50%;
+  background: #fff;
+  position: absolute;
+  transform: rotate(25deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(180deg, #5446ff 0%, #d277ff 50%, #ffe0c6 100%);
+}
+.eye.left {
+  left: 210px;
+  top: 180px;
+}
+.eye.right {
+  left: 300px;
+  top: 180px;
+}
+
+.pupil {
+  width: 40px;
+  height: 48px;
+  border-radius: 50%;
+  background: black;
+  position: absolute;
+  transform: rotate(25deg);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+  transition: 0.05s linear;
+}

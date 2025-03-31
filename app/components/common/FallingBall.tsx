@@ -74,7 +74,23 @@ const FallingBall = () => {
       )
     ];
 
-    World.add(engine.world, walls);
+    // Step 1: 获取按钮位置
+    const button = document.getElementById("action-button");
+    const rect = button.getBoundingClientRect();
+
+    // Step 2: 转换为中心点坐标（Matter.js 用中心点定位）
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    // Step 3: 创建物理墙（不可见）
+    const wall = Bodies.rectangle(centerX, centerY, rect.width, rect.height, {
+      isStatic: true,
+      render: {
+        fillStyle: "transparent" // 可选，设置颜色让你看到这面“墙”
+      }
+    });
+
+    World.add(engine.world, [...walls, wall]);
 
     // 创建小球
     const balls = [];

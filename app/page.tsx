@@ -5,6 +5,7 @@ import PrimaryButton from "./components/common/PrimaryButton";
 import { cn } from "@/utils";
 import Link from "next/link";
 import { whitepaper } from "./data/auctions";
+import FallingBall from "./components/common/FallingBall";
 
 const tabs = [
   {
@@ -27,6 +28,9 @@ export default function Home() {
       bg={"linear-gradient(180deg, #6457FD 0%, #E2A9FE 50%, #FFDFE1 100%);"}
       className="w-full h-screen relative flex items-center justify-between min-w-[1280px] overflow-x-auto"
     >
+      <div className="fixed z-50">
+        <FallingBall />
+      </div>
       <div className="flex items-center justify-between min-w-[1280px] max-w-[1728px] w-full mx-auto h-full relative">
         <img
           onClick={() => router.push("/")}

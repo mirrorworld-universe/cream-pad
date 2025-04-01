@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     icon: "/images/logo.svg"
   },
   description:
-    "Cream Pad is a cutting-edge asset launchpad on Sonic SVM, redefining token distribution with its Dutch Dual-Track Auction."
+    "Cream Pad is the first asset launchpad on Sonic SVM, redefining token distribution with its unique Dutch Dual-Track Auction."
 };
 
 const manrope = Manrope({

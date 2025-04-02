@@ -51,7 +51,18 @@ export default function Page() {
   const handleCalculate = () => {
     const ret = simulate(state);
     console.log("params:", state);
-    setResult(ret);
+
+    const data = [];
+
+    for (const item of ret) {
+      if (item.Sales_Amount >= state.total_supply * state.auction_percentage) {
+        data.push(item);
+        break;
+      }
+      data.push(item);
+    }
+
+    setResult(data);
   };
 
   useMount(() => {
@@ -162,7 +173,7 @@ export default function Page() {
             />
           </FormControl>
           <FormControl className="flex flex-col gap-2">
-            <p className="sonic-body3">Penalty Score </p>
+            <p className="sonic-body3">Max Boost </p>
             <Input
               className="rounded-sm border-white/30"
               type="number"

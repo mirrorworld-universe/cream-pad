@@ -74,7 +74,7 @@ export default function Header() {
                     alt="sonic"
                   />
                 </div>
-                <PrimaryButton className="text-base bg-[#F6F6F3] text-[#121212] gap-2">
+                <PrimaryButton className="text-base bg-[#F6F6F3] text-[#121212] gap-2 hover:bg-[#F6F6F3]">
                   {formatStr(publicKey?.toString())}
                   <ArrowIcon className="rotate-90 size-5" />
                 </PrimaryButton>

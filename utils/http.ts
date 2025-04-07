@@ -5,7 +5,7 @@ class Http {
 
   constructor() {
     this.ins = axios.create({
-      baseURL: ""
+      baseURL: "https://api-stg.creampad.io/"
     });
   }
 

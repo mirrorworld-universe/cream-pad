@@ -2,6 +2,7 @@
 import PrimaryButton from "@/app/components/common/PrimaryButton";
 import ArrowIcon from "@/app/components/icons/ArrowIcon";
 import CloseIcon from "@/app/components/icons/CloseIcon";
+import { http } from "@/utils/http";
 import { dataMock } from "@/utils/playground";
 import {
   Box,
@@ -11,6 +12,9 @@ import {
   PopoverTrigger,
   useDisclosure
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   Bar,
   ComposedChart,
@@ -38,6 +42,21 @@ const options = [
 ];
 export default function Chart() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const params = useParams();
+
+  const { data: paymentMethods } = useQuery({
+    queryKey: ["/pad/payment-mint"],
+    queryFn: async () =>
+      http.get("/pad/payment-mint", { project_id: params.id })
+  });
+
+  const [currentToken, setCurrentToken] = useState<any>({});
+
+  useEffect(() => {
+    if (paymentMethods?.data) {
+      setCurrentToken(paymentMethods.data[0]);
+    }
+  }, [paymentMethods]);
 
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">
@@ -214,9 +233,11 @@ export default function Chart() {
               >
                 <PopoverTrigger>
                   <div className="z-10 h-10 px-3 flex items-center justify-center my-auto absolute top-0 bottom-0 right-2 bg-white rounded-[10px] cursor-pointer">
-                    <p className="font-semibold">SONIC</p>
+                    <p className="font-semibold">
+                      {currentToken?.token_symbol}
+                    </p>
                     <img
-                      src="/images/sonic-token.png"
+                      src={currentToken.token_image}
                       alt="sonic"
                       className="w-4 h-4 ml-2 mr-1"
                     />
@@ -239,20 +260,24 @@ export default function Chart() {
                       />
                     </div>
                     <div className="flex flex-col mt-6">
-                      <div
-                        onClick={() => {
-                          onClose();
-                        }}
-                        className="px-8 flex items-center gap-2 h-14 hover:bg-[#F6F6F3] cursor-pointer"
-                      >
-                        <img
-                          src="/images/sonic-token.png"
-                          alt="sonic"
-                          className="size-8"
-                        />
-                        <p className="font-semibold">SONIC</p>
-                        <p className="ml-auto">247,899,872.994</p>
-                      </div>
+                      {paymentMethods?.data?.map((item, index) => (
+                        <div
+                          onClick={() => {
+                            setCurrentToken(item);
+                            onClose();
+                          }}
+                          key={index}
+                          className="px-8 flex items-center gap-2 h-14 hover:bg-[#F6F6F3] cursor-pointer"
+                        >
+                          <img
+                            src={item.token_image}
+                            alt="sonic"
+                            className="size-8"
+                          />
+                          <p className="font-semibold">{item.token_symbol}</p>
+                          <p className="ml-auto"></p>
+                        </div>
+                      ))}
                     </div>
                   </Box>
                 </PopoverContent>
@@ -267,6 +292,7 @@ export default function Chart() {
                   {option.label}
                 </div>
               ))}
+              <p></p>
             </div>
             <p className="text-sm text-[#121212]/70 mt-3">Gas: 0.00 SOL</p>
           </div>

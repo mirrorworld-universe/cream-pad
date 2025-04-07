@@ -3,22 +3,30 @@ import { Box } from "@chakra-ui/react";
 import { AuctionData } from "@/app/data/auctions";
 import { useRouter } from "next/navigation";
 
+export const logoMap = {
+  twitter: "/images/activity/x.svg",
+  discord: "/images/activity/discord.svg",
+  telegram: "/images/activity/tg.svg"
+};
+
 export default function Card({ data }: { data: AuctionData }) {
   const router = useRouter();
 
   return (
-    <div
-      onClick={() => router.push(`/auction/${data.id}`)}
-      className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors group/card"
-    >
-      <img className="h-[320px] w-[535px]" src={data.image} alt="" />
+    <div className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors group/card">
+      <img
+        className="h-[320px] w-[535px] rounded-[50px]"
+        src={data.image}
+        alt=""
+      />
 
       <div className="flex flex-col gap-6 grow">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 w-full">
             <img className="size-14" src="/images/sonic-token.png" alt="" />
-            <span className="text-2xl font-bold font-baloo2">{data.title}</span>
+            <span className="text-2xl font-bold font-baloo2">{data.name}</span>
             <div
+              onClick={() => router.push(`/auction/${data.id}`)}
               className={cn(
                 "py-2.5 px-4 ml-auto bg-[#DEF26B] rounded-full cursor-pointer"
               )}
@@ -30,8 +38,15 @@ export default function Card({ data }: { data: AuctionData }) {
             {data.description}
           </div>
           <div className="flex items-center gap-2">
-            <img src="/images/activity/x.svg" alt="" />
-            <img src="/images/activity/tg.svg" alt="" />
+            {data?.social?.map((social) => (
+              <a href={social.account} target="_blank">
+                <img
+                  className="size-6 rounded-full"
+                  src={logoMap[social.type]}
+                  alt=""
+                />
+              </a>
+            ))}
           </div>
         </div>
 
@@ -40,13 +55,13 @@ export default function Card({ data }: { data: AuctionData }) {
             <div className="flex justify-between">
               <span className="text-2xl/[1.2] font-bold">Sale Progress</span>
               <span className="text-[#7E67FF] text-2xl/[1.2] font-semibold">
-                {data.saleProgress}%
+                {data.progress}%
               </span>
             </div>
             <div className="w-full h-2.5 rounded-full bg-[#ECECEC] group-hover/card:bg-white">
               <Box
                 bg={"linear-gradient(90deg, #C49AFF 0%, #FFB055 100%)"}
-                width={"40%"}
+                width={data.progress + "%"}
                 className="rounded-full h-full"
               ></Box>
             </div>
@@ -59,8 +74,7 @@ export default function Card({ data }: { data: AuctionData }) {
                 <span>Amount for Sale</span>
               </div>
               <div className="font-baloo2 font-semibold text-[28px]/[1.1]">
-                {data.amountForSale}{" "}
-                <span className="text-base">{data.symbol}</span>
+                {data.amount} <span className="text-base">monk</span>
               </div>
             </div>
             <div className="flex flex-col gap-1.5">
@@ -69,8 +83,7 @@ export default function Card({ data }: { data: AuctionData }) {
                 <span>Price</span>
               </div>
               <div className="font-baloo2 font-semibold text-[28px]/[1.1]">
-                {data.price}{" "}
-                <span className="text-base">{data.priceSymbol}</span>
+                {data.price} <span className="text-base">sonic</span>
               </div>
             </div>
           </div>

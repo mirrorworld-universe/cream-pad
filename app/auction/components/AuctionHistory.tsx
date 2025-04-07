@@ -1,11 +1,33 @@
 "use client";
+import Empty from "@/app/components/common/Empty";
 import Pagination from "@/app/components/common/Pagination";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
-import { cn } from "@/utils";
+import { cn, formatStr } from "@/utils";
+import { http } from "@/utils/http";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import { useState } from "react";
+import { match, P } from "ts-pattern";
 
 export default function AuctionHistory() {
   const [active, setActive] = useState<"all" | "my">("all");
+  const params = useParams();
+  const { publicKey } = useWallet();
+
+  const { data } = useQuery({
+    queryKey: ["/pad/auction/history", params.id, active],
+    queryFn: async () =>
+      http.post("/pad/auction/history", {
+        page: 1,
+        page_size: 10,
+        project_id: params.id,
+        wallet: active === "my" ? publicKey?.toBase58() : undefined
+      })
+  });
+
+  const items: any[] = data?.data?.data || [];
+  const total = data?.data?.total_page || 0;
 
   return (
     <div className="flex flex-col gap-6">
@@ -32,7 +54,7 @@ export default function AuctionHistory() {
         </PrimaryButton>
       </div>
 
-      <div className="p-8 rounded-[40px] bg-white flex flex-col gap-2 font-inter">
+      <div className="p-8 rounded-[40px] bg-white flex flex-col gap-2 font-inter min-h-[800px]">
         <h1 className="font-baloo2 text-2xl font-bold">Auction History</h1>
         <div className="grid grid-cols-[157px_136px_111px_100px] px-3 justify-between h-[50px] items-center text-[#727272] border-b border-[#121212]/10">
           <div>Address</div>
@@ -40,25 +62,33 @@ export default function AuctionHistory() {
           <div>Auction Round</div>
           <div className="flex justify-end">Date</div>
         </div>
-        {Array.from({ length: 10 }, (_, index) => (
-          <div
-            key={index}
-            className={cn(
-              "grid grid-cols-[157px_134px_111px_100px] px-3 justify-between h-[50px] items-center text-[#121212]/70 border-b border-[#F6F6F3]",
-              "font-medium text-lg/[22px] hover:bg-[#F6F6F3] rounded-2xl transition-all duration-300"
-            )}
-          >
-            <div className={cn("px-2 py-1 rounded-full w-fit", "bg-[#DEF26B]")}>
-              0x42fB1...78c2E
-            </div>
-            <div>100,000 Sonic</div>
-            <div>Round 4</div>
-            <div className="flex justify-end">19s ago</div>
-          </div>
-        ))}
+
+        {match(items)
+          .with([], () => <Empty className="mt-[72px]" />)
+          .with(P.array(), (items) =>
+            items.map((item, index) => (
+              <div
+                key={index}
+                className={cn(
+                  "grid grid-cols-[157px_134px_111px_100px] px-3 justify-between h-[50px] items-center text-[#121212]/70 border-b border-[#F6F6F3]",
+                  "font-medium text-lg/[22px] hover:bg-[#F6F6F3] rounded-2xl transition-all duration-300"
+                )}
+              >
+                <div
+                  className={cn("px-2 py-1 rounded-full w-fit", "bg-[#DEF26B]")}
+                >
+                  {formatStr(item.amount, 4)}
+                </div>
+                <div>{item.amount}</div>
+                <div>Round {item.round}</div>
+                <div className="flex justify-end">{item.date}</div>
+              </div>
+            ))
+          )
+          .run()}
       </div>
 
-      <Pagination total={10} className="mt-2" />
+      {total > 0 && <Pagination total={total} className="mt-2" />}
     </div>
   );
 }

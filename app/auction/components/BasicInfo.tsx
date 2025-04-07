@@ -1,6 +1,21 @@
+"use client";
 import CopyIcon from "@/app/components/icons/CopyIcon";
+import { formatStr } from "@/utils";
+import { http } from "@/utils/http";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+import { logoMap } from "./AuctionCard";
 
 export default function BasicInfo() {
+  const params = useParams();
+
+  const { data } = useQuery({
+    queryKey: ["/project/:id", params.id],
+    queryFn: async () => http.get(`/project/${params.id}`)
+  });
+
+  const detail = data?.data || {};
+
   return (
     <>
       <p className="text-3xl font-baloo2 font-bold mb-8">
@@ -9,7 +24,9 @@ export default function BasicInfo() {
       <div className="flex items-center gap-2 font-medium text-2xl mb-6">
         <span>Token Name</span>
         <img className="size-12" src="/images/sonic-token.png" alt="sonic" />
-        <span>Sonic SVM (Symbol)</span>
+        <span>
+          {detail.token_name} ({detail.token_symbol})
+        </span>
 
         <div className="ml-auto flex items-center">
           <div className="size-10 rounded-full bg-[#E8FF59] flex items-center justify-center">
@@ -31,7 +48,7 @@ export default function BasicInfo() {
             />
             <div className="space-y-2">
               <p className="text-[#666] text-sm">Blockchain:</p>
-              <p className="font-baloo2 font-semibold">Sonic svm</p>
+              <p className="font-baloo2 font-semibold">{detail.chain}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -43,7 +60,7 @@ export default function BasicInfo() {
             <div className="space-y-2">
               <p className="text-[#666] text-sm">Mint Address:</p>
               <div className="font-baloo2 font-semibold cursor-pointer">
-                0xf2fBD...88bFE <CopyIcon />
+                {formatStr(detail.token_address)} <CopyIcon />
               </div>
             </div>
           </div>
@@ -58,16 +75,11 @@ export default function BasicInfo() {
             <div className="space-y-2">
               <p className="text-[#666] text-sm">Social media:</p>
               <div className="font-baloo2 font-semibold flex items-center gap-2">
-                <img
-                  className="size-5"
-                  src="/images/activity/x.svg"
-                  alt="twitter"
-                />
-                <img
-                  className="size-5"
-                  src="/images/activity/tg.svg"
-                  alt="telegram"
-                />
+                {detail.social?.map((social) => (
+                  <a key={social.account} href={social.account} target="_blank">
+                    <img className="size-5" src={logoMap[social.type]} alt="" />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
@@ -81,7 +93,13 @@ export default function BasicInfo() {
               <p className="text-[#666] text-sm">
                 Remaining Token in this Auction Round (%):
               </p>
-              <p className="font-baloo2 font-semibold">869,863 (20%)</p>
+              <p className="font-baloo2 font-semibold">
+                {detail.remaining_token} (
+                {Number((detail.remaining_token / detail.FDV).toFixed(2)) *
+                  100 +
+                  "%"}
+                )
+              </p>
             </div>
           </div>
         </div>
@@ -94,7 +112,7 @@ export default function BasicInfo() {
             />
             <div className="space-y-2">
               <p className="text-[#666] text-sm">FDV:</p>
-              <p className="font-baloo2 font-semibold">$100k</p>
+              <p className="font-baloo2 font-semibold">{detail.FDV}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -107,7 +125,9 @@ export default function BasicInfo() {
               <p className="text-[#666] text-sm">
                 Current Auction Rounds/Total Rounds:
               </p>
-              <p className="font-baloo2 font-semibold">1/10</p>
+              <p className="font-baloo2 font-semibold">
+                {detail.cur_round}/{detail.total_round}
+              </p>
             </div>
           </div>
         </div>

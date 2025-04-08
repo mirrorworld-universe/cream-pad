@@ -13,7 +13,10 @@ export default function Card({ data }: { data: AuctionData }) {
   const router = useRouter();
 
   return (
-    <div className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors group/card">
+    <div
+      onClick={() => router.push(`/auction/${data.id}`)}
+      className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors group/card"
+    >
       <img
         className="h-[320px] w-[535px] rounded-[50px]"
         src={data.image}
@@ -26,9 +29,9 @@ export default function Card({ data }: { data: AuctionData }) {
             <img className="size-14" src="/images/sonic-token.png" alt="" />
             <span className="text-2xl font-bold font-baloo2">{data.name}</span>
             <div
-              onClick={() => router.push(`/auction/${data.id}`)}
               className={cn(
-                "py-2.5 px-4 ml-auto bg-[#DEF26B] rounded-full cursor-pointer"
+                "py-2.5 px-4 ml-auto bg-[#DEF26B] rounded-full cursor-pointer font-semibold",
+                data.status === "closed" && "bg-[#F5F5F7]"
               )}
             >
               {data.status}
@@ -39,7 +42,13 @@ export default function Card({ data }: { data: AuctionData }) {
           </div>
           <div className="flex items-center gap-2">
             {data?.social?.map((social) => (
-              <a href={social.account} target="_blank">
+              <a
+                key={social.type}
+                href={social.account}
+                target="_blank"
+                onClick={(e) => e.stopPropagation()}
+                className="size-6 rounded-full"
+              >
                 <img
                   className="size-6 rounded-full"
                   src={logoMap[social.type]}

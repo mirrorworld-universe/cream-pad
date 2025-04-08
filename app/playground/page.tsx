@@ -254,6 +254,15 @@ export default function Page() {
                 state.auction_percentage
             )}
           </p>
+          <p>
+            $Sonic Secured Simulation :{" "}
+            {Math.floor(
+              result.reduce(
+                (acc, item) => acc + item.Sales_Amount * item.Actual_Price,
+                0
+              )
+            )}
+          </p>
         </div>
         <Button
           className="font-manrope"

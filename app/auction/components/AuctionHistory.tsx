@@ -4,12 +4,13 @@ import Pagination from "@/app/components/common/Pagination";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
 import { openModalDirectly } from "@/app/hooks/useModalHash";
 import { MODAL_HASH_MAP } from "@/app/hooks/useModalHash";
-import { cn, formatStr } from "@/utils";
+import { cn, formatStr, getRandomAddressColor } from "@/utils";
 import { http } from "@/utils/http";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { useSetState } from "react-use";
 import { match, P } from "ts-pattern";
 
 export default function AuctionHistory() {
@@ -17,15 +18,16 @@ export default function AuctionHistory() {
   const params = useParams();
   const { publicKey, connected } = useWallet();
 
+  const [state, setState] = useSetState({
+    page: 1,
+    page_size: 10,
+    project_id: params.id,
+    wallet: active === "my" ? publicKey?.toBase58() : undefined
+  });
+
   const { data } = useQuery({
-    queryKey: ["/pad/auction/history", params.id, active],
-    queryFn: async () =>
-      http.post("/pad/auction/history", {
-        page: 1,
-        page_size: 10,
-        project_id: params.id,
-        wallet: active === "my" ? publicKey?.toBase58() : undefined
-      }),
+    queryKey: ["/pad/auction/history", state],
+    queryFn: async () => http.post("/pad/auction/history", state),
     staleTime: 0
   });
 
@@ -85,20 +87,30 @@ export default function AuctionHistory() {
                 )}
               >
                 <div
-                  className={cn("px-2 py-1 rounded-full w-fit", "bg-[#DEF26B]")}
+                  className={cn("px-2 py-1 rounded-full w-fit")}
+                  style={{
+                    backgroundColor: getRandomAddressColor(item.address)
+                  }}
                 >
-                  {formatStr(item.amount, 4)}
+                  {formatStr(item.address, 4)}
                 </div>
                 <div>{item.amount}</div>
                 <div>Round {item.round}</div>
-                <div className="flex justify-end">{item.date}</div>
+                <div>Round {item.round}</div>
+                <div className="flex justify-end">{}</div>
               </div>
             ))
           )
           .run()}
       </div>
 
-      {total > 0 && <Pagination total={total} className="mt-2" />}
+      {total > 0 && (
+        <Pagination
+          onPageChange={({ selected }) => setState({ page: selected + 1 })}
+          total={total}
+          className="mt-2"
+        />
+      )}
     </div>
   );
 }

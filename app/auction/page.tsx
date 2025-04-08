@@ -4,11 +4,15 @@ import Pagination from "../components/common/Pagination";
 import { Box } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { http } from "@/utils/http";
+
 export default function Home() {
   const { data } = useQuery({
     queryKey: [""],
     queryFn: async () => http.get("/projects?page=1&page_size=10")
   });
+
+  const items: any[] = data?.data || [];
+  const total = data?.total_page || 0;
 
   return (
     <div className="pb-12 flex flex-col text-[#121212]">
@@ -27,12 +31,12 @@ export default function Home() {
         className="h-[100px]"
       ></Box>
 
-      <div className="flex flex-col gap-8 max-w-view px-4 mx-auto w-full -mt-[60px]">
-        {data?.data?.map((item) => (
+      <div className="flex flex-col gap-8 max-w-view px-4 mx-auto w-full -mt-[60px] min-h-[360px]">
+        {items.map((item) => (
           <AuctionCard key={item.id} data={item} />
         ))}
       </div>
-      {/* <Pagination total={5} /> */}
+      <Pagination total={total} className="mt-8" />
     </div>
   );
 }

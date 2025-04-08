@@ -15,7 +15,7 @@ export default function Card({ data }: { data: AuctionData }) {
   return (
     <div
       onClick={() => router.push(`/auction/${data.id}`)}
-      className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] transition-colors group/card"
+      className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] cursor-pointer transition-colors group/card"
     >
       <img
         className="h-[320px] w-[535px] rounded-[50px]"

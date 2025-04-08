@@ -1,6 +1,6 @@
 "use client";
 import CopyIcon from "@/app/components/icons/CopyIcon";
-import { formatStr } from "@/utils";
+import { formatStr, formatTime } from "@/utils";
 import { http } from "@/utils/http";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -50,7 +50,7 @@ export default function BasicInfo() {
                 </div>
                 <div className="h-3 w-2 bg-[#E8FF59]"></div>
                 <div className="px-5 h-10 bg-[#E8FF59] rounded-full flex items-center justify-center text-base">
-                  Next Auction in: 3 mins
+                  Next Auction in: {formatTime(Number(detail.next_auction))}
                 </div>
               </div>
             </div>

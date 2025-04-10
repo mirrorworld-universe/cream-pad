@@ -4,11 +4,17 @@ import Pagination from "../components/common/Pagination";
 import { Box } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { http } from "@/utils/http";
+import { useSetState } from "react-use";
 
 export default function Home() {
+  const [params, setParams] = useSetState({
+    page: 1,
+    page_size: 10
+  });
+
   const { data } = useQuery({
-    queryKey: [""],
-    queryFn: async () => http.get("/projects?page=1&page_size=10")
+    queryKey: ["/projects", params],
+    queryFn: async () => http.get("/projects", params)
   });
 
   const items: any[] = data?.data || [];
@@ -36,7 +42,11 @@ export default function Home() {
           <AuctionCard key={item.id} data={item} />
         ))}
       </div>
-      <Pagination total={total} className="mt-8" />
+      <Pagination
+        total={total}
+        className="mt-8"
+        onPageChange={({ selected }) => setParams({ page: selected })}
+      />
     </div>
   );
 }

@@ -11,30 +11,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatTime(seconds: number): string {
-  if (typeof seconds !== "number") {
-    return seconds;
-  }
-  if (seconds < 60) {
-    return `${seconds}s`;
-  } else if (seconds < 3600) {
-    const minutes = Math.floor(seconds / 60);
-    const remainingSeconds = seconds % 60;
-    return remainingSeconds > 0
-      ? `${minutes}m ${remainingSeconds}s`
-      : `${minutes}m`;
-  } else {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = seconds % 60;
-
-    let result = `${hours}h`;
-    if (minutes > 0) result += ` ${minutes}m`;
-    if (remainingSeconds > 0) result += ` ${remainingSeconds}s`;
-    return result;
-  }
-}
-
 export function getRandomAddressColor(address: string) {
   const colors = [
     "#6B9DF2",
@@ -52,4 +28,24 @@ export function getRandomAddressColor(address: string) {
     .reduce((acc, char) => acc + char.charCodeAt(0), 0);
   const index = hash % colors.length;
   return colors[index];
+}
+
+export function formatTimeAgo(dateStr: string) {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (diffInSeconds >= 48 * 3600) {
+    return "48h ago";
+  }
+
+  if (diffInSeconds >= 3600) {
+    return `${Math.floor(diffInSeconds / 3600)}h ago`;
+  }
+
+  if (diffInSeconds >= 60) {
+    return `${Math.floor(diffInSeconds / 60)}m ago`;
+  }
+
+  return `${diffInSeconds}s ago`;
 }

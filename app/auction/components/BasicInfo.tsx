@@ -1,12 +1,17 @@
 "use client";
 import CopyIcon from "@/app/components/icons/CopyIcon";
-import { formatStr, formatTime } from "@/utils";
+import { formatStr } from "@/utils";
 import { http } from "@/utils/http";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { logoMap } from "./AuctionCard";
 import { match } from "ts-pattern";
 import { Skeleton } from "@chakra-ui/react";
+import { useProjectDetail } from "@/app/store";
+import { useEffect } from "react";
+import Countdown from "react-countdown";
+import { P } from "ts-pattern";
+import dayjs from "dayjs";
 
 export default function BasicInfo() {
   const params = useParams();
@@ -16,7 +21,30 @@ export default function BasicInfo() {
     queryFn: async () => http.get(`/project/${params.id}`)
   });
 
+  useEffect(() => {
+    if (data?.data) {
+      useProjectDetail.getState().setProjectDetail(data.data);
+    }
+  }, [data]);
+
   const detail = data?.data || {};
+
+  const nextAuction = match(Number(detail.next_auction))
+    .with(P.number.lt(86400), (time) => (
+      <Countdown
+        date={Date.now() + time * 1000}
+        renderer={({ hours, minutes, seconds }) => (
+          <span>
+            {`${hours.toString().padStart(2, "0")}:${minutes
+              .toString()
+              .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`}
+          </span>
+        )}
+      />
+    ))
+    .otherwise((time) => (
+      <span>{dayjs(Date.now() + time * 1000).format("YYYY-MM-DD")}</span>
+    ));
 
   return (
     <>
@@ -50,7 +78,7 @@ export default function BasicInfo() {
                 </div>
                 <div className="h-3 w-2 bg-[#E8FF59]"></div>
                 <div className="px-5 h-10 bg-[#E8FF59] rounded-full flex items-center justify-center text-base">
-                  Next Auction in: {formatTime(Number(detail.next_auction))}
+                  Next Auction in: {nextAuction}
                 </div>
               </div>
             </div>
@@ -120,16 +148,11 @@ export default function BasicInfo() {
                   />
                   <div className="space-y-2">
                     <p className="text-[#666] text-sm">
-                      Remaining Token in this Auction Round (%):
+                      Remaining Token in the Sale(%)
                     </p>
                     <p className="font-baloo2 font-semibold">
-                      {detail.remaining_token} (
-                      {Number(
-                        (detail.remaining_token / detail.FDV).toFixed(2)
-                      ) *
-                        100 +
-                        "%"}
-                      )
+                      {detail.remaining_token} ({detail.remaining_token_percent}
+                      % )
                     </p>
                   </div>
                 </div>

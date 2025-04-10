@@ -1,52 +1,134 @@
 "use client";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
-import ArrowIcon from "@/app/components/icons/ArrowIcon";
-import CloseIcon from "@/app/components/icons/CloseIcon";
+import { useProjectDetail } from "@/app/store";
+import { cn } from "@/utils";
 import { http } from "@/utils/http";
-import {
-  Box,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  useDisclosure
-} from "@chakra-ui/react";
-import { useQuery } from "@tanstack/react-query";
+import { Box, Input } from "@chakra-ui/react";
+import { useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { match, P } from "ts-pattern";
 import RoundInfo from "./RoundInfo";
-
+import { TokenSelect } from "./TokenSelect";
+import { triggerTransaction } from "@/utils/transaction";
+import { MODAL_HASH_MAP, openModalDirectly } from "@/app/hooks/useModalHash";
+import { toast } from "@/app/components/common/toast";
 const options = [
   {
     label: "25%",
-    value: 25
+    value: 0.25
   },
   {
     label: "50%",
-    value: 50
+    value: 0.5
   },
   {
     label: "100%",
-    value: 100
+    value: 1
   }
 ];
 export default function Chart() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const params = useParams();
+  const { publicKey, signTransaction } = useWallet();
+  const queryClient = useQueryClient();
 
-  const { data: paymentMethods } = useQuery({
-    queryKey: ["/pad/payment-mint"],
-    queryFn: async () =>
-      http.get("/pad/payment-mint", { project_id: params.id })
-  });
+  const { connection } = useConnection();
 
   const [currentToken, setCurrentToken] = useState<any>({});
 
-  useEffect(() => {
-    if (paymentMethods?.data) {
-      setCurrentToken(paymentMethods.data[0]);
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: {
+      amount: 0
     }
-  }, [paymentMethods]);
+  });
+
+  const { mutateAsync: buildTransaction } = useMutation({
+    mutationKey: ["/pad/token/buy/build-transaction"],
+    mutationFn: async (data: any) =>
+      http.post("/pad/token/buy/build-transaction", data)
+  });
+
+  const { projectDetail } = useProjectDetail();
+
+  const { data: priceResult } = useQuery({
+    queryKey: ["/pad/price", params.id],
+    queryFn: async () => http.get("/pad/price", { project_id: params.id })
+  });
+
+  const { data: balanceResult } = useQuery({
+    queryKey: [`/token/balance`, params.id, currentToken.token_address],
+    queryFn: async () =>
+      http.get("/token/balance", {
+        wallet: publicKey?.toBase58(),
+        token_address: currentToken.token_address
+      }),
+    enabled: !!publicKey && !!currentToken.token_address
+  });
+
+  const percentage = useMemo(() => {
+    if (priceResult?.data) {
+      const max = priceResult.data.next_price.max;
+      const realtime = priceResult.data.next_price.realtime;
+      const min = priceResult.data.next_price.min;
+      const percentage = (realtime - min) / (max - min);
+      return +percentage.toFixed(2);
+    }
+  }, [priceResult]);
+
+  const handleBuy = async () => {
+    if (!publicKey) {
+      openModalDirectly(MODAL_HASH_MAP.walletConnect);
+      return;
+    }
+    handleSubmit(async (data) => {
+      const res: any = await buildTransaction({
+        project_id: params.id,
+        amount: data.amount,
+        payment_token: currentToken.token_address,
+        wallet: publicKey?.toBase58()
+      });
+
+      const latestBlockHash = await connection.getLatestBlockhash();
+      const hash = await triggerTransaction(
+        res.data.hash,
+        connection,
+        signTransaction
+      );
+
+      const result = await connection.confirmTransaction({
+        signature: hash,
+        blockhash: latestBlockHash.blockhash,
+        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight
+      });
+
+      if (result.value.err) {
+        toast({
+          title: "Transaction failed",
+          description: "Please try again",
+          status: "error"
+        });
+      } else {
+        toast({
+          title: "Transaction successful",
+          status: "success"
+        });
+        const queryKeys = [
+          ["/pad/auction/history"],
+          ["/pad/round/info"],
+          ["/pad/price"],
+          ["/token/balance"],
+          ["/project/:id"]
+        ];
+        queryKeys.forEach((key) => {
+          queryClient.invalidateQueries({
+            queryKey: key
+          });
+        });
+      }
+    })();
+  };
 
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">
@@ -57,13 +139,24 @@ export default function Chart() {
         <RoundInfo />
         <div className="flex flex-col gap-8 grow">
           <div className="flex flex-col gap-4">
-            <p className="font-medium">
-              Current Auction Price: <span className="font-bold"> $0.16</span>
-            </p>
+            <div className="font-medium flex flex-col gap-2">
+              <p>
+                Current Auction Price:{" "}
+                <span className="font-bold">
+                  {" "}
+                  ${priceResult?.data?.current_price.toFixed(2)}
+                </span>
+              </p>
+              <p>Next Auction Price: </p>
+            </div>
             <div className="flex flex-col gap-1">
               <div className="flex justify-between text-xs">
-                <span className="text-[#7500FF]">$0.14</span>
-                <span className="text-[#FF9011]">$0.28</span>
+                <span className="text-[#7500FF]">
+                  ${priceResult?.data.next_price.realtime.toFixed(2)}
+                </span>
+                <span className="text-[#FF9011]">
+                  ${priceResult?.data.next_price.max.toFixed(2)}
+                </span>
               </div>
               <div className="h-3 bg-[#F6F6F3] rounded-full">
                 <Box
@@ -73,95 +166,73 @@ export default function Chart() {
                 ></Box>
               </div>
               <div className="flex justify-between text-xs text-[#666]">
-                <span>100,000</span>
-                <span>100,000</span>
+                <span>0</span>
+                <span>{Math.max(percentage * 100, 100)}%</span>
               </div>
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
-            <p className="font-medium text-base/[1.2]">Your Bid Amount</p>
+            <div className="flex justify-between">
+              <p className="font-medium text-base/[1.2]">Your Bid Amount</p>
+              {match(balanceResult?.data?.balance)
+                .with(P.number, () => (
+                  <p className="text-xs">
+                    Balance: {balanceResult?.data?.balance}{" "}
+                    {currentToken?.token_symbol}
+                  </p>
+                ))
+                .otherwise(() => null)}
+            </div>
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
                 className="h-14 border border-[#121212] rounded-2xl placeholder:text-[#121212]/20 focus:outline-none pr-32"
                 placeholder="0.00"
+                {...register("amount")}
               />
-              <Popover
-                isOpen={isOpen}
-                onClose={onClose}
-                onOpen={onOpen}
-                trigger="hover"
-                placement="bottom-end"
-              >
-                <PopoverTrigger>
-                  <div className="z-10 h-10 px-3 flex items-center justify-center my-auto absolute top-0 bottom-0 right-2 bg-white rounded-[10px] cursor-pointer">
-                    <p className="font-semibold">
-                      {currentToken?.token_symbol}
-                    </p>
-                    <img
-                      src={currentToken.token_image}
-                      alt="sonic"
-                      className="w-4 h-4 ml-2 mr-1"
-                    />
-                    <ArrowIcon className="size-5 rotate-90" />
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent
-                  _focusWithin={{ border: "none" }}
-                  boxShadow={"0px 0px 16px 0px rgba(68, 68, 68, 0.25)"}
-                  className="w-[369px] outline-none -mr-2 mt-2 px-0 py-8 border-none rounded-[32px] bg-white overflow-scroll"
-                >
-                  <Box className="flex flex-col">
-                    <div className="flex items-center justify-between px-8">
-                      <p className="font-baloo2 font-bold text-xl">
-                        Select Token
-                      </p>
-                      <CloseIcon
-                        className="size-4 cursor-pointer"
-                        onClick={onClose}
-                      />
-                    </div>
-                    <div className="flex flex-col mt-6">
-                      {paymentMethods?.data?.map((item, index) => (
-                        <div
-                          onClick={() => {
-                            setCurrentToken(item);
-                            onClose();
-                          }}
-                          key={index}
-                          className="px-8 flex items-center gap-2 h-14 hover:bg-[#F6F6F3] cursor-pointer"
-                        >
-                          <img
-                            src={item.token_image}
-                            alt="sonic"
-                            className="size-8"
-                          />
-                          <p className="font-semibold">{item.token_symbol}</p>
-                          <p className="ml-auto"></p>
-                        </div>
-                      ))}
-                    </div>
-                  </Box>
-                </PopoverContent>
-              </Popover>
+              <TokenSelect
+                currentToken={currentToken}
+                setCurrentToken={setCurrentToken}
+              />
             </div>
             <div className="flex gap-2">
               {options.map((option) => (
                 <div
                   key={option.value}
+                  onClick={() =>
+                    setValue(
+                      "amount",
+                      option.value * (balanceResult?.data?.balance || 0)
+                    )
+                  }
                   className="px-[18px] text-sm font-medium py-1 border border-[#E1E1E1] rounded-full cursor-pointer"
                 >
                   {option.label}
                 </div>
               ))}
-              <p></p>
             </div>
             <p className="text-sm text-[#121212]/70 mt-3">Gas: 0.00 SOL</p>
           </div>
 
           <div className="mt-auto flex flex-col gap-8">
             <p className="text-center font-medium">Total: 0.00 SOL</p>
-            <PrimaryButton className="">Buy</PrimaryButton>
+            {match(projectDetail?.status)
+              .with("open", () => (
+                <PrimaryButton className="" onClick={handleBuy}>
+                  Buy
+                </PrimaryButton>
+              ))
+              .with("closed", () => (
+                <div
+                  className={cn(
+                    "flex items-center justify-center bg-[#E1E1E1] rounded-full h-[50px] text-white cursor-not-allowed font-baloo2 font-bold",
+                    "text-2xl"
+                  )}
+                >
+                  Auction Closed
+                </div>
+              ))
+              .otherwise(() => null)}
           </div>
         </div>
       </div>

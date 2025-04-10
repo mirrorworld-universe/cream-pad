@@ -4,7 +4,7 @@ import Pagination from "@/app/components/common/Pagination";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
 import { openModalDirectly } from "@/app/hooks/useModalHash";
 import { MODAL_HASH_MAP } from "@/app/hooks/useModalHash";
-import { cn, formatStr, getRandomAddressColor } from "@/utils";
+import { cn, formatStr, formatTimeAgo, getRandomAddressColor } from "@/utils";
 import { http } from "@/utils/http";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
@@ -27,8 +27,7 @@ export default function AuctionHistory() {
 
   const { data } = useQuery({
     queryKey: ["/pad/auction/history", state],
-    queryFn: async () => http.post("/pad/auction/history", state),
-    staleTime: 0
+    queryFn: async () => http.post("/pad/auction/history", state)
   });
 
   const items: any[] = data?.data?.data || [];
@@ -43,7 +42,10 @@ export default function AuctionHistory() {
             active !== "all" &&
               "bg-white text-[#121212] hover:bg-[#292929] hover:text-white"
           )}
-          onClick={() => setActive("all")}
+          onClick={() => {
+            setActive("all");
+            setState({ wallet: undefined });
+          }}
         >
           All
         </PrimaryButton>
@@ -59,6 +61,7 @@ export default function AuctionHistory() {
               return;
             }
             setActive("my");
+            setState({ wallet: publicKey?.toBase58() });
           }}
         >
           My
@@ -96,8 +99,10 @@ export default function AuctionHistory() {
                 </div>
                 <div>{item.amount}</div>
                 <div>Round {item.round}</div>
-                <div>Round {item.round}</div>
-                <div className="flex justify-end">{}</div>
+                <div>{item.price.toFixed(2)}</div>
+                <div className="flex justify-end">
+                  {formatTimeAgo(item.date)}
+                </div>
               </div>
             ))
           )

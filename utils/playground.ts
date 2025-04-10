@@ -151,3 +151,6 @@ export const dataMock = simulate({
   decay_model,
   oversold
 });
+
+// dataMock[0].Sales_Ratio = "1";
+// dataMock[0].Sales_Ratio_Percentage = "100%";

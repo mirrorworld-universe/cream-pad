@@ -84,7 +84,7 @@ export default function RoundInfo() {
     let dashValue = null;
     if (rounds[index + 1]?.price.value === "0") {
       dashValue = round.price.value;
-    } else if (rounds[index + 1]?.price.value == null) {
+    } else if (rounds[index + 1]?.price.value == null && round.price.max != 0) {
       dashValue = ((round.price.max + round.price.min) / 2).toFixed(2);
     } else {
       dashValue = null;

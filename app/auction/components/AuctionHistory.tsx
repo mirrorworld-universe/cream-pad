@@ -99,7 +99,7 @@ export default function AuctionHistory() {
                 </div>
                 <div>{item.amount}</div>
                 <div>Round {item.round}</div>
-                <div>{item.price.toFixed(2)}</div>
+                <div>${item.price.toFixed(2)}</div>
                 <div className="flex justify-end">
                   {formatTimeAgo(item.date)}
                 </div>

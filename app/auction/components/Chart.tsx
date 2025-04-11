@@ -73,6 +73,9 @@ export default function Chart() {
       const realtime = priceResult.data.next_price.realtime;
       const min = priceResult.data.next_price.min;
       const percentage = (realtime - min) / (max - min);
+      if (min == 0) {
+        return 0.02;
+      }
       return +percentage.toFixed(2);
     }
   }, [priceResult]);

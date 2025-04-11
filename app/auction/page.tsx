@@ -17,8 +17,8 @@ export default function Home() {
     queryFn: async () => http.get("/projects", params)
   });
 
-  const items: any[] = data?.data || [];
-  const total = data?.total_page || 0;
+  const items: any[] = data?.data?.data || [];
+  const total = data?.data?.total_page || 0;
 
   return (
     <div className="pb-12 flex flex-col text-[#121212]">
@@ -45,7 +45,7 @@ export default function Home() {
       <Pagination
         total={total}
         className="mt-8"
-        onPageChange={({ selected }) => setParams({ page: selected })}
+        onPageChange={({ selected }) => setParams({ page: selected + 1 })}
       />
     </div>
   );

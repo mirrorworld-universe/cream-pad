@@ -38,7 +38,7 @@ export default function Chart() {
 
   const [currentToken, setCurrentToken] = useState<any>({});
 
-  const { register, handleSubmit, setValue } = useForm({
+  const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       amount: 0
     }
@@ -143,27 +143,32 @@ export default function Chart() {
               <p>
                 Current Auction Price:{" "}
                 <span className="font-bold">
-                  {" "}
                   ${priceResult?.data?.current_price.toFixed(2)}
                 </span>
               </p>
               <p>Next Auction Price: </p>
             </div>
             <div className="flex flex-col gap-1">
-              <div className="flex justify-between text-xs">
-                <span className="text-[#7500FF]">
-                  ${priceResult?.data.next_price.realtime.toFixed(2)}
-                </span>
-                <span className="text-[#FF9011]">
-                  ${priceResult?.data.next_price.max.toFixed(2)}
-                </span>
+              <div className="relative h-4">
+                <div
+                  className="flex justify-between text-xs absolute top-0 text-[#7500FF]"
+                  style={{
+                    left: `calc(${percentage * 100}% - 20px)`
+                  }}
+                >
+                  $
+                  {Math.min(
+                    priceResult?.data.next_price.realtime.toFixed(2),
+                    priceResult?.data.next_price.max.toFixed(2)
+                  )}
+                </div>
               </div>
               <div className="h-3 bg-[#F6F6F3] rounded-full">
                 <Box
                   bg={"linear-gradient(90deg, #C59AFC 0%, #FFB056 100%)"}
                   className="h-full rounded-full"
-                  w={"50%"}
-                ></Box>
+                  w={`${Math.min(percentage * 100, 100)}%`}
+                />
               </div>
               <div className="flex justify-between text-xs text-[#666]">
                 <span>0</span>
@@ -211,11 +216,13 @@ export default function Chart() {
                 </div>
               ))}
             </div>
-            <p className="text-sm text-[#121212]/70 mt-3">Gas: 0.00 SOL</p>
+            <p className="text-sm text-[#121212]/70 mt-3">Gas: 0.01 SOL</p>
+            <p className="text-sm text-[#121212]/70">
+              You will get: {watch("amount")} {projectDetail?.token_symbol}
+            </p>
           </div>
 
           <div className="mt-auto flex flex-col gap-8">
-            <p className="text-center font-medium">Total: 0.00 SOL</p>
             {match(projectDetail?.status)
               .with("open", () => (
                 <PrimaryButton className="" onClick={handleBuy}>

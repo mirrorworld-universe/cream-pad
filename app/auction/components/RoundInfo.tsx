@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import {
   Bar,
+  CartesianGrid,
   ComposedChart,
   Label,
   LabelList,
@@ -15,6 +16,52 @@ import {
   XAxis,
   YAxis
 } from "recharts";
+import { match, P } from "ts-pattern";
+
+const data = [
+  {
+    name: "Page A",
+    uv: 4000,
+    pv: 2400,
+    amt: 2400
+  },
+  {
+    name: "Page B",
+    uv: 3000,
+    pv: 1398,
+    amt: 2210
+  },
+  {
+    name: "Page C",
+    uv: 2000,
+    pv: 9800,
+    amt: 2290
+  },
+  {
+    name: "Page D",
+    uv: 2780,
+    pv: 3908,
+    amt: 2000
+  },
+  {
+    name: "Page E",
+    uv: 1890,
+    pv: 4800,
+    amt: 2181
+  },
+  {
+    name: "Page F",
+    uv: 2390,
+    pv: 3800,
+    amt: 2500
+  },
+  {
+    name: "Page G",
+    uv: 3490,
+    pv: 4300,
+    amt: 2100
+  }
+];
 
 export default function RoundInfo() {
   const params = useParams();
@@ -31,24 +78,39 @@ export default function RoundInfo() {
     }));
   }, [roundInfo]);
 
+  const lineData = rounds?.map((round, index) => {
+    const actualValue = round.price.value === "0" ? null : +round.price.value;
+
+    let dashValue = null;
+    if (rounds[index + 1]?.price.value === "0") {
+      dashValue = round.price.value;
+    } else if (rounds[index + 1]?.price.value == null) {
+      dashValue = ((round.price.max + round.price.min) / 2).toFixed(2);
+    } else {
+      dashValue = null;
+    }
+
+    return {
+      actual: actualValue,
+      dash: dashValue,
+      max: round.price.max,
+      min: round.price.min,
+      isDash: dashValue !== null
+    };
+  });
+
   return (
     <div className="w-[658px] h-[428px] flex flex-col items-center justify-center">
       <div className="w-full px-8 h-[100px]">
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            width={500}
-            height={300}
-            data={rounds}
-            margin={{
-              top: 5,
-              right: 80,
-              left: 80,
-              bottom: 5
-            }}
-          >
+          <LineChart width={500} height={300} data={lineData}>
             <Tooltip
               content={(props) => {
-                if (props.active && props.payload[0]?.value) {
+                if (props.active && props.payload[0]) {
+                  const value = Number(props.payload[0]?.value);
+                  const max = Number(props.payload[0]?.payload.max);
+                  const min = Number(props.payload[0]?.payload.min);
+                  const isDash = props.payload[0]?.payload.isDash;
                   return (
                     <Box
                       bgColor={"rgba(222, 242, 107, 0.50)"}
@@ -56,18 +118,26 @@ export default function RoundInfo() {
                       backdropFilter={"blur(20px)"}
                       className="border border-[#DEF26B] py-2 px-4 rounded-2xl"
                     >
-                      <p>Price: {props.payload[0]?.value}</p>
+                      {match(isDash)
+                        .with(false, () => <p>Price: {value.toFixed(2)}</p>)
+                        .otherwise(() => (
+                          <>
+                            {" "}
+                            <p>Max: {max.toFixed(2)}</p>
+                            <p>Min: {min.toFixed(2)}</p>
+                          </>
+                        ))}
                     </Box>
                   );
                 }
               }}
             />
             <Line
-              dataKey="price.value"
+              type="monotone"
+              dataKey="actual"
               fill="#FF9011"
               stroke="#FF9011"
               strokeWidth={4}
-              type={"monotone"}
               dot={{
                 stroke: "#FF9011",
                 strokeWidth: 2,
@@ -75,23 +145,27 @@ export default function RoundInfo() {
                 fill: "#FF9011"
               }}
             />
+            <Line
+              type="monotone"
+              dataKey="dash"
+              fill="#FF9011"
+              stroke="#FF9011"
+              strokeWidth={4}
+              dot={{
+                stroke: "#FF9011",
+                strokeWidth: 2,
+                r: 4,
+                fill: "#FF9011"
+              }}
+              strokeDasharray="5 5"
+            />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
       <div className="w-full h-[280px]">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
-            width={500}
-            height={400}
-            data={rounds}
-            margin={{
-              top: 20,
-              right: 13,
-              bottom: 20,
-              left: 13
-            }}
-          >
+          <ComposedChart width={500} height={400} data={rounds}>
             <defs>
               <pattern
                 id="diagonalHatch"
@@ -111,15 +185,7 @@ export default function RoundInfo() {
                 />
               </pattern>
             </defs>
-            <XAxis dataKey="round" axisLine={false} tickLine={false}>
-              <Label
-                value="Auction Rounds"
-                offset={-20}
-                position="insideBottom"
-                className="font-inter"
-                style={{ fill: "#000", fontSize: 12 }}
-              />
-            </XAxis>
+            <XAxis dataKey="round" axisLine={false} tickLine={false}></XAxis>
             <YAxis
               yAxisId={0}
               domain={[0, 1.5]} // 设置范围从 0 到 2
@@ -148,10 +214,10 @@ export default function RoundInfo() {
                 }
               }}
             />
+
             <Bar
               dataKey="radio"
-              barSize={65}
-              radius={20}
+              barSize={"50%"}
               yAxisId={0}
               shape={(props) => {
                 const { x, y, width, height, value } = props;
@@ -217,6 +283,7 @@ export default function RoundInfo() {
             </Bar>
           </ComposedChart>
         </ResponsiveContainer>
+        <p className="text-xs text-center">Auction Rounds</p>
       </div>
     </div>
   );

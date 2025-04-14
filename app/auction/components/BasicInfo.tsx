@@ -1,6 +1,6 @@
 "use client";
 import CopyIcon from "@/app/components/icons/CopyIcon";
-import { formatStr } from "@/utils";
+import { formatStr, formatNumber } from "@/utils";
 import { http } from "@/utils/http";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -21,6 +21,13 @@ export default function BasicInfo() {
     queryFn: async () => http.get(`/project/${params.id}`)
   });
 
+  const { data: contractInfo } = useQuery({
+    queryKey: ["/pad/project/contract/info", params.id],
+    queryFn: async () =>
+      http.get(`/pad/project/contract/info`, { project_id: params.id }),
+    enabled: !!params.id
+  });
+
   useEffect(() => {
     if (data?.data) {
       useProjectDetail.getState().setProjectDetail(data.data);
@@ -29,10 +36,14 @@ export default function BasicInfo() {
 
   const detail = data?.data || {};
 
-  const nextAuction = match(Number(detail.next_auction))
+  const nextAuction = match(Number(contractInfo?.data?.next_auction))
     .with(P.number.lt(86400), (time) => (
       <Countdown
         date={Date.now() + time * 1000}
+        onComplete={() => {
+          // TODO: 拍卖结束
+          console.log("complete");
+        }}
         renderer={({ hours, minutes, seconds }) => (
           <span>
             {`${hours.toString().padStart(2, "0")}:${minutes
@@ -63,11 +74,7 @@ export default function BasicInfo() {
           <>
             <div className="flex items-center gap-2 font-medium text-2xl mb-6">
               <span>Token Name</span>
-              <img
-                className="size-12"
-                src="/images/sonic-token.png"
-                alt="sonic"
-              />
+              <img className="size-12" src={detail.token_icon} alt="sonic" />
               <span>
                 {detail.token_name} ({detail.token_symbol})
               </span>
@@ -78,7 +85,7 @@ export default function BasicInfo() {
                 </div>
                 <div className="h-3 w-2 bg-[#E8FF59]"></div>
                 <div className="px-5 h-10 bg-[#E8FF59] rounded-full flex items-center justify-center text-base">
-                  Next Auction in: {nextAuction}
+                  Auction Ends in: {nextAuction}
                 </div>
               </div>
             </div>
@@ -151,8 +158,9 @@ export default function BasicInfo() {
                       Remaining Token in the Sale(%)
                     </p>
                     <p className="font-baloo2 font-semibold">
-                      {detail.remaining_token} ({detail.remaining_token_percent}
-                      % )
+                      {contractInfo?.data?.remaining_token &&
+                        formatNumber(contractInfo.data.remaining_token)}{" "}
+                      ({contractInfo?.data?.remaining_token_percent}% )
                     </p>
                   </div>
                 </div>
@@ -166,7 +174,10 @@ export default function BasicInfo() {
                   />
                   <div className="space-y-2">
                     <p className="text-[#666] text-sm">FDV:</p>
-                    <p className="font-baloo2 font-semibold">{detail.FDV}</p>
+                    <p className="font-baloo2 font-semibold">
+                      {contractInfo?.data?.FDV &&
+                        formatNumber(contractInfo.data.FDV)}
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -180,7 +191,8 @@ export default function BasicInfo() {
                       Current Auction Rounds/Total Rounds:
                     </p>
                     <p className="font-baloo2 font-semibold">
-                      {detail.cur_round}/{detail.total_round}
+                      {contractInfo?.data?.cur_round}/
+                      {contractInfo?.data?.total_round}
                     </p>
                   </div>
                 </div>

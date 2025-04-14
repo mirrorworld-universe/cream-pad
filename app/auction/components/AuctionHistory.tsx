@@ -111,6 +111,7 @@ export default function AuctionHistory() {
 
       {total > 0 && (
         <Pagination
+          initialPage={state.page - 1}
           onPageChange={({ selected }) => setState({ page: selected + 1 })}
           total={total}
           className="mt-2"

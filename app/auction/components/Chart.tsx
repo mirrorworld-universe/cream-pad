@@ -136,7 +136,7 @@ export default function Chart() {
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">
       <div className="h-9 px-8 font-baloo2 font-bold bg-[#121212] text-white w-fit rounded-full flex items-center justify-center">
-        chart
+        Auction Chart
       </div>
       <div className="p-8 rounded-[40px] bg-white flex gap-8">
         <RoundInfo />

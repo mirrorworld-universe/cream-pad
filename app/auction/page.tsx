@@ -46,6 +46,7 @@ export default function Home() {
         total={total}
         className="mt-8"
         onPageChange={({ selected }) => setParams({ page: selected + 1 })}
+        initialPage={params.page - 1}
       />
     </div>
   );

@@ -1,6 +1,5 @@
 import { cn } from "@/utils";
 import { Box } from "@chakra-ui/react";
-import { AuctionData } from "@/app/data/auctions";
 import { useRouter } from "next/navigation";
 
 export const logoMap = {
@@ -9,7 +8,7 @@ export const logoMap = {
   telegram: "/images/activity/tg.svg"
 };
 
-export default function Card({ data }: { data: AuctionData }) {
+export default function Card({ data }: { data: any }) {
   const router = useRouter();
 
   return (
@@ -83,7 +82,8 @@ export default function Card({ data }: { data: AuctionData }) {
                 <span>Amount for Sale</span>
               </div>
               <div className="font-baloo2 font-semibold text-[28px]/[1.1]">
-                {data.amount} <span className="text-base">monk</span>
+                {data.amount}{" "}
+                <span className="text-base">{data.token.symbol}</span>
               </div>
             </div>
             <div className="flex flex-col gap-1.5">

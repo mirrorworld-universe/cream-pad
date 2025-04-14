@@ -49,3 +49,21 @@ export function formatTimeAgo(dateStr: string) {
 
   return `${diffInSeconds}s ago`;
 }
+
+export function formatNumber(num?: number | string): string {
+  if (num === undefined || num === null) return "";
+
+  const value = typeof num === "string" ? parseFloat(num) : num;
+
+  if (isNaN(value)) return "";
+
+  if (value >= 1_000_000_000) {
+    return (value / 1_000_000_000).toFixed(2) + "B";
+  } else if (value >= 1_000_000) {
+    return (value / 1_000_000).toFixed(2) + "M";
+  } else if (value >= 1_000) {
+    return (value / 1_000).toFixed(2) + "K";
+  }
+
+  return value.toFixed(2);
+}

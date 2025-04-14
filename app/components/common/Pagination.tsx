@@ -7,12 +7,14 @@ interface IPagination {
   total: number;
   className?: string;
   onPageChange?: (params: { selected: number }) => void;
+  initialPage?: number;
 }
 
 export default function Pagination({
   total,
   onPageChange,
-  className
+  className,
+  initialPage
 }: IPagination) {
   return (
     <>
@@ -26,6 +28,7 @@ export default function Pagination({
         pageCount={total}
         previousLabel={<ArrowIcon className="rotate-180" />}
         renderOnZeroPageCount={null}
+        initialPage={initialPage}
       />
     </>
   );

@@ -41,7 +41,7 @@ export default function Chart() {
 
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
-      amount: 0
+      amount: undefined
     }
   });
 
@@ -199,7 +199,7 @@ export default function Chart() {
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
                 className="h-14 border border-[#121212] rounded-2xl placeholder:text-[#121212]/20 focus:outline-none pr-32"
-                placeholder="0.00"
+                placeholder="100 SONIC Limited"
                 {...register("amount")}
               />
               <TokenSelect
@@ -214,7 +214,10 @@ export default function Chart() {
                   onClick={() =>
                     setValue(
                       "amount",
-                      option.value * (balanceResult?.data?.balance || 0)
+                      Math.min(
+                        option.value * (balanceResult?.data?.balance || 0),
+                        100
+                      )
                     )
                   }
                   className="px-[18px] text-sm font-medium py-1 border border-[#E1E1E1] rounded-full cursor-pointer"

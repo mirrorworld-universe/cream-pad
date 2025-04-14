@@ -1,6 +1,7 @@
 import { Flex, Center, Fade, useClipboard } from "@chakra-ui/react";
 import CopyIcon from "../icons/CopyIcon";
 import SelectedIcon from "../icons/SelectedIcon";
+import { useEffect } from "react";
 
 interface CopyTextProps {
   children: React.ReactNode;
@@ -9,15 +10,15 @@ interface CopyTextProps {
 
 export default function CopyText({ children, label }: CopyTextProps) {
   const { onCopy, setValue, hasCopied } = useClipboard("");
+
+  useEffect(() => {
+    setValue(label);
+  }, [label, setValue]);
+
   return (
     <Flex
-      onClick={() => {
-        setValue(label);
-        setInterval(() => {
-          onCopy();
-        }, 0);
-      }}
-      className="font-normal cursor-pointer text-sm items-center gap-1 text-tertary group hover:text-primary transition-colors"
+      onClick={onCopy}
+      className="cursor-pointer items-center gap-1 group transition-colors"
     >
       {children}
       <Center className="relative size-4">

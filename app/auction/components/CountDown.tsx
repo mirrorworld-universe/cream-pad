@@ -53,7 +53,7 @@ export default function CountDownTime() {
       </div>
       <div className="h-3 w-2 bg-[#E8FF59]"></div>
       <div className="px-5 h-10 bg-[#E8FF59] rounded-full flex items-center justify-center text-base">
-        {contractInfo?.data?.current_round === contractInfo?.data?.total_rounds
+        {contractInfo?.data?.current_round === contractInfo?.data?.total_round
           ? "Auction Ends in:"
           : "Auction Starts in:"}
         {nextAuction}

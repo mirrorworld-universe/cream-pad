@@ -16,51 +16,6 @@ import {
 } from "recharts";
 import { match } from "ts-pattern";
 
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100
-  }
-];
-
 export default function RoundInfo() {
   const params = useParams();
   const { data: roundInfo } = useQuery({
@@ -68,12 +23,17 @@ export default function RoundInfo() {
     queryFn: async () => http.get("/pad/round/info", { project_id: params.id })
   });
 
-  const rounds = useMemo(() => {
-    return roundInfo?.data?.round_info.map((round) => ({
+  const { rounds } = useMemo(() => {
+    const rounds = roundInfo?.data?.round_info.map((round) => ({
       ...round,
       radio: Math.max(round.percent, 0.0001) / 100,
       radio_text: round.percent + "%"
     }));
+    return {
+      rounds,
+      currentRound: roundInfo?.data?.current_round,
+      totalRound: roundInfo?.data?.total_round
+    };
   }, [roundInfo]);
 
   const lineData = rounds?.map((round, index) => {
@@ -93,7 +53,7 @@ export default function RoundInfo() {
       dash: dashValue,
       max: round.price.max,
       min: round.price.min,
-      isDash: dashValue !== null
+      isDash: dashValue !== null && actualValue === 0
     };
   });
 

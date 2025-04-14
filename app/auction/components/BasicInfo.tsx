@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { match } from "ts-pattern";
 import { logoMap } from "./AuctionCard";
+import CopyText from "@/app/components/common/CopyText";
 
 export default function BasicInfo() {
   const params = useParams();
@@ -86,7 +87,9 @@ export default function BasicInfo() {
                       }}
                       className="font-baloo2 font-semibold cursor-pointer"
                     >
-                      {formatStr(detail.token_address)} <CopyIcon />
+                      <CopyText label={detail.token_address}>
+                        {formatStr(detail.token_address)}
+                      </CopyText>
                     </div>
                   </div>
                 </div>

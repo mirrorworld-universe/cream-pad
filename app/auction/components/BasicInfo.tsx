@@ -1,17 +1,14 @@
 "use client";
 import CopyIcon from "@/app/components/icons/CopyIcon";
-import { formatStr, formatNumber } from "@/utils";
+import { useProjectDetail } from "@/app/store";
+import { formatNumber, formatStr } from "@/utils";
 import { http } from "@/utils/http";
+import { Skeleton } from "@chakra-ui/react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { logoMap } from "./AuctionCard";
-import { match } from "ts-pattern";
-import { Skeleton } from "@chakra-ui/react";
-import { useProjectDetail } from "@/app/store";
 import { useEffect } from "react";
-import Countdown from "react-countdown";
-import { P } from "ts-pattern";
-import dayjs from "dayjs";
+import { match } from "ts-pattern";
+import { logoMap } from "./AuctionCard";
 
 export default function BasicInfo() {
   const params = useParams();
@@ -40,37 +37,6 @@ export default function BasicInfo() {
 
   const detail = data?.data || {};
 
-  const nextAuction = match(Number(contractInfo?.data?.next_auction))
-    .with(P.number.lt(86400), (time) => (
-      <Countdown
-        date={Date.now() + time * 1000}
-        onComplete={() => {
-          const queryKeys = [
-            ["/pad/auction/history"],
-            ["/pad/round/info"],
-            ["/pad/price"],
-            ["/project/:id"],
-            ["/pad/project/contract/info"]
-          ];
-          queryKeys.forEach((key) => {
-            queryClient.invalidateQueries({
-              queryKey: key
-            });
-          });
-        }}
-        renderer={({ hours, minutes, seconds }) => (
-          <span>
-            {`${hours.toString().padStart(2, "0")}:${minutes
-              .toString()
-              .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`}
-          </span>
-        )}
-      />
-    ))
-    .otherwise((time) => (
-      <span>{dayjs(Date.now() + time * 1000).format("YYYY-MM-DD")}</span>
-    ));
-
   return (
     <>
       <p className="text-3xl font-baloo2 font-bold mb-8">
@@ -92,16 +58,6 @@ export default function BasicInfo() {
               <span>
                 {detail.token_name} ({detail.token_symbol})
               </span>
-
-              <div className="ml-auto flex items-center">
-                <div className="size-10 rounded-full bg-[#E8FF59] flex items-center justify-center">
-                  <img src="/images/time.svg" alt="time" />
-                </div>
-                <div className="h-3 w-2 bg-[#E8FF59]"></div>
-                <div className="px-5 h-10 bg-[#E8FF59] rounded-full flex items-center justify-center text-base">
-                  Auction Ends in: {nextAuction}
-                </div>
-              </div>
             </div>
             <div className="grid grid-cols-3 gap-x-[100px] gap-y-6 mb-11">
               <div className="flex flex-col gap-6">

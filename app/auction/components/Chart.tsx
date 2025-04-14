@@ -15,6 +15,7 @@ import { TokenSelect } from "./TokenSelect";
 import { triggerTransaction } from "@/utils/transaction";
 import { MODAL_HASH_MAP, openModalDirectly } from "@/app/hooks/useModalHash";
 import { toast } from "@/app/components/common/toast";
+import CountDownTime from "./CountDown";
 const options = [
   {
     label: "25%",
@@ -135,8 +136,11 @@ export default function Chart() {
 
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">
-      <div className="h-9 px-8 font-baloo2 font-bold bg-[#121212] text-white w-fit rounded-full flex items-center justify-center">
-        Auction Chart
+      <div className="flex items-center justify-between">
+        <div className="h-9 px-8 font-baloo2 font-bold bg-[#121212] text-white w-fit rounded-full flex items-center justify-center">
+          Auction Chart
+        </div>
+        <CountDownTime />
       </div>
       <div className="p-8 rounded-[40px] bg-white flex gap-8">
         <RoundInfo />

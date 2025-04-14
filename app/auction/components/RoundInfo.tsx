@@ -5,9 +5,7 @@ import { useParams } from "next/navigation";
 import { useMemo } from "react";
 import {
   Bar,
-  CartesianGrid,
   ComposedChart,
-  Label,
   LabelList,
   Line,
   LineChart,
@@ -16,7 +14,7 @@ import {
   XAxis,
   YAxis
 } from "recharts";
-import { match, P } from "ts-pattern";
+import { match } from "ts-pattern";
 
 const data = [
   {

@@ -29,10 +29,13 @@ export default function BasicInfo() {
   });
 
   useEffect(() => {
-    if (data?.data) {
-      useProjectDetail.getState().setProjectDetail(data.data);
+    if (data?.data && contractInfo?.data) {
+      useProjectDetail.getState().setProjectDetail({
+        ...data.data,
+        ...contractInfo.data
+      });
     }
-  }, [data]);
+  }, [data, contractInfo]);
 
   const detail = data?.data || {};
 

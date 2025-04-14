@@ -101,7 +101,7 @@ export default function RoundInfo() {
 
   return (
     <div className="w-[658px] h-[428px] flex flex-col items-center justify-center">
-      <div className="w-full px-8 h-[100px]">
+      <div className="w-full px-8 h-[150px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart width={500} height={300} data={lineData}>
             <Tooltip
@@ -131,6 +131,14 @@ export default function RoundInfo() {
                   );
                 }
               }}
+            />
+            <YAxis
+              yAxisId={0}
+              domain={["dataMin - 0.5", "dataMax + 0.5"]}
+              axisLine={false} // 隐藏轴线
+              tickLine={false} // 隐藏刻度线
+              tick={false}
+              width={0}
             />
             <Line
               type="monotone"

@@ -2,7 +2,7 @@
 import CopyIcon from "@/app/components/icons/CopyIcon";
 import { formatStr, formatNumber } from "@/utils";
 import { http } from "@/utils/http";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { logoMap } from "./AuctionCard";
 import { match } from "ts-pattern";
@@ -15,6 +15,7 @@ import dayjs from "dayjs";
 
 export default function BasicInfo() {
   const params = useParams();
+  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ["/project/:id", params.id],
@@ -44,8 +45,18 @@ export default function BasicInfo() {
       <Countdown
         date={Date.now() + time * 1000}
         onComplete={() => {
-          // TODO: 拍卖结束
-          console.log("complete");
+          const queryKeys = [
+            ["/pad/auction/history"],
+            ["/pad/round/info"],
+            ["/pad/price"],
+            ["/project/:id"],
+            ["/pad/project/contract/info"]
+          ];
+          queryKeys.forEach((key) => {
+            queryClient.invalidateQueries({
+              queryKey: key
+            });
+          });
         }}
         renderer={({ hours, minutes, seconds }) => (
           <span>

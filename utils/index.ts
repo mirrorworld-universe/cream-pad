@@ -67,3 +67,49 @@ export function formatNumber(num?: number | string): string {
 
   return value.toFixed(2);
 }
+
+export function formatChartData(roundData: {
+  current_round: number;
+  total_round: number;
+  round_info: Array<{
+    round: number;
+    supply: string;
+    sold: string | number;
+    percent: number;
+    price: {
+      min: number;
+      max: number;
+      value: string;
+    };
+  }>;
+}) {
+  if (!roundData) return [];
+
+  // Sort round_info by round number to ensure correct order
+  const sortedRoundInfo = [...roundData.round_info].sort(
+    (a, b) => a.round - b.round
+  );
+
+  // Create combined data in required format
+  const formattedData = sortedRoundInfo.map((info) => {
+    const priceValue = parseFloat(info.price.value);
+
+    return {
+      round: info.round,
+      percent: info.percent,
+      solidPrice: info.round <= roundData.current_round ? priceValue : null,
+      dottedPrice:
+        info.round === roundData.current_round ||
+        info.round === roundData.current_round + 1
+          ? priceValue
+          : null
+    };
+  });
+
+  return formattedData;
+}
+
+export function truncateToDecimals(num: number, decimals: number) {
+  const factor = Math.pow(10, decimals);
+  return Math.floor(num * factor) / factor;
+}

@@ -1,7 +1,7 @@
 "use client";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
 import { useProjectDetail } from "@/app/store";
-import { cn } from "@/utils";
+import { cn, truncateToDecimals } from "@/utils";
 import { http } from "@/utils/http";
 import { Box, Input } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
@@ -133,6 +133,7 @@ export default function Chart() {
       }
     })();
   };
+  console.log(watch("amount"), "watch");
 
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">
@@ -187,14 +188,6 @@ export default function Chart() {
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
               <p className="font-medium text-base/[1.2]">Your Bid Amount</p>
-              {match(balanceResult?.data?.balance)
-                .with(P.number, () => (
-                  <p className="text-xs">
-                    Balance: {balanceResult?.data?.balance}{" "}
-                    {currentToken?.token_symbol}
-                  </p>
-                ))
-                .otherwise(() => null)}
             </div>
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
@@ -207,16 +200,16 @@ export default function Chart() {
                 setCurrentToken={setCurrentToken}
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
               {options.map((option) => (
                 <div
                   key={option.value}
                   onClick={() =>
                     setValue(
                       "amount",
-                      Math.min(
+                      truncateToDecimals(
                         option.value * (balanceResult?.data?.balance || 0),
-                        100
+                        2
                       )
                     )
                   }
@@ -225,11 +218,29 @@ export default function Chart() {
                   {option.label}
                 </div>
               ))}
+              {match(balanceResult?.data?.balance)
+                .with(P.number, () => (
+                  <p className="text-xs ml-auto">
+                    {balanceResult?.data?.balance} {currentToken?.token_symbol}
+                  </p>
+                ))
+                .otherwise(() => null)}
             </div>
-            <p className="text-sm text-[#121212]/70 mt-3">Gas: 0.01 SOL</p>
-            <p className="text-sm text-[#121212]/70">
-              You will get: {watch("amount")} {projectDetail?.token_symbol}
-            </p>
+            <div className="flex flex-col gap-2 text-xs">
+              <p className="text-[#121212]/70">
+                Cost: {truncateToDecimals(watch("amount"), 2) || 0}{" "}
+                {currentToken?.token_symbol}
+              </p>
+              <p className="text-[#121212]/70">Gas: 0.01 SOL</p>
+              <p className="text-[#121212]/70 text-base font-medium">
+                You will get:{" "}
+                {truncateToDecimals(
+                  +watch("amount") / priceResult?.data?.current_price,
+                  2
+                )}{" "}
+                {projectDetail?.token_symbol}
+              </p>
+            </div>
           </div>
 
           <div className="mt-auto flex flex-col gap-8">

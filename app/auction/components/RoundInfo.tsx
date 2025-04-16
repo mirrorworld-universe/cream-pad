@@ -12,7 +12,7 @@ export default function RoundInfo() {
   });
 
   const mockData = useMemo(() => {
-    let roundInfoData = [];
+    const roundInfoData = [];
     if (roundInfo?.data) {
       for (let i = 0; i < roundInfo.data.total_round; i++) {
         if (roundInfo.data.round_info[i]) {

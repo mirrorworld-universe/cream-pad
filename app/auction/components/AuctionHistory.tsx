@@ -101,7 +101,7 @@ export default function AuctionHistory() {
                   {formatStr(item.address, 4)}
                 </div>
                 <div>
-                  {item.amount} {projectDetail.token_symbol}
+                  {item.amount} {projectDetail?.token_symbol}
                 </div>
                 <div>Round {item.round}</div>
                 <div>${item.price.toFixed(2)}</div>

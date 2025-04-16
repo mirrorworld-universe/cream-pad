@@ -195,7 +195,7 @@ export default function Chart() {
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
                 className="h-14 border border-[#121212] rounded-2xl placeholder:text-[#121212]/20 focus:outline-none pr-32"
-                placeholder={`100 ${projectDetail.token_symbol} Limited`}
+                placeholder={`100 ${projectDetail?.token_symbol} Limited`}
                 {...register("amount")}
               />
               <TokenSelect
@@ -231,7 +231,7 @@ export default function Chart() {
             </div>
             <div className="flex flex-col gap-2 text-xs text-[#121212]/70">
               <p>
-                Limit: 100 {projectDetail.token_symbol} / Round (3000{" "}
+                Limit: 100 {projectDetail?.token_symbol} / Round (3000{" "}
                 {currentToken?.token_symbol})
               </p>
               <p>

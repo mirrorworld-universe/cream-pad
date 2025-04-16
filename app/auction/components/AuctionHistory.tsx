@@ -4,6 +4,7 @@ import Pagination from "@/app/components/common/Pagination";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
 import { openModalDirectly } from "@/app/hooks/useModalHash";
 import { MODAL_HASH_MAP } from "@/app/hooks/useModalHash";
+import { useProjectDetail } from "@/app/store";
 import { cn, formatStr, formatTimeAgo, getRandomAddressColor } from "@/utils";
 import { http } from "@/utils/http";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -17,6 +18,8 @@ export default function AuctionHistory() {
   const [active, setActive] = useState<"all" | "my">("all");
   const params = useParams();
   const { publicKey, connected } = useWallet();
+
+  const { projectDetail } = useProjectDetail();
 
   const [state, setState] = useSetState({
     page: 1,
@@ -97,7 +100,9 @@ export default function AuctionHistory() {
                 >
                   {formatStr(item.address, 4)}
                 </div>
-                <div>{item.amount}</div>
+                <div>
+                  {item.amount} {projectDetail.token_symbol}
+                </div>
                 <div>Round {item.round}</div>
                 <div>${item.price.toFixed(2)}</div>
                 <div className="flex justify-end">

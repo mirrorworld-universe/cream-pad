@@ -89,7 +89,10 @@ export default function Chart() {
     handleSubmit(async (data) => {
       const res: any = await buildTransaction({
         project_id: params.id,
-        amount: data.amount,
+        amount: truncateToDecimals(
+          data.amount / priceResult?.data?.current_price,
+          2
+        ),
         payment_token: currentToken.token_address,
         wallet: publicKey?.toBase58()
       });
@@ -226,13 +229,17 @@ export default function Chart() {
                 ))
                 .otherwise(() => null)}
             </div>
-            <div className="flex flex-col gap-2 text-xs">
-              <p className="text-[#121212]/70">
+            <div className="flex flex-col gap-2 text-xs text-[#121212]/70">
+              <p>
+                Limit: 100 {projectDetail.token_symbol} / Round (3000{" "}
+                {currentToken?.token_symbol})
+              </p>
+              <p>
                 Cost: {truncateToDecimals(watch("amount"), 2) || 0}{" "}
                 {currentToken?.token_symbol}
               </p>
-              <p className="text-[#121212]/70">Gas: 0.01 SOL</p>
-              <p className="text-[#121212]/70 text-base font-medium">
+              <p>Gas: 0.01 SOL</p>
+              <p className="text-base font-medium">
                 You will get:{" "}
                 {truncateToDecimals(
                   +watch("amount") / priceResult?.data?.current_price,

@@ -195,7 +195,7 @@ export default function Chart() {
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
                 className="h-14 border border-[#121212] rounded-2xl placeholder:text-[#121212]/20 focus:outline-none pr-32"
-                placeholder="100 SONIC Limited"
+                placeholder={`100 ${projectDetail.token_symbol} Limited`}
                 {...register("amount")}
               />
               <TokenSelect

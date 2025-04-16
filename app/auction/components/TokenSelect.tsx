@@ -75,7 +75,7 @@ export const TokenSelect = ({
                 className="px-8 flex items-center gap-2 h-14 hover:bg-[#F6F6F3] cursor-pointer"
               >
                 <img src={item.token_image} alt="sonic" className="size-8" />
-                <p className="font-semibold">{item.token_symbol}</p>
+                <p className="font-semibold">{item?.token_symbol}</p>
                 <p className="ml-auto"></p>
               </div>
             ))}

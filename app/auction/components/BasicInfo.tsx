@@ -57,7 +57,7 @@ export default function BasicInfo() {
               <span>Token Name</span>
               <img className="size-12" src={detail.token_icon} alt="sonic" />
               <span>
-                {detail.token_name} ({detail.token_symbol})
+                {detail?.token_name} ({detail?.token_symbol})
               </span>
             </div>
             <div className="grid grid-cols-3 gap-x-[100px] gap-y-6 mb-11">

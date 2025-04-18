@@ -52,10 +52,7 @@ export default function Chart() {
       projectDetail?.token_type
     ],
     mutationFn: async (data: any) =>
-      http.post(
-        `/pad/token/${projectDetail?.token_type}/buy/build-transaction`,
-        data
-      )
+      http.post(`/pad/${projectDetail?.token_type}/buy/build-transaction`, data)
   });
 
   const { data: priceResult } = useQuery({

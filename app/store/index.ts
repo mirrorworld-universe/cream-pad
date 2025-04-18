@@ -19,6 +19,7 @@ interface ProjectDetail {
   next_auction: number;
   remaining_token_percent: number;
   status: "open" | "closed";
+  token_type: "token" | "nft";
 }
 
 interface ProjectDetailState {

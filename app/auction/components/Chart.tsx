@@ -36,6 +36,7 @@ export default function Chart() {
   const queryClient = useQueryClient();
 
   const { connection } = useConnection();
+  const { projectDetail } = useProjectDetail();
 
   const [currentToken, setCurrentToken] = useState<any>({});
 
@@ -46,12 +47,16 @@ export default function Chart() {
   });
 
   const { mutateAsync: buildTransaction } = useMutation({
-    mutationKey: ["/pad/token/buy/build-transaction"],
+    mutationKey: [
+      "/pad/token/buy/build-transaction",
+      projectDetail?.token_type
+    ],
     mutationFn: async (data: any) =>
-      http.post("/pad/token/buy/build-transaction", data)
+      http.post(
+        `/pad/token/${projectDetail?.token_type}/buy/build-transaction`,
+        data
+      )
   });
-
-  const { projectDetail } = useProjectDetail();
 
   const { data: priceResult } = useQuery({
     queryKey: ["/pad/price", params.id],
@@ -59,13 +64,13 @@ export default function Chart() {
   });
 
   const { data: balanceResult } = useQuery({
-    queryKey: [`/token/balance`, params.id, currentToken.token_address],
+    queryKey: [`/token/balance`, params.id, currentToken?.token_address],
     queryFn: async () =>
       http.get("/token/balance", {
         wallet: publicKey?.toBase58(),
-        token_address: currentToken.token_address
+        token_address: currentToken?.token_address
       }),
-    enabled: !!publicKey && !!currentToken.token_address
+    enabled: !!publicKey && !!currentToken?.token_address
   });
 
   const percentage = useMemo(() => {

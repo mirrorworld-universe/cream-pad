@@ -1,12 +1,12 @@
+import { refetchQueries } from "@/utils";
 import { http } from "@/utils/http";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
 import Countdown from "react-countdown";
 import { match, P } from "ts-pattern";
 
 export default function CountDownTime() {
-  const queryClient = useQueryClient();
   const params = useParams();
 
   const { data: contractInfo } = useQuery({
@@ -21,18 +21,7 @@ export default function CountDownTime() {
       <Countdown
         date={Date.now() + time * 1000}
         onComplete={() => {
-          const queryKeys = [
-            ["/pad/auction/history"],
-            ["/pad/round/info"],
-            ["/pad/price"],
-            ["/project/:id"],
-            ["/pad/project/contract/info"]
-          ];
-          queryKeys.forEach((key) => {
-            queryClient.invalidateQueries({
-              queryKey: key
-            });
-          });
+          refetchQueries();
         }}
         renderer={({ hours, minutes, seconds }) => (
           <span>

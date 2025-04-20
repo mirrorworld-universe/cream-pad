@@ -6,6 +6,7 @@ interface ProjectDetail {
   token_address: string;
   token_name: string;
   token_symbol: string;
+  buy_limit: number;
   token_icon: string;
   chain: string;
   social: {

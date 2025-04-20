@@ -1,3 +1,4 @@
+import { getQueryClient } from "@/app/providers/QueryProvider";
 import { clsx } from "clsx";
 import { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -112,4 +113,20 @@ export function formatChartData(roundData: {
 export function truncateToDecimals(num: number, decimals: number) {
   const factor = Math.pow(10, decimals);
   return Math.floor(num * factor) / factor;
+}
+
+export function refetchQueries() {
+  const queryClient = getQueryClient();
+  const queryKeys = [
+    ["/pad/auction/history"],
+    ["/pad/round/info"],
+    ["/pad/price"],
+    ["/token/balance"],
+    ["/project/:id"]
+  ];
+  queryKeys.forEach((key) => {
+    queryClient.invalidateQueries({
+      queryKey: key
+    });
+  });
 }

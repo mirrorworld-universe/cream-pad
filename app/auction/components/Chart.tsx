@@ -1,8 +1,11 @@
 "use client";
 import PrimaryButton from "@/app/components/common/PrimaryButton";
+import { toast } from "@/app/components/common/toast";
+import { MODAL_HASH_MAP, openModalDirectly } from "@/app/hooks/useModalHash";
 import { useProjectDetail } from "@/app/store";
-import { cn, truncateToDecimals } from "@/utils";
+import { cn, refetchQueries, truncateToDecimals } from "@/utils";
 import { http } from "@/utils/http";
+import { triggerTransaction } from "@/utils/transaction";
 import { Box, Input } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,12 +13,9 @@ import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { match, P } from "ts-pattern";
+import CountDownTime from "./CountDown";
 import RoundInfo from "./RoundInfo";
 import { TokenSelect } from "./TokenSelect";
-import { triggerTransaction } from "@/utils/transaction";
-import { MODAL_HASH_MAP, openModalDirectly } from "@/app/hooks/useModalHash";
-import { toast } from "@/app/components/common/toast";
-import CountDownTime from "./CountDown";
 const options = [
   {
     label: "25%",
@@ -123,22 +123,10 @@ export default function Chart() {
           title: "Transaction successful",
           status: "success"
         });
-        const queryKeys = [
-          ["/pad/auction/history"],
-          ["/pad/round/info"],
-          ["/pad/price"],
-          ["/token/balance"],
-          ["/project/:id"]
-        ];
-        queryKeys.forEach((key) => {
-          queryClient.invalidateQueries({
-            queryKey: key
-          });
-        });
+        refetchQueries();
       }
     })();
   };
-  console.log(watch("amount"), "watch");
 
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">
@@ -197,7 +185,11 @@ export default function Chart() {
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
                 className="h-14 border border-[#121212] rounded-2xl placeholder:text-[#121212]/20 focus:outline-none pr-32"
-                placeholder={`100 ${projectDetail?.token_symbol} Limited`}
+                placeholder={
+                  projectDetail == null
+                    ? ""
+                    : `${projectDetail?.buy_limit} ${projectDetail?.token_symbol} Limited`
+                }
                 {...register("amount")}
               />
               <TokenSelect
@@ -205,74 +197,119 @@ export default function Chart() {
                 setCurrentToken={setCurrentToken}
               />
             </div>
-            <div className="flex gap-2 items-center">
-              {options.map((option) => (
-                <div
-                  key={option.value}
-                  onClick={() =>
-                    setValue(
-                      "amount",
-                      truncateToDecimals(
-                        option.value * (balanceResult?.data?.balance || 0),
-                        2
-                      )
-                    )
-                  }
-                  className="px-[18px] text-sm font-medium py-1 border border-[#E1E1E1] rounded-full cursor-pointer"
-                >
-                  {option.label}
+            <div className="flex items-center justify-between">
+              {projectDetail?.token_type === "token" && (
+                <div className="flex gap-2 items-center">
+                  {options.map((option) => (
+                    <div
+                      key={option.value}
+                      onClick={() =>
+                        setValue(
+                          "amount",
+                          truncateToDecimals(
+                            option.value * (balanceResult?.data?.balance || 0),
+                            2
+                          )
+                        )
+                      }
+                      className="px-[18px] text-sm font-medium py-1 border border-[#E1E1E1] rounded-full cursor-pointer"
+                    >
+                      {option.label}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
+
               {match(balanceResult?.data?.balance)
                 .with(P.number, () => (
-                  <p className="text-xs ml-auto">
+                  <p className="text-xs">
                     {balanceResult?.data?.balance} {currentToken?.token_symbol}
                   </p>
                 ))
                 .otherwise(() => null)}
             </div>
-            <div className="flex flex-col gap-2 text-xs text-[#121212]/70">
-              <p>
-                Limit: 100 {projectDetail?.token_symbol} / Round (3000{" "}
-                {currentToken?.token_symbol})
-              </p>
-              <p>
-                Cost: {truncateToDecimals(watch("amount"), 2) || 0}{" "}
-                {currentToken?.token_symbol}
-              </p>
-              <p>Gas: 0.01 SOL</p>
-              <p className="text-base font-medium">
-                You will get:{" "}
-                {truncateToDecimals(
-                  +watch("amount") / priceResult?.data?.current_price,
-                  2
-                )}{" "}
-                {projectDetail?.token_symbol}
-              </p>
-            </div>
+            <BuyInfo
+              currentToken={currentToken}
+              priceResult={priceResult}
+              watch={watch}
+            />
           </div>
-
-          <div className="mt-auto flex flex-col gap-8">
-            {match(projectDetail?.status)
-              .with("open", () => (
-                <PrimaryButton className="" onClick={handleBuy}>
-                  Buy
-                </PrimaryButton>
-              ))
-              .with("closed", () => (
-                <div
-                  className={cn(
-                    "flex items-center justify-center bg-[#E1E1E1] rounded-full h-[50px] text-white cursor-not-allowed font-baloo2 font-bold",
-                    "text-2xl"
-                  )}
-                >
-                  Auction Closed
-                </div>
-              ))
-              .otherwise(() => null)}
-          </div>
+          <ActionButton handleBuy={handleBuy} />
         </div>
       </div>
+    </div>
+  );
+}
+
+function ActionButton({ handleBuy }: { handleBuy: () => void }) {
+  const { projectDetail } = useProjectDetail();
+  return (
+    <div className="mt-auto flex flex-col gap-8">
+      {match(projectDetail?.status)
+        .with("open", () => (
+          <PrimaryButton className="" onClick={handleBuy}>
+            Buy
+          </PrimaryButton>
+        ))
+        .with("closed", () => (
+          <div
+            className={cn(
+              "flex items-center justify-center bg-[#E1E1E1] rounded-full h-[50px] text-white cursor-not-allowed font-baloo2 font-bold",
+              "text-2xl"
+            )}
+          >
+            Auction Closed
+          </div>
+        ))
+        .otherwise(() => null)}
+    </div>
+  );
+}
+
+function BuyInfo({
+  currentToken,
+  priceResult,
+  watch
+}: {
+  currentToken: any;
+  priceResult: any;
+  watch: any;
+}) {
+  const { projectDetail } = useProjectDetail();
+  const { publicKey } = useWallet();
+  const params = useParams();
+  const { data: buyInfo } = useQuery({
+    queryKey: ["/pad/round/buy/info"],
+    queryFn: async () =>
+      http.get("/pad/round/buy/info", {
+        project_id: params.id,
+        wallet: publicKey?.toBase58()
+      })
+  });
+
+  return (
+    <div className="flex flex-col gap-2 text-xs text-[#121212]/70">
+      <p>
+        Limit: {buyInfo?.data.buy_limit} {projectDetail?.token_symbol} / Round (
+        {truncateToDecimals(
+          buyInfo?.data.buy_limit * priceResult?.data?.current_price,
+          2
+        )}{" "}
+        {currentToken?.token_symbol})
+      </p>
+      <p>
+        Cost: {truncateToDecimals(watch("amount"), 2) || 0}{" "}
+        {currentToken?.token_symbol}
+      </p>
+      <p>Gas: 0.01 SOL</p>
+      <p className="text-base font-medium">
+        You will get:{" "}
+        {truncateToDecimals(
+          +watch("amount") / priceResult?.data?.current_price,
+          2
+        )}{" "}
+        {projectDetail?.token_symbol}
+      </p>
     </div>
   );
 }

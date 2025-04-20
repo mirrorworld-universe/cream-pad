@@ -9,7 +9,7 @@ import { useSetState } from "react-use";
 export default function Home() {
   const [params, setParams] = useSetState({
     page: 1,
-    page_size: 10
+    page_size: 4
   });
 
   const { data } = useQuery({

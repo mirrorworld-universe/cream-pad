@@ -1,4 +1,6 @@
+import { whitepaper } from "@/app/data/auctions";
 import { cn } from "@/utils";
+import Link from "next/link";
 
 export default function Footer() {
   return (
@@ -28,17 +30,15 @@ export default function Footer() {
             <p className="font-baloo2 text-2xl/[1.2] font-bold mb-1">
               Products
             </p>
-            <a href="#">Auction</a>
-            <a href="#">AI Agent</a>
-            <a href="#">BounceX Exchange</a>
+            <Link href="/auction">Auction</Link>
           </div>
           <div className="flex flex-col gap-4 text-sm">
             <p className="font-baloo2 text-2xl/[1.2] font-bold mb-1">
               Resources
             </p>
-            <a href="#">Help Center</a>
-            <a href="#">Become a Partner</a>
-            <a href="#">Contract Us</a>
+            <a href={whitepaper} target="_blank">
+              Documentation
+            </a>
           </div>
         </div>
       </div>

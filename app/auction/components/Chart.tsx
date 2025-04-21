@@ -8,7 +8,7 @@ import { http } from "@/utils/http";
 import { triggerTransaction } from "@/utils/transaction";
 import { Box, Input } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -33,7 +33,6 @@ const options = [
 export default function Chart() {
   const params = useParams();
   const { publicKey, signTransaction } = useWallet();
-  const queryClient = useQueryClient();
 
   const { connection } = useConnection();
   const { projectDetail } = useProjectDetail();
@@ -88,13 +87,21 @@ export default function Chart() {
       openModalDirectly(MODAL_HASH_MAP.walletConnect);
       return;
     }
+
+    const amount = match(projectDetail?.token_type)
+      .with("token", () =>
+        truncateToDecimals(
+          watch("amount") / priceResult?.data?.current_price,
+          2
+        )
+      )
+      .with("nft", () => watch("amount"))
+      .exhaustive();
+
     handleSubmit(async (data) => {
       const res: any = await buildTransaction({
         project_id: params.id,
-        amount: truncateToDecimals(
-          data.amount / priceResult?.data?.current_price,
-          2
-        ),
+        amount,
         payment_token: currentToken.token_address,
         wallet: publicKey?.toBase58()
       });
@@ -293,7 +300,8 @@ function BuyInfo({
       http.get("/pad/round/buy/info", {
         project_id: params.id,
         wallet: publicKey?.toBase58()
-      })
+      }),
+    enabled: !!publicKey
   });
 
   return (
@@ -313,10 +321,15 @@ function BuyInfo({
       <p>Gas: 0.01 SOL</p>
       <p className="text-base font-medium">
         You will get:{" "}
-        {truncateToDecimals(
-          +watch("amount") / priceResult?.data?.current_price,
-          2
-        )}{" "}
+        {match(projectDetail?.token_type)
+          .with("token", () =>
+            truncateToDecimals(
+              +watch("amount") / priceResult?.data?.current_price,
+              2
+            )
+          )
+          .with("nft", () => watch("amount") || 0)
+          .otherwise(() => 0)}{" "}
         {projectDetail?.token_symbol}
       </p>
     </div>

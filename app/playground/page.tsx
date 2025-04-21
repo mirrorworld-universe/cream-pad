@@ -14,6 +14,7 @@ import {
   Legend,
   Bar
 } from "recharts";
+import { whitepaper } from "../data/auctions";
 
 const mapData = {
   undersold: {
@@ -72,7 +73,7 @@ export default function Page() {
   return (
     <div className="py-5 bg-[#1f2935] text-white flex flex-col gap-5">
       <a
-        href="https://github.com/jackPanyj/oos/blob/main/uPic/CreamPad_Whitepaper.pdf"
+        href={whitepaper}
         target="_blank"
         className="flex justify-center py-2 text-center bg-green-500 sonic-title1 rounded"
       >

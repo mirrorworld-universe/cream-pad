@@ -13,6 +13,7 @@ import { formatStr } from "@/utils";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import ArrowIcon from "../icons/ArrowIcon";
+import { whitepaper } from "@/app/data/auctions";
 export default function Header() {
   const { connected, publicKey, disconnect } = useWallet();
   const router = useRouter();
@@ -37,12 +38,7 @@ export default function Header() {
           Auction
         </Link>
         <div
-          onClick={() =>
-            window.open(
-              "https://github.com/jackPanyj/oos/blob/main/uPic/CreamPad_Whitepaper.pdf",
-              "_blank"
-            )
-          }
+          onClick={() => window.open(whitepaper, "_blank")}
           className="font-bold px-6 py-2 cursor-pointer"
         >
           Documentation

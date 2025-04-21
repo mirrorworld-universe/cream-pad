@@ -37,12 +37,13 @@ export default function CountDownTime() {
           <span>
             {match(isLastRound && completed)
               .with(true, () => "")
-              .otherwise(
-                () =>
-                  `in: ${hours.toString().padStart(2, "0")}:${minutes
-                    .toString()
-                    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
-              )}
+              .otherwise(() => (
+                <span>
+                  &nbsp;in: {hours.toString().padStart(2, "0")}:
+                  {minutes.toString().padStart(2, "0")}:
+                  {seconds.toString().padStart(2, "0")}
+                </span>
+              ))}
           </span>
         )}
       />
@@ -51,18 +52,25 @@ export default function CountDownTime() {
       <span>{dayjs(Date.now() + time * 1000).format("YYYY-MM-DD")}</span>
     ));
   return (
-    <div className="ml-auto flex items-center">
-      <div className="size-10 rounded-full bg-[#E8FF59] flex items-center justify-center">
-        <img src="/images/time.svg" alt="time" />
-      </div>
-      <div className="h-3 w-2 bg-[#E8FF59]"></div>
+    <div className="ml-auto flex items-center -space-x-1">
       <div
         className={cn(
-          "px-5 h-10 bg-[#E8FF59] rounded-full flex items-center justify-center text-base",
-          isCountdownComplete && isLastRound && "bg-[#E8FF59]"
+          "size-10 rounded-full bg-[#C49AFF] flex items-center justify-center",
+          isLastRound && "bg-[#E8FF59]"
         )}
       >
-        {isLastRound ? "Auction Ends" : "Auction Starts"}
+        <img src="/images/time.svg" alt="time" />
+      </div>
+      <div
+        className={cn("h-3 w-3 bg-[#C49AFF]", isLastRound && "bg-[#E8FF59]")}
+      />
+      <div
+        className={cn(
+          "px-5 h-10 bg-[#C49AFF] rounded-full flex items-center text-base min-w-[245px]",
+          isLastRound && "bg-[#E8FF59]"
+        )}
+      >
+        {isLastRound ? "Auction Ends " : `Auction Starts`}
         {nextAuction}
       </div>
     </div>

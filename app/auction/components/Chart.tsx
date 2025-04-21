@@ -180,7 +180,12 @@ export default function Chart() {
 
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
-              <p className="font-medium text-base/[1.2]">Your Bid Amount</p>
+              <p className="font-medium text-base/[1.2]">
+                {match(projectDetail?.token_type)
+                  .with("token", () => "Your Bid Amount")
+                  .with("nft", () => "Your NFT Purchase Amount")
+                  .otherwise(() => null)}
+              </p>
             </div>
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
@@ -192,10 +197,14 @@ export default function Chart() {
                 }
                 {...register("amount")}
               />
-              <TokenSelect
-                currentToken={currentToken}
-                setCurrentToken={setCurrentToken}
-              />
+              {match(projectDetail?.token_type)
+                .with("token", () => (
+                  <TokenSelect
+                    currentToken={currentToken}
+                    setCurrentToken={setCurrentToken}
+                  />
+                ))
+                .otherwise(() => null)}
             </div>
             <div className="flex items-center justify-between">
               {projectDetail?.token_type === "token" && (

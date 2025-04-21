@@ -133,7 +133,8 @@ export default function BasicInfo() {
                     <p className="font-baloo2 font-semibold">
                       {contractInfo?.data?.remaining_token &&
                         formatNumber(contractInfo.data.remaining_token)}{" "}
-                      ({contractInfo?.data?.remaining_token_percent}% )
+                      ({contractInfo?.data?.remaining_token_percent?.toFixed(2)}
+                      % )
                     </p>
                   </div>
                 </div>

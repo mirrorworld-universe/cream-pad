@@ -204,14 +204,16 @@ export default function Chart() {
                 }
                 {...register("amount")}
               />
-              {match(projectDetail?.token_type)
-                .with("token", () => (
-                  <TokenSelect
-                    currentToken={currentToken}
-                    setCurrentToken={setCurrentToken}
-                  />
-                ))
-                .otherwise(() => null)}
+              <div
+                className={cn(
+                  projectDetail?.token_type === "token" ? "block" : "hidden"
+                )}
+              >
+                <TokenSelect
+                  currentToken={currentToken}
+                  setCurrentToken={setCurrentToken}
+                />
+              </div>
             </div>
             <div className="flex items-center justify-between">
               {projectDetail?.token_type === "token" && (
@@ -315,7 +317,18 @@ function BuyInfo({
         {currentToken?.token_symbol})
       </p>
       <p>
-        Cost: {truncateToDecimals(watch("amount"), 2) || 0}{" "}
+        Cost:{" "}
+        {match(projectDetail?.token_type)
+          .with("token", () => truncateToDecimals(watch("amount"), 2) || 0)
+          .with(
+            "nft",
+            () =>
+              truncateToDecimals(
+                watch("amount") * priceResult?.data?.current_price,
+                2
+              ) || 0
+          )
+          .otherwise(() => 0)}{" "}
         {currentToken?.token_symbol}
       </p>
       <p>Gas: 0.01 SOL</p>

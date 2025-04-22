@@ -54,7 +54,7 @@ const CustomTooltip = ({ active, payload, currentRound }: any) => {
   );
 };
 
-const RoundChart = ({ data }: { data: any }) => {
+const RoundChart = ({ data, isLoading }: { data: any; isLoading: boolean }) => {
   const [chartData, setChartData] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const currentRound = data?.current_round;
@@ -131,8 +131,6 @@ const RoundChart = ({ data }: { data: any }) => {
 
     // 简化逻辑，确保当前轮和下一轮始终显示虚线价格
     if (isCurrentRound || isNextRound) {
-      console.log(currentRound, item.round);
-
       // 修复当value为'0'的情况，确保显示虚线
       // 使用原始价格对象的value，不进行parseFloat转换，避免'0'变成0被认为是假值
       const priceValue = originalRoundInfo?.price.value;
@@ -171,7 +169,7 @@ const RoundChart = ({ data }: { data: any }) => {
   });
 
   // 如果没有数据，显示加载状态
-  if (!data || !chartData.length) {
+  if (!data || !chartData.length || isLoading) {
     return (
       <div className="w-full h-[400px] flex items-center justify-center">
         No data available

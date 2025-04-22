@@ -6,8 +6,8 @@ import { useMemo } from "react";
 
 export default function RoundInfo() {
   const params = useParams();
-  const { data: roundInfo } = useQuery({
-    queryKey: ["/pad/round/info"],
+  const { data: roundInfo, isLoading } = useQuery({
+    queryKey: ["/pad/round/info", params.id],
     queryFn: async () => http.get("/pad/round/info", { project_id: params.id })
   });
 
@@ -36,7 +36,7 @@ export default function RoundInfo() {
 
   return (
     <div className="w-[658px] h-[428px] flex flex-col items-center justify-center">
-      <RoundChart data={mockData} />
+      <RoundChart data={mockData} isLoading={isLoading} />
       <div className="text-black text-xs">Auction Rounds</div>
     </div>
   );

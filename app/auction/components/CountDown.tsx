@@ -62,12 +62,15 @@ export default function CountDownTime() {
       />
       <div
         className={cn(
-          "px-5 h-10 bg-[#C49AFF] rounded-full flex items-center text-base min-w-[245px]",
+          "px-5 h-10 bg-[#C49AFF] rounded-full flex items-center text-base",
           isLastRound && "bg-[#E8FF59]"
         )}
       >
-        {isLastRound ? "Auction Ends " : `Auction Starts`}
-        {nextAuction}
+        {isLastRound ? (
+          <div>Auction Ends {nextAuction}</div>
+        ) : (
+          <div className="min-w-[245px]">Auction Starts {nextAuction}</div>
+        )}
       </div>
     </div>
   );

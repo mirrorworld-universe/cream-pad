@@ -62,9 +62,7 @@ const RoundChart = ({ data, isLoading }: { data: any; isLoading: boolean }) => {
   useEffect(() => {
     // 只有在data有效时才处理数据
     if (data && data.round_info && data.round_info.length > 0) {
-      console.log("Processing data:", data);
       const formattedData = formatChartData(data);
-      console.log("Formatted data:", formattedData);
       setChartData(formattedData);
     } else {
       console.warn("Invalid data provided to RoundChart:", data);

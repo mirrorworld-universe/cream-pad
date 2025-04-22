@@ -10,9 +10,6 @@ import { match, P } from "ts-pattern";
 
 export default function CountDownTime() {
   const params = useParams();
-  const [isCountdownComplete, setIsCountdownComplete] = useState(false);
-
-  const { projectDetail } = useProjectDetail();
 
   const { data: contractInfo } = useQuery({
     queryKey: ["/pad/project/contract/info", params.id],
@@ -31,7 +28,6 @@ export default function CountDownTime() {
         date={Date.now() + time * 1000}
         onComplete={() => {
           refetchQueries();
-          setIsCountdownComplete(true);
         }}
         renderer={({ hours, minutes, seconds, completed }) => (
           <span>

@@ -38,6 +38,16 @@ export default function Chart() {
   const { projectDetail } = useProjectDetail();
   const [isLoading, setIsLoading] = useState(false);
 
+  const { data: buyInfo } = useQuery({
+    queryKey: ["/pad/round/buy/info", params.id, publicKey?.toBase58()],
+    queryFn: async () =>
+      http.get("/pad/round/buy/info", {
+        project_id: params.id,
+        wallet: publicKey?.toBase58()
+      }),
+    enabled: !!publicKey
+  });
+
   const [currentToken, setCurrentToken] = useState<any>({});
 
   const { register, handleSubmit, setValue, watch } = useForm({
@@ -72,8 +82,8 @@ export default function Chart() {
 
   const percentage = useMemo(() => {
     if (priceResult?.data) {
-      const max = priceResult.data.sold / priceResult.data.supply;
-      return +max.toFixed(2);
+      const percent = priceResult.data.current_round.percent / 100;
+      return +percent.toFixed(2);
     }
   }, [priceResult]);
 
@@ -92,6 +102,14 @@ export default function Chart() {
       )
       .with("nft", () => watch("amount"))
       .exhaustive();
+
+    if (buyInfo?.data.bought + Number(amount) > buyInfo?.data.buy_limit) {
+      toast({
+        title: "You have reached the maximum purchase limit",
+        status: "error"
+      });
+      return;
+    }
 
     handleSubmit(async (data) => {
       setIsLoading(true);
@@ -256,6 +274,7 @@ export default function Chart() {
               currentToken={currentToken}
               priceResult={priceResult}
               watch={watch}
+              buyInfo={buyInfo}
             />
           </div>
           <ActionButton handleBuy={handleBuy} isLoading={isLoading} />
@@ -304,24 +323,17 @@ function ActionButton({
 function BuyInfo({
   currentToken,
   priceResult,
-  watch
+  watch,
+  buyInfo
 }: {
   currentToken: any;
   priceResult: any;
   watch: any;
+  buyInfo: any;
 }) {
   const { projectDetail } = useProjectDetail();
   const { publicKey } = useWallet();
   const params = useParams();
-  const { data: buyInfo } = useQuery({
-    queryKey: ["/pad/round/buy/info"],
-    queryFn: async () =>
-      http.get("/pad/round/buy/info", {
-        project_id: params.id,
-        wallet: publicKey?.toBase58()
-      }),
-    enabled: !!publicKey
-  });
 
   return (
     <div className="flex flex-col gap-2 text-xs text-[#121212]/70">

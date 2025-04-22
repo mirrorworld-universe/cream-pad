@@ -139,10 +139,6 @@ const RoundChart = ({ data }: { data: any }) => {
 
       // 即使价格是0也要显示虚线
       dotPrice = priceValue ? parseFloat(priceValue) : 0;
-
-      console.log(
-        `Setting dotPrice for round ${item.round}: ${dotPrice}, isCurrentRound: ${isCurrentRound}, isNextRound: ${isNextRound}, original value: ${priceValue}`
-      );
     }
 
     // 线图数据，将其值平移到柱状图最大值之上

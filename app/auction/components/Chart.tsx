@@ -36,6 +36,7 @@ export default function Chart() {
 
   const { connection } = useConnection();
   const { projectDetail } = useProjectDetail();
+  const [isLoading, setIsLoading] = useState(false);
 
   const [currentToken, setCurrentToken] = useState<any>({});
 
@@ -71,14 +72,8 @@ export default function Chart() {
 
   const percentage = useMemo(() => {
     if (priceResult?.data) {
-      const max = priceResult.data.next_price.max;
-      const realtime = priceResult.data.next_price.realtime;
-      const min = priceResult.data.next_price.min;
-      const percentage = (realtime - min) / (max - min);
-      if (min == 0) {
-        return 0.02;
-      }
-      return +percentage.toFixed(2);
+      const max = priceResult.data.sold / priceResult.data.supply;
+      return +max.toFixed(2);
     }
   }, [priceResult]);
 
@@ -99,38 +94,46 @@ export default function Chart() {
       .exhaustive();
 
     handleSubmit(async (data) => {
-      const res: any = await buildTransaction({
-        project_id: params.id,
-        amount,
-        payment_token: currentToken.token_address,
-        wallet: publicKey?.toBase58()
-      });
-
-      const latestBlockHash = await connection.getLatestBlockhash();
-      const hash = await triggerTransaction(
-        res.data.hash,
-        connection,
-        signTransaction
-      );
-
-      const result = await connection.confirmTransaction({
-        signature: hash,
-        blockhash: latestBlockHash.blockhash,
-        lastValidBlockHeight: latestBlockHash.lastValidBlockHeight
-      });
-
-      if (result.value.err) {
-        toast({
-          title: "Transaction failed",
-          description: "Please try again",
-          status: "error"
+      setIsLoading(true);
+      try {
+        const res: any = await buildTransaction({
+          project_id: params.id,
+          amount,
+          payment_token: currentToken.token_address,
+          wallet: publicKey?.toBase58()
         });
-      } else {
-        toast({
-          title: "Transaction successful",
-          status: "success"
+
+        const latestBlockHash = await connection.getLatestBlockhash();
+        const hash = await triggerTransaction(
+          res.data.hash,
+          connection,
+          signTransaction
+        );
+
+        const result = await connection.confirmTransaction({
+          signature: hash,
+          blockhash: latestBlockHash.blockhash,
+          lastValidBlockHeight: latestBlockHash.lastValidBlockHeight
         });
-        refetchQueries();
+        setIsLoading(false);
+
+        if (result.value.err) {
+          toast({
+            title: "Transaction failed",
+            description: "Please try again",
+            status: "error"
+          });
+        } else {
+          toast({
+            title: "Transaction successful",
+            status: "success"
+          });
+          refetchQueries();
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     })();
   };
@@ -197,6 +200,9 @@ export default function Chart() {
             <div className="bg-[#F6F6F3] rounded-2xl relative">
               <Input
                 className="h-14 border border-[#121212] rounded-2xl placeholder:text-[#121212]/20 focus:outline-none pr-32"
+                type="number"
+                min={projectDetail?.token_type === "nft" ? 1 : undefined}
+                step={projectDetail?.token_type === "nft" ? 1 : undefined}
                 placeholder={
                   projectDetail == null
                     ? ""
@@ -252,20 +258,31 @@ export default function Chart() {
               watch={watch}
             />
           </div>
-          <ActionButton handleBuy={handleBuy} />
+          <ActionButton handleBuy={handleBuy} isLoading={isLoading} />
         </div>
       </div>
     </div>
   );
 }
 
-function ActionButton({ handleBuy }: { handleBuy: () => void }) {
+function ActionButton({
+  handleBuy,
+  isLoading
+}: {
+  handleBuy: () => void;
+  isLoading: boolean;
+}) {
   const { projectDetail } = useProjectDetail();
   return (
     <div className="mt-auto flex flex-col gap-8">
       {match(projectDetail?.status)
         .with("open", () => (
-          <PrimaryButton className="" onClick={handleBuy}>
+          <PrimaryButton
+            loadingText={<span className="font-baloo2 text-2xl">loading</span>}
+            isLoading={isLoading}
+            className=""
+            onClick={handleBuy}
+          >
             Buy
           </PrimaryButton>
         ))

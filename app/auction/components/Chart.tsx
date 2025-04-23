@@ -80,13 +80,6 @@ export default function Chart() {
     enabled: !!publicKey && !!currentToken?.token_address
   });
 
-  const percentage = useMemo(() => {
-    if (priceResult?.data) {
-      const percent = priceResult.data.current_round.percent / 100;
-      return +percent.toFixed(2);
-    }
-  }, [priceResult]);
-
   const handleBuy = async () => {
     if (!publicKey) {
       openModalDirectly(MODAL_HASH_MAP.walletConnect);
@@ -167,44 +160,7 @@ export default function Chart() {
       <div className="p-8 rounded-[40px] bg-white flex gap-8">
         <RoundInfo />
         <div className="flex flex-col gap-8 grow">
-          <div className="flex flex-col gap-4">
-            <div className="font-medium flex flex-col gap-2">
-              <p>
-                Current Auction Price:{" "}
-                <span className="font-bold">
-                  ${priceResult?.data?.current_price.toFixed(2)}
-                </span>
-              </p>
-              <p>Next Auction Price: </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <div className="relative h-4">
-                <div
-                  className="flex justify-between text-xs absolute top-0 text-[#7500FF]"
-                  style={{
-                    left: `calc(${percentage * 100}% - 20px)`
-                  }}
-                >
-                  $
-                  {Math.min(
-                    priceResult?.data.next_price.realtime.toFixed(2),
-                    priceResult?.data.next_price.max.toFixed(2)
-                  )}
-                </div>
-              </div>
-              <div className="h-3 bg-[#F6F6F3] rounded-full">
-                <Box
-                  bg={"linear-gradient(90deg, #C59AFC 0%, #FFB056 100%)"}
-                  className="h-full rounded-full"
-                  w={`${Math.min(percentage * 100, 100)}%`}
-                />
-              </div>
-              <div className="flex justify-between text-xs text-[#666]">
-                <span>0</span>
-                <span>{Math.max(percentage * 100, 100)}%</span>
-              </div>
-            </div>
-          </div>
+          <AuctionPrice priceResult={priceResult} />
 
           <div className="flex flex-col gap-2">
             <div className="flex justify-between">
@@ -320,6 +276,58 @@ function ActionButton({
   );
 }
 
+function AuctionPrice({ priceResult }: { priceResult: any }) {
+  const percentage = useMemo(() => {
+    if (priceResult?.data) {
+      const percent = priceResult.data.current_round.percent / 100;
+      return +percent.toFixed(2);
+    }
+  }, [priceResult]);
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="font-medium flex flex-col gap-2">
+        <p>
+          Current Auction Price:{" "}
+          <span className="font-bold">
+            ${priceResult?.data?.current_price.toFixed(2)}
+          </span>
+        </p>
+        <p>Next Auction Price: </p>
+      </div>
+      <div className="flex flex-col gap-1 pt-4">
+        <div className="flex items-center gap-2 w-full relative">
+          <span className="text-xs text-[#666]">0%</span>
+          <div className="h-3 bg-[#F6F6F3] rounded-full grow relative">
+            <div
+              className="flex justify-between text-xs absolute -top-5 text-[#7500FF]"
+              style={{
+                left: `calc(${percentage * 100}% - 10px)`
+              }}
+            >
+              $
+              {Math.min(
+                priceResult?.data.next_price.realtime.toFixed(2),
+                priceResult?.data.next_price.max.toFixed(2)
+              )}
+            </div>
+            <Box
+              bg={"linear-gradient(90deg, #C59AFC 0%, #FFB056 100%)"}
+              className="h-full rounded-full"
+              w={`${Math.min(percentage * 100, 100)}%`}
+            />
+          </div>
+          <div className="text-xs text-[#666] flex flex-col">
+            <span className="text-[#FF9011]">
+              ${priceResult?.data.next_price.max.toFixed(2)}
+            </span>
+            {Math.max(percentage * 100, 100)}%
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function BuyInfo({
   currentToken,
   priceResult,
@@ -332,15 +340,13 @@ function BuyInfo({
   buyInfo: any;
 }) {
   const { projectDetail } = useProjectDetail();
-  const { publicKey } = useWallet();
-  const params = useParams();
 
   return (
     <div className="flex flex-col gap-2 text-xs text-[#121212]/70">
       <p>
         Limit: {buyInfo?.data.buy_limit} {projectDetail?.token_symbol} / Round (
         {truncateToDecimals(
-          buyInfo?.data.buy_limit * priceResult?.data?.current_price,
+          projectDetail?.buy_limit * priceResult?.data?.current_price,
           2
         )}{" "}
         {currentToken?.token_symbol})

@@ -58,6 +58,9 @@ const RoundChart = ({ data, isLoading }: { data: any; isLoading: boolean }) => {
   const [chartData, setChartData] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const currentRound = data?.current_round;
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   useEffect(() => {
     // 只有在data有效时才处理数据
@@ -69,6 +72,36 @@ const RoundChart = ({ data, isLoading }: { data: any; isLoading: boolean }) => {
       setChartData([]);
     }
   }, [data]);
+
+  // Handle mouse down event to start dragging
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (scrollContainerRef.current) {
+      setIsDragging(true);
+      setStartX(e.pageX - scrollContainerRef.current.offsetLeft);
+      setScrollLeft(scrollContainerRef.current.scrollLeft);
+    }
+  };
+
+  // Handle mouse move event for dragging
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    if (scrollContainerRef.current) {
+      const x = e.pageX - scrollContainerRef.current.offsetLeft;
+      const walk = (x - startX) * 1.5; // Scroll speed multiplier
+      scrollContainerRef.current.scrollLeft = scrollLeft - walk;
+    }
+  };
+
+  // Handle mouse up event to stop dragging
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // Handle mouse leave event to stop dragging if cursor leaves the chart
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
 
   // Scroll to current round when data is loaded
   useEffect(() => {
@@ -176,7 +209,15 @@ const RoundChart = ({ data, isLoading }: { data: any; isLoading: boolean }) => {
   }
 
   return (
-    <div className="w-full overflow-auto" ref={scrollContainerRef}>
+    <div
+      className="w-full overflow-x-scroll overflow-y-hidden"
+      ref={scrollContainerRef}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+      style={{ cursor: isDragging ? "grabbing" : "grab" }}
+    >
       <ResponsiveContainer
         width={Math.max(transformedData.length * 80, 658)}
         height={400}

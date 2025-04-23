@@ -284,7 +284,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
     }
   }, [priceResult]);
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col">
       <div className="font-medium flex flex-col gap-2">
         <p>
           Current Auction Price:{" "}
@@ -294,7 +294,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
         </p>
         <p>Next Auction Price: </p>
       </div>
-      <div className="flex flex-col gap-1 pt-4">
+      <div className="flex flex-col gap-1 pt-5">
         <div className="flex items-center gap-2 w-full relative">
           <span className="text-xs text-[#666]">0%</span>
           <div className="h-3 bg-[#F6F6F3] rounded-full grow relative">

@@ -12,18 +12,17 @@ export default function Footer() {
       <div className="flex justify-between">
         <div className="flex flex-col gap-9">
           <img className="h-10" src="/images/footer-logo.png" alt="logo" />
-          <div className="flex items-center gap-3">
+          <a
+            className="flex items-center gap-3"
+            href="https://x.com/creampad_svm"
+            target="_blank"
+          >
             <img
               className="size-12 cursor-pointer"
               src="/images/footer-x.svg"
               alt="x"
             />
-            <img
-              className="size-12 cursor-pointer"
-              src="/images/footer-tg.svg"
-              alt="telegram"
-            />
-          </div>
+          </a>
         </div>
         <div className="flex gap-[100px]">
           <div className="flex flex-col gap-4 text-sm">

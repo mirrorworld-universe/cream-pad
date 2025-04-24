@@ -4,12 +4,13 @@ import { http } from "@/utils/http";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Countdown from "react-countdown";
 import { match, P } from "ts-pattern";
 
 export default function CountDownTime() {
   const params = useParams();
+  const [isDone, setIsDone] = useState(false);
 
   const { data: contractInfo } = useQuery({
     queryKey: ["/pad/project/contract/info", params.id],
@@ -22,12 +23,17 @@ export default function CountDownTime() {
   const totalRound = contractInfo?.data?.total_round;
   const isLastRound = curRound === totalRound && curRound != null;
 
+  const isOver = useMemo(() => {
+    return isLastRound && isDone;
+  }, [isLastRound, isDone]);
+
   const nextAuction = match(Number(contractInfo?.data?.next_auction))
     .with(P.number.lt(86400), (time) => (
       <Countdown
         date={Date.now() + time * 1000}
         onComplete={() => {
           refetchQueries();
+          setIsDone(true);
         }}
         renderer={({ hours, minutes, seconds, completed }) => (
           <span>
@@ -52,18 +58,24 @@ export default function CountDownTime() {
       <div
         className={cn(
           "size-10 rounded-full bg-[#C49AFF] flex items-center justify-center",
-          isLastRound && "bg-[#E8FF59]"
+          isLastRound && "bg-[#E8FF59]",
+          isOver && "bg-white"
         )}
       >
         <img src="/images/time.svg" alt="time" />
       </div>
       <div
-        className={cn("h-3 w-3 bg-[#C49AFF]", isLastRound && "bg-[#E8FF59]")}
+        className={cn(
+          "h-3 w-3 bg-[#C49AFF]",
+          isLastRound && "bg-[#E8FF59]",
+          isOver && "bg-white"
+        )}
       />
       <div
         className={cn(
           "px-5 h-10 bg-[#C49AFF] rounded-full flex items-center text-base",
-          isLastRound && "bg-[#E8FF59]"
+          isLastRound && "bg-[#E8FF59]",
+          isOver && "bg-white"
         )}
       >
         {isLastRound ? (

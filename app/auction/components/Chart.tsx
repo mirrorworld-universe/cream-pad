@@ -6,7 +6,7 @@ import { useProjectDetail } from "@/app/store";
 import { cn, refetchQueries, truncateToDecimals } from "@/utils";
 import { http } from "@/utils/http";
 import { triggerTransaction } from "@/utils/transaction";
-import { Box, Input } from "@chakra-ui/react";
+import { Box, Divider, Input } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -340,45 +340,44 @@ function BuyInfo({
   buyInfo: any;
 }) {
   const { projectDetail } = useProjectDetail();
+  const { connected } = useWallet();
 
   return (
     <div className="flex flex-col gap-2 text-xs text-[#121212]/70">
-      <p>
-        Limit: {buyInfo?.data.buy_limit} {projectDetail?.token_symbol} / Round (
-        {truncateToDecimals(
-          projectDetail?.buy_limit * priceResult?.data?.current_price,
-          2
-        )}{" "}
-        {currentToken?.token_symbol})
+      <p className="text-sm flex justify-between">
+        Limit:{" "}
+        <span>
+          {projectDetail?.buy_limit} {projectDetail?.token_symbol} / Round (
+          {truncateToDecimals(
+            projectDetail?.buy_limit * priceResult?.data?.current_price,
+            2
+          )}{" "}
+          {currentToken?.token_symbol})
+        </span>
       </p>
-      <p>
-        Cost:{" "}
-        {match(projectDetail?.token_type)
-          .with("token", () => truncateToDecimals(watch("amount"), 2) || 0)
-          .with(
-            "nft",
-            () =>
-              truncateToDecimals(
-                watch("amount") * priceResult?.data?.current_price,
-                2
-              ) || 0
-          )
-          .otherwise(() => 0)}{" "}
-        {currentToken?.token_symbol}
-      </p>
-      <p>Gas: 0.01 SOL</p>
-      <p className="text-base font-medium">
+      {connected && (
+        <p className="text-sm flex justify-between">
+          Remaining/Limit:
+          <span>
+            {buyInfo?.data.buy_limit - buyInfo?.data.bought} /{" "}
+            {projectDetail?.buy_limit} {projectDetail?.token_symbol}
+          </span>
+        </p>
+      )}
+      <p className="text-base font-medium flex justify-between">
         You will get:{" "}
-        {match(projectDetail?.token_type)
-          .with("token", () =>
-            truncateToDecimals(
-              +watch("amount") / priceResult?.data?.current_price,
-              2
+        <span>
+          {match(projectDetail?.token_type)
+            .with("token", () =>
+              truncateToDecimals(
+                +watch("amount") / priceResult?.data?.current_price,
+                2
+              )
             )
-          )
-          .with("nft", () => watch("amount") || 0)
-          .otherwise(() => 0)}{" "}
-        {projectDetail?.token_symbol}
+            .with("nft", () => watch("amount") || 0)
+            .otherwise(() => 0)}{" "}
+          {projectDetail?.token_symbol}
+        </span>
       </p>
     </div>
   );

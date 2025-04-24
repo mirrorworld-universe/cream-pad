@@ -50,8 +50,18 @@ export default function Footer() {
           ©{new Date().getFullYear()} Cream PAD Ltd. All rights reserved.
         </span>
         <div className="flex gap-10 text-sm">
-          <a href="#">Terms of Service</a>
-          <a href="#">Privacy Policy</a>
+          <a
+            href="https://www.termsfeed.com/live/caafd1f6-7b95-45bc-8512-c79132fbda5b"
+            target="_blank"
+          >
+            Terms of Service
+          </a>
+          <a
+            href="https://www.termsfeed.com/live/4863e755-5f07-40dc-aabd-d0f7c6e053ad"
+            target="_blank"
+          >
+            Privacy Policy
+          </a>
         </div>
       </div>
     </div>

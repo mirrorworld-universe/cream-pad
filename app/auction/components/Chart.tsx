@@ -6,7 +6,7 @@ import { useProjectDetail } from "@/app/store";
 import { cn, refetchQueries, truncateToDecimals } from "@/utils";
 import { http } from "@/utils/http";
 import { triggerTransaction } from "@/utils/transaction";
-import { Box, Divider, Input } from "@chakra-ui/react";
+import { Box, Divider, Input, Tooltip } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -16,6 +16,7 @@ import { match, P } from "ts-pattern";
 import CountDownTime from "./CountDown";
 import RoundInfo from "./RoundInfo";
 import { TokenSelect } from "./TokenSelect";
+import InfoIcon from "@/app/components/icons/InfoIcon";
 const options = [
   {
     label: "25%",
@@ -357,10 +358,30 @@ function BuyInfo({
       </p>
       {connected && (
         <p className="text-sm flex justify-between">
-          Remaining/Limit:
+          <span className="flex items-center gap-1">
+            Remaining/Limit:{" "}
+            <Tooltip
+              placement="top"
+              hasArrow
+              bg={"white"}
+              className="rounded-[28px] px-4 py-2 w-fit max-w-[250px]"
+              label={
+                <div className="text-xs text-[#121212]">
+                  The remaining purchasable amount and the purchase limit for
+                  this round.
+                </div>
+              }
+            >
+              <span>
+                <InfoIcon />
+              </span>
+            </Tooltip>
+          </span>
           <span>
-            {buyInfo?.data.buy_limit - buyInfo?.data.bought} /{" "}
-            {projectDetail?.buy_limit} {projectDetail?.token_symbol}
+            <span className="text-[#FF9011]">
+              {buyInfo?.data.buy_limit - buyInfo?.data.bought}
+            </span>{" "}
+            / {projectDetail?.buy_limit} {projectDetail?.token_symbol}
           </span>
         </p>
       )}

@@ -346,7 +346,26 @@ function BuyInfo({
   return (
     <div className="flex flex-col gap-2 text-xs text-[#121212]/70">
       <p className="text-sm flex justify-between">
-        Limit:{" "}
+        <span>
+          Limit:{" "}
+          <Tooltip
+            placement="top"
+            hasArrow
+            bg={"white"}
+            className="rounded-[28px] px-4 py-2 w-fit max-w-[250px]"
+            label={
+              <div className="text-xs text-[#121212]">
+                The remaining purchasable amount and the purchase limit for this
+                round.
+              </div>
+            }
+          >
+            <span>
+              <InfoIcon />
+            </span>
+          </Tooltip>
+        </span>
+
         <span>
           {projectDetail?.buy_limit} {projectDetail?.token_symbol} / Round (
           {truncateToDecimals(

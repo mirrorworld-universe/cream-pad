@@ -359,7 +359,7 @@ function BuyInfo({
       {connected && (
         <p className="text-sm flex justify-between">
           <span className="flex items-center gap-1">
-            Remaining/Limit:{" "}
+            Remaining:{" "}
             <Tooltip
               placement="top"
               hasArrow
@@ -385,6 +385,21 @@ function BuyInfo({
           </span>
         </p>
       )}
+      <p className="text-sm flex justify-between">
+        Pay Amount:{" "}
+        <span>
+          <span className="text-[#FF9011]">
+            {match(projectDetail?.token_type)
+              .with("token", () => watch("amount"))
+              .with(
+                "nft",
+                () => watch("amount") * priceResult?.data?.current_price
+              )
+              .otherwise(() => 0)}
+          </span>{" "}
+          {currentToken?.token_symbol}
+        </span>
+      </p>
       <p className="text-base font-medium flex justify-between">
         You will get:{" "}
         <span>

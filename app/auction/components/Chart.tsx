@@ -97,12 +97,22 @@ export default function Chart() {
       .with("nft", () => watch("amount"))
       .exhaustive();
 
-    if (buyInfo?.data.bought + Number(amount) > buyInfo?.data.buy_limit) {
-      toast({
-        title: "You have reached the maximum purchase limit",
-        status: "error"
-      });
-      return;
+    if (projectDetail.token_type === "nft") {
+      if (buyInfo?.data.bought + Number(amount) > buyInfo?.data.buy_limit) {
+        toast({
+          title: "You have reached the maximum purchase limit",
+          status: "error"
+        });
+        return;
+      }
+    } else {
+      if (buyInfo?.data.bought + Number(amount) > buyInfo?.data.buy_limit) {
+        toast({
+          title: "You have reached the maximum purchase limit",
+          status: "error"
+        });
+        return;
+      }
     }
 
     handleSubmit(async (data) => {
@@ -211,7 +221,11 @@ export default function Chart() {
                                 (balanceResult?.data?.balance || 0),
                               2
                             ),
-                            buyInfo?.data.buy_limit - buyInfo?.data.bought
+                            truncateToDecimals(
+                              (buyInfo?.data.buy_limit - buyInfo?.data.bought) *
+                                priceResult?.data?.current_price,
+                              2
+                            )
                           )
                         )
                       }

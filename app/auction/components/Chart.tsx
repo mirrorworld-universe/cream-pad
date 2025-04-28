@@ -89,30 +89,17 @@ export default function Chart() {
 
     const amount = match(projectDetail?.token_type)
       .with("token", () =>
-        truncateToDecimals(
-          watch("amount") / priceResult?.data?.current_price,
-          2
-        )
+        truncateToDecimals(watch("amount") / priceResult?.data?.current_price)
       )
       .with("nft", () => watch("amount"))
       .exhaustive();
 
-    if (projectDetail.token_type === "nft") {
-      if (buyInfo?.data.bought + Number(amount) > buyInfo?.data.buy_limit) {
-        toast({
-          title: "You have reached the maximum purchase limit",
-          status: "error"
-        });
-        return;
-      }
-    } else {
-      if (buyInfo?.data.bought + Number(amount) > buyInfo?.data.buy_limit) {
-        toast({
-          title: "You have reached the maximum purchase limit",
-          status: "error"
-        });
-        return;
-      }
+    if (buyInfo?.data.bought + Number(amount) > buyInfo?.data.buy_limit) {
+      toast({
+        title: "You have reached the maximum purchase limit",
+        status: "error"
+      });
+      return;
     }
 
     handleSubmit(async (data) => {
@@ -217,14 +204,11 @@ export default function Chart() {
                           "amount",
                           Math.min(
                             truncateToDecimals(
-                              option.value *
-                                (balanceResult?.data?.balance || 0),
-                              2
+                              option.value * (balanceResult?.data?.balance || 0)
                             ),
                             truncateToDecimals(
                               (buyInfo?.data.buy_limit - buyInfo?.data.bought) *
-                                priceResult?.data?.current_price,
-                              2
+                                priceResult?.data?.current_price
                             )
                           )
                         )
@@ -387,8 +371,7 @@ function BuyInfo({
         <span>
           {projectDetail?.buy_limit} {projectDetail?.token_symbol} / Round (
           {truncateToDecimals(
-            projectDetail?.buy_limit * priceResult?.data?.current_price,
-            2
+            projectDetail?.buy_limit * priceResult?.data?.current_price
           )}{" "}
           {currentToken?.token_symbol})
         </span>
@@ -443,8 +426,7 @@ function BuyInfo({
           {match(projectDetail?.token_type)
             .with("token", () =>
               truncateToDecimals(
-                +watch("amount") / priceResult?.data?.current_price,
-                2
+                +watch("amount") / priceResult?.data?.current_price
               )
             )
             .with("nft", () => watch("amount") || 0)

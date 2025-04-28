@@ -110,9 +110,9 @@ export function formatChartData(roundData: {
   return formattedData;
 }
 
-export function truncateToDecimals(num: number, decimals: number) {
+export function truncateToDecimals(num: number, decimals: number = 4) {
   const factor = Math.pow(10, decimals);
-  return Math.floor(num * factor) / factor;
+  return Math.round(num * factor) / factor;
 }
 
 export function refetchQueries() {

@@ -205,9 +205,13 @@ export default function Chart() {
                       onClick={() =>
                         setValue(
                           "amount",
-                          truncateToDecimals(
-                            option.value * (balanceResult?.data?.balance || 0),
-                            2
+                          Math.min(
+                            truncateToDecimals(
+                              option.value *
+                                (balanceResult?.data?.balance || 0),
+                              2
+                            ),
+                            buyInfo?.data.buy_limit - buyInfo?.data.bought
                           )
                         )
                       }
@@ -386,8 +390,8 @@ function BuyInfo({
               className="rounded-[28px] px-4 py-2 w-fit max-w-[250px]"
               label={
                 <div className="text-xs text-[#121212]">
-                  The remaining purchasable amount and the purchase limit for
-                  this round.
+                  The remaining quantity available for purchase and the purchase
+                  limit in this round.
                 </div>
               }
             >

@@ -102,6 +102,17 @@ export default function Chart() {
       return;
     }
 
+    // 如果是nft，需要确定 amount 是正整数
+    if (projectDetail?.token_type === "nft") {
+      if (Number(amount) <= 0 || !Number.isInteger(Number(amount))) {
+        toast({
+          title: "Amount must be a positive integer",
+          status: "error"
+        });
+        return;
+      }
+    }
+
     handleSubmit(async (data) => {
       setIsLoading(true);
       try {

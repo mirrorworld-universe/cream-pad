@@ -341,7 +341,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
             <div
               className="flex justify-between text-xs absolute -top-5 text-[#7500FF]"
               style={{
-                left: `calc(${percentage * 100}% - 10px)`
+                left: `calc(${Math.min(percentage * 100, 100)}% - 10px)`
               }}
             >
               $

@@ -35,7 +35,7 @@ export default function CountDownTime() {
           setTimeout(() => {
             refetchQueries();
             setIsDone(true);
-          }, 2000);
+          }, 3000);
         }}
         renderer={({ hours, minutes, seconds, completed }) => (
           <span>

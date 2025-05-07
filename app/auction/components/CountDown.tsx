@@ -53,6 +53,9 @@ export default function CountDownTime() {
     .otherwise((time) => (
       <span>{dayjs(Date.now() + time * 1000).format("YYYY-MM-DD")}</span>
     ));
+
+  if (contractInfo == null) return null;
+
   return (
     <div className="ml-auto flex items-center -space-x-1">
       <div

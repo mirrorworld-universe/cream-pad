@@ -32,8 +32,10 @@ export default function CountDownTime() {
       <Countdown
         date={Date.now() + time * 1000}
         onComplete={() => {
-          refetchQueries();
-          setIsDone(true);
+          setTimeout(() => {
+            refetchQueries();
+            setIsDone(true);
+          }, 2000);
         }}
         renderer={({ hours, minutes, seconds, completed }) => (
           <span>

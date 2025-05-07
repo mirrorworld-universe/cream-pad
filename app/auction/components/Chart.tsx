@@ -72,7 +72,12 @@ export default function Chart() {
   });
 
   const { data: balanceResult } = useQuery({
-    queryKey: [`/token/balance`, params.id, currentToken?.token_address],
+    queryKey: [
+      `/token/balance`,
+      params.id,
+      currentToken?.token_address,
+      publicKey?.toBase58()
+    ],
     queryFn: async () =>
       http.get("/token/balance", {
         wallet: publicKey?.toBase58(),

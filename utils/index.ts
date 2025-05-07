@@ -122,7 +122,8 @@ export function refetchQueries() {
     ["/pad/round/info"],
     ["/pad/price"],
     ["/token/balance"],
-    ["/project/:id"]
+    ["/project/:id"],
+    ["/pad/project/contract/info"]
   ];
   queryKeys.forEach((key) => {
     queryClient.invalidateQueries({

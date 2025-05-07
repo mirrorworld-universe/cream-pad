@@ -360,7 +360,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
             <span className="text-[#FF9011]">
               ${priceResult?.data.next_price.max.toFixed(2)}
             </span>
-            {Math.max(percentage * 100, 100)}%
+            {Math.round(Math.round(Math.max(percentage * 100, 100)))}%
           </div>
         </div>
       </div>

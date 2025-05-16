@@ -58,15 +58,19 @@ export function formatNumber(num?: number | string): string {
 
   if (isNaN(value)) return "";
 
+  let result: string;
   if (value >= 1_000_000_000) {
-    return (value / 1_000_000_000).toFixed(2) + "B";
+    result = (value / 1_000_000_000).toFixed(2) + "B";
   } else if (value >= 1_000_000) {
-    return (value / 1_000_000).toFixed(2) + "M";
+    result = (value / 1_000_000).toFixed(2) + "M";
   } else if (value >= 1_000) {
-    return (value / 1_000).toFixed(2) + "K";
+    result = (value / 1_000).toFixed(2) + "K";
+  } else {
+    result = value.toFixed(2);
   }
 
-  return value.toFixed(2);
+  // Remove decimal part if it's all zeros
+  return result.replace(/\.00$/, "");
 }
 
 export function formatChartData(roundData: {

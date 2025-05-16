@@ -6,7 +6,7 @@ import { useProjectDetail } from "@/app/store";
 import { cn, refetchQueries, truncateToDecimals } from "@/utils";
 import { http } from "@/utils/http";
 import { triggerTransaction } from "@/utils/transaction";
-import { Box, Divider, Input, Tooltip } from "@chakra-ui/react";
+import { Box, Input, Tooltip } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -326,11 +326,16 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
   return (
     <div className="flex flex-col">
       <div className="font-medium flex flex-col gap-2">
-        <p>
+        <p className="flex items-center gap-1">
           Current Auction Price:{" "}
           <span className="font-bold">
-            ${priceResult?.data?.current_price.toFixed(2)}
+            {priceResult?.data?.current_price.toFixed(2)}{" "}
           </span>
+          <img
+            className="size-4 inline-block"
+            src="/images/sonic-token.png"
+            alt="sonic-token"
+          />
         </p>
         <p>Next Auction Price: </p>
       </div>
@@ -344,11 +349,11 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
                 left: `calc(${Math.min(percentage * 100, 100)}% - 10px)`
               }}
             >
-              $
               {Math.min(
-                priceResult?.data.next_price.realtime.toFixed(2),
+                priceResult?.data.next_price.min.toFixed(2),
                 priceResult?.data.next_price.max.toFixed(2)
-              )}
+              )}{" "}
+              $SONIC
             </div>
             <Box
               bg={"linear-gradient(90deg, #C59AFC 0%, #FFB056 100%)"}
@@ -358,7 +363,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
           </div>
           <div className="text-xs text-[#666] flex flex-col">
             <span className="text-[#FF9011]">
-              ${priceResult?.data.next_price.max.toFixed(2)}
+              {priceResult?.data.next_price.max.toFixed(2)} $SONIC
             </span>
             {Math.round(Math.round(Math.max(percentage * 100, 100)))}%
           </div>

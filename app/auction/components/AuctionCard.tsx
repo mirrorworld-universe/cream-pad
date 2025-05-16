@@ -25,7 +25,11 @@ export default function Card({ data }: { data: any }) {
       <div className="flex flex-col gap-6 grow">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 w-full">
-            <img className="size-14" src="/images/sonic-token.png" alt="" />
+            <img
+              className="size-14 rounded-full"
+              src={data?.token?.icon}
+              alt=""
+            />
             <span className="text-2xl font-bold font-baloo2">{data.name}</span>
             <div
               className={cn(

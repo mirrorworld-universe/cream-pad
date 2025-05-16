@@ -153,21 +153,26 @@ const RoundChart = ({ data, isLoading }: { data: any; isLoading: boolean }) => {
 
     // 确定是否是当前轮次或下一轮次
     const isCurrentRound = item.round === currentRound;
-
-    // 重新定义下一轮的判断逻辑，避免循环依赖
     const isNextRound = Number(item.round) === Number(currentRound) + 1;
 
     // 手动设置虚线价格
     let dotPrice = null;
 
-    // 简化逻辑，确保当前轮和下一轮始终显示虚线价格
-    if (isCurrentRound || isNextRound) {
-      // 修复当value为'0'的情况，确保显示虚线
-      // 使用原始价格对象的value，不进行parseFloat转换，避免'0'变成0被认为是假值
+    if (isCurrentRound) {
+      // 当前轮虚线点逻辑保持不变
       const priceValue = originalRoundInfo?.price.value;
-
-      // 即使价格是0也要显示虚线
       dotPrice = priceValue ? parseFloat(priceValue) : 0;
+    } else if (isNextRound) {
+      // 下一轮虚线点根据当前轮百分比决定取min还是max
+      const currentRoundInfo = sourceData.round_info.find(
+        (round) => round.round === currentRound
+      );
+      const currentPercent = currentRoundInfo?.percent ?? 0;
+      if (currentPercent >= 1) {
+        dotPrice = originalRoundInfo?.price.max;
+      } else {
+        dotPrice = originalRoundInfo?.price.min;
+      }
     }
 
     // 线图数据，将其值平移到柱状图最大值之上

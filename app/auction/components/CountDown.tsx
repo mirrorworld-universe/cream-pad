@@ -86,7 +86,7 @@ export default function CountDownTime() {
         {isLastRound ? (
           <div>Auction Ends {nextAuction}</div>
         ) : (
-          <div className="min-w-[205px]">Auction Starts {nextAuction}</div>
+          <div className="min-w-[205px]">Next Round Starts {nextAuction}</div>
         )}
       </div>
     </div>

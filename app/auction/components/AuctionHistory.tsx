@@ -30,7 +30,8 @@ export default function AuctionHistory() {
 
   const { data } = useQuery({
     queryKey: ["/pad/auction/history", state],
-    queryFn: async () => http.post("/pad/auction/history", state)
+    queryFn: async () => http.post("/pad/auction/history", state),
+    refetchInterval: 5000
   });
 
   const items: any[] = data?.data?.data || [];
@@ -104,7 +105,14 @@ export default function AuctionHistory() {
                   {item.amount} {projectDetail?.token_symbol}
                 </div>
                 <div>Round {item.round}</div>
-                <div>${item.price.toFixed(2)}</div>
+                <div className="flex items-center gap-1">
+                  {item.price.toFixed(2)}{" "}
+                  <img
+                    className="size-4 inline-block"
+                    src="/images/sonic-token.png"
+                    alt="sonic-token"
+                  />
+                </div>
                 <div className="flex justify-end">
                   {formatTimeAgo(item.date)}
                 </div>

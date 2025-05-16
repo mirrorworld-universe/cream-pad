@@ -352,7 +352,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
           <span className="text-xs text-[#666]">0%</span>
           <div className="h-3 bg-[#F6F6F3] rounded-full grow relative">
             <div
-              className="flex justify-between text-xs absolute -top-5 text-[#7500FF]"
+              className="flex items-center gap-0.5 justify-between text-xs absolute -top-5 text-[#7500FF]"
               style={{
                 left: `calc(${Math.min(percentage * 100, 100)}% - 10px)`
               }}
@@ -361,7 +361,11 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
                 priceResult?.data.next_price.realtime.toFixed(2),
                 priceResult?.data.next_price.max.toFixed(2)
               )}{" "}
-              $SONIC
+              <img
+                className="size-2.5 inline-block"
+                src="/images/sonic-token.png"
+                alt="sonic-token"
+              />
             </div>
             <Box
               bg={"linear-gradient(90deg, #C59AFC 0%, #FFB056 100%)"}
@@ -370,8 +374,13 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
             />
           </div>
           <div className="text-xs text-[#666] flex flex-col">
-            <span className="text-[#FF9011]">
-              {priceResult?.data.next_price.max.toFixed(2)} $SONIC
+            <span className="text-[#FF9011] flex items-center gap-0.5">
+              {priceResult?.data.next_price.max.toFixed(2)}
+              <img
+                className="size-2.5 inline-block"
+                src="/images/sonic-token.png"
+                alt="sonic-token"
+              />
             </span>
             {Math.round(Math.round(Math.max(percentage * 100, 100)))}%
           </div>

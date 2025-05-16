@@ -1,2 +1,1 @@
-export const whitepaper =
-  "https://github.com/jackPanyj/oos/blob/main/uPic/CreamPad_Whitepaper.pdf";
+export const whitepaper = "/file/whitepaper.pdf";

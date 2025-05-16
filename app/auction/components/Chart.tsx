@@ -410,7 +410,7 @@ function BuyInfo({
       </p>
       {connected && (
         <p className="text-sm flex justify-between">
-          Available This Round:{" "}
+          Your Available this Round :{" "}
           <span>
             <span className="text-[#FF9011]">
               {buyInfo?.data.buy_limit - buyInfo?.data.bought}

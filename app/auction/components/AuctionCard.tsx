@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 export const logoMap = {
   twitter: "/images/activity/x.svg",
   discord: "/images/activity/discord.svg",
-  telegram: "/images/activity/tg.svg"
+  telegram: "/images/activity/tg.svg",
+  medium: "/images/activity/medium.svg"
 };
 
 export default function Card({ data }: { data: any }) {

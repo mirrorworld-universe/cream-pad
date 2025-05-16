@@ -10,7 +10,7 @@ import { Box, Input, Tooltip } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { match, P } from "ts-pattern";
 import CountDownTime from "./CountDown";
@@ -56,6 +56,14 @@ export default function Chart() {
       amount: undefined
     }
   });
+
+  useEffect(() => {
+    const amount = watch("amount");
+    const left = buyInfo?.data.buy_limit - buyInfo?.data.bought;
+    if (amount > left) {
+      setValue("amount", left);
+    }
+  }, [watch("amount"), buyInfo?.data.buy_limit]);
 
   const { mutateAsync: buildTransaction } = useMutation({
     mutationKey: [
@@ -350,7 +358,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
               }}
             >
               {Math.min(
-                priceResult?.data.next_price.min.toFixed(2),
+                priceResult?.data.next_price.realtime.toFixed(2),
                 priceResult?.data.next_price.max.toFixed(2)
               )}{" "}
               $SONIC

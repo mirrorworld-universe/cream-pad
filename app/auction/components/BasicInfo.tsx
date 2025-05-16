@@ -128,13 +128,11 @@ export default function BasicInfo() {
                   />
                   <div className="space-y-2">
                     <p className="text-[#666] text-sm">
-                      Remaining Token in the Sale(%)
+                      Remaining Token in the Sale
                     </p>
                     <p className="font-baloo2 font-semibold">
                       {contractInfo?.data?.remaining_token &&
                         formatNumber(contractInfo.data.remaining_token)}{" "}
-                      ({contractInfo?.data?.remaining_token_percent?.toFixed(2)}
-                      % )
                     </p>
                   </div>
                 </div>

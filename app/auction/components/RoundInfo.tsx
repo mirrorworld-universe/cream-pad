@@ -8,7 +8,8 @@ export default function RoundInfo() {
   const params = useParams();
   const { data: roundInfo, isLoading } = useQuery({
     queryKey: ["/pad/round/info", params.id],
-    queryFn: async () => http.get("/pad/round/info", { project_id: params.id })
+    queryFn: async () => http.get("/pad/round/info", { project_id: params.id }),
+    refetchInterval: 5000
   });
 
   const mockData = useMemo(() => {

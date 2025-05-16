@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 export const logoMap = {
   twitter: "/images/activity/x.svg",
   discord: "/images/activity/discord.svg",
-  telegram: "/images/activity/tg.svg"
+  telegram: "/images/activity/tg.svg",
+  medium: "/images/activity/medium.svg"
 };
 
 export default function Card({ data }: { data: any }) {
@@ -25,7 +26,11 @@ export default function Card({ data }: { data: any }) {
       <div className="flex flex-col gap-6 grow">
         <div className="flex flex-col gap-3">
           <div className="flex items-center gap-2 w-full">
-            <img className="size-14" src="/images/sonic-token.png" alt="" />
+            <img
+              className="size-14 rounded-full"
+              src={data?.token?.icon}
+              alt=""
+            />
             <span className="text-2xl font-bold font-baloo2">{data.name}</span>
             <div
               className={cn(

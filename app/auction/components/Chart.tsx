@@ -6,11 +6,11 @@ import { useProjectDetail } from "@/app/store";
 import { cn, refetchQueries, truncateToDecimals } from "@/utils";
 import { http } from "@/utils/http";
 import { triggerTransaction } from "@/utils/transaction";
-import { Box, Divider, Input, Tooltip } from "@chakra-ui/react";
+import { Box, Input, Tooltip } from "@chakra-ui/react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { match, P } from "ts-pattern";
 import CountDownTime from "./CountDown";
@@ -56,6 +56,14 @@ export default function Chart() {
       amount: undefined
     }
   });
+
+  useEffect(() => {
+    const amount = watch("amount");
+    const left = buyInfo?.data.buy_limit - buyInfo?.data.bought;
+    if (amount > left) {
+      setValue("amount", left);
+    }
+  }, [watch("amount"), buyInfo?.data.buy_limit]);
 
   const { mutateAsync: buildTransaction } = useMutation({
     mutationKey: [
@@ -326,11 +334,16 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
   return (
     <div className="flex flex-col">
       <div className="font-medium flex flex-col gap-2">
-        <p>
+        <p className="flex items-center gap-1">
           Current Auction Price:{" "}
           <span className="font-bold">
-            ${priceResult?.data?.current_price.toFixed(2)}
+            {priceResult?.data?.current_price.toFixed(2)}{" "}
           </span>
+          <img
+            className="size-4 inline-block"
+            src="/images/sonic-token.png"
+            alt="sonic-token"
+          />
         </p>
         <p>Next Auction Price: </p>
       </div>
@@ -339,16 +352,20 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
           <span className="text-xs text-[#666]">0%</span>
           <div className="h-3 bg-[#F6F6F3] rounded-full grow relative">
             <div
-              className="flex justify-between text-xs absolute -top-5 text-[#7500FF]"
+              className="flex items-center gap-0.5 justify-between text-xs absolute -top-5 text-[#7500FF]"
               style={{
                 left: `calc(${Math.min(percentage * 100, 100)}% - 10px)`
               }}
             >
-              $
               {Math.min(
                 priceResult?.data.next_price.realtime.toFixed(2),
                 priceResult?.data.next_price.max.toFixed(2)
-              )}
+              )}{" "}
+              <img
+                className="size-2.5 inline-block"
+                src="/images/sonic-token.png"
+                alt="sonic-token"
+              />
             </div>
             <Box
               bg={"linear-gradient(90deg, #C59AFC 0%, #FFB056 100%)"}
@@ -357,8 +374,13 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
             />
           </div>
           <div className="text-xs text-[#666] flex flex-col">
-            <span className="text-[#FF9011]">
-              ${priceResult?.data.next_price.max.toFixed(2)}
+            <span className="text-[#FF9011] flex items-center gap-0.5">
+              {priceResult?.data.next_price.max.toFixed(2)}
+              <img
+                className="size-2.5 inline-block"
+                src="/images/sonic-token.png"
+                alt="sonic-token"
+              />
             </span>
             {Math.round(Math.round(Math.max(percentage * 100, 100)))}%
           </div>
@@ -397,7 +419,7 @@ function BuyInfo({
       </p>
       {connected && (
         <p className="text-sm flex justify-between">
-          Available This Round:{" "}
+          Your Available this Round :{" "}
           <span>
             <span className="text-[#FF9011]">
               {buyInfo?.data.buy_limit - buyInfo?.data.bought}

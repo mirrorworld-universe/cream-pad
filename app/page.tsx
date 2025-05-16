@@ -79,7 +79,7 @@ export default function Home() {
         </div>
         <div className="ml-20 flex flex-col gap-24">
           <img className="w-[672px]" src="/images/welcome.png" alt="" />
-          {/* <div
+          <div
             className={cn(
               "rounded-full relative z-30 cursor-not-allowed w-fit flex items-center gap-8 bg-white py-2 text-black pl-8 pr-3 font-baloo2 font-bold text-[32px]"
             )}
@@ -87,15 +87,15 @@ export default function Home() {
           >
             Coming Soon
             <img src="/images/coffee.svg" alt="" className="size-[54px]" />
-          </div> */}
-          <PrimaryButton
+          </div>
+          {/* <PrimaryButton
             id="action-button"
             onClick={() => router.push("/auction")}
             className="h-[66px] w-[414px] text-[32px]/normal border-none gap-4 font-baloo2 relative z-30"
           >
             <img src="/images/action.svg" alt="" />
             Auction Now
-          </PrimaryButton>
+          </PrimaryButton> */}
         </div>
         <div className="relative w-[609px] h-[516px] mr-20">
           <div className="eye left">

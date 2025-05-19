@@ -110,12 +110,12 @@ export function simulate({
       boost[i] = 0;
     }
 
-    let delta_t_eff = 1 - boost[i];
+    let delta_t_eff = -boost[i];
     if (time_shift_max !== null) {
       delta_t_eff = Math.max(Math.min(delta_t_eff, 1), -time_shift_max);
     }
 
-    sum_boost[i] = sum_boost[i - 1] + (1 - boost[i]);
+    sum_boost[i] = sum_boost[i - 1] + delta_t_eff;
     p_simulate_price[i] =
       decay_model === "linear"
         ? P0 - K0 * sum_boost[i]

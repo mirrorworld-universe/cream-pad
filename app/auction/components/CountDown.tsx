@@ -1,4 +1,3 @@
-import { useProjectDetail } from "@/app/store";
 import { cn, refetchQueries } from "@/utils";
 import { http } from "@/utils/http";
 import { useQuery } from "@tanstack/react-query";
@@ -30,12 +29,13 @@ export default function CountDownTime() {
   const nextAuction = match(Number(contractInfo?.data?.next_auction))
     .with(P.number.lt(86400), (time) => (
       <Countdown
+        key={contractInfo?.data?.next_auction + "-" + Date.now()}
         date={Date.now() + time * 1000}
         onComplete={() => {
           setTimeout(() => {
             refetchQueries();
             setIsDone(true);
-          }, 3000);
+          }, 5000);
         }}
         renderer={({ hours, minutes, seconds, completed }) => (
           <span>
@@ -86,7 +86,7 @@ export default function CountDownTime() {
         {isLastRound ? (
           <div>Auction Ends {nextAuction}</div>
         ) : (
-          <div className="min-w-[205px]">Next Round Starts {nextAuction}</div>
+          <div className="min-w-[240px]">Next Round Starts {nextAuction}</div>
         )}
       </div>
     </div>

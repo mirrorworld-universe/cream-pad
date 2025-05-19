@@ -10,7 +10,7 @@ import { http } from "@/utils/http";
 import { useWallet } from "@solana/wallet-adapter-react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSetState } from "react-use";
 import { match, P } from "ts-pattern";
 
@@ -31,11 +31,63 @@ export default function AuctionHistory() {
   const { data } = useQuery({
     queryKey: ["/pad/auction/history", state],
     queryFn: async () => http.post("/pad/auction/history", state),
-    refetchInterval: 5000
+    staleTime: 0
   });
 
-  const items: any[] = data?.data?.data || [];
+  const [items, setItems] = useState<any[]>([]);
   const total = data?.data?.total_page || 0;
+
+  useEffect(() => {
+    setItems(data?.data?.data || []);
+  }, [data]);
+
+  useEffect(() => {
+    const source = new EventSource(
+      `${process.env.NEXT_PUBLIC_API_URL}/history/events?projectId=${params.id}`
+    );
+    source.onmessage = (event) => {
+      console.log(event);
+    };
+    // 自定义事件: connected
+    source.addEventListener("connected", (e) => {
+      console.log(`✅ 连接成功事件: ${e.data}`);
+    });
+
+    // 自定义事件: update
+    source.addEventListener("update", (e) => {
+      console.log(`🔄 更新事件: ${e.data}`);
+      try {
+        const newItem = JSON.parse(e.data);
+        const id = `${newItem.address}_${newItem.date}`;
+        if (active === "my") {
+          if (!publicKey || newItem.address !== publicKey.toBase58()) {
+            return;
+          }
+        }
+        setItems((prev) => {
+          const updated = [{ ...newItem, _highlight: id }, ...prev];
+          return updated.slice(0, 10);
+        });
+        setTimeout(() => {
+          setItems((prev) =>
+            prev.map((item) =>
+              item._highlight === id ? { ...item, _highlight: undefined } : item
+            )
+          );
+        }, 3000);
+      } catch (err) {
+        console.error("解析更新事件数据失败", err);
+      }
+    });
+
+    source.onerror = (e) => {
+      console.log("❌ 连接错误！");
+    };
+
+    return () => {
+      source.close();
+    };
+  }, [active, publicKey, params.id]);
 
   return (
     <div className="flex flex-col gap-6">
@@ -90,7 +142,8 @@ export default function AuctionHistory() {
                 key={index}
                 className={cn(
                   "grid grid-cols-[157px_134px_111px_105px_100px] px-3 justify-between h-[50px] items-center text-[#121212]/70 border-b border-[#F6F6F3]",
-                  "font-medium text-lg/[22px] hover:bg-[#F6F6F3] rounded-2xl transition-all duration-300"
+                  "font-medium text-lg/[22px] hover:bg-[#F6F6F3] rounded-2xl transition-all duration-300",
+                  item._highlight && "bg-[#DEF26B80]"
                 )}
               >
                 <div

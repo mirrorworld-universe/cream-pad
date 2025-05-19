@@ -122,7 +122,7 @@ export function truncateToDecimals(num: number, decimals: number = 4) {
 export function refetchQueries() {
   const queryClient = getQueryClient();
   const queryKeys = [
-    ["/pad/auction/history"],
+    // ["/pad/auction/history"],
     ["/pad/round/info"],
     ["/pad/price"],
     ["/token/balance"],

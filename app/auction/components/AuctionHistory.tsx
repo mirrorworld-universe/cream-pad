@@ -57,8 +57,12 @@ export default function AuctionHistory() {
       console.log(`🔄 更新事件: ${e.data}`);
       try {
         const newItem = JSON.parse(e.data);
-        // 给新 item 加一个唯一 id 标记（比如用时间+地址）
         const id = `${newItem.address}_${newItem.date}`;
+        if (active === "my") {
+          if (!publicKey || newItem.address !== publicKey.toBase58()) {
+            return;
+          }
+        }
         setItems((prev) => {
           const updated = [{ ...newItem, _highlight: id }, ...prev];
           return updated.slice(0, 10);

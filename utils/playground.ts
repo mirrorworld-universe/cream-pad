@@ -115,7 +115,7 @@ export function simulate({
     if (time_shift_max !== null) {
       delta_t_eff = Math.max(Math.min(delta_t_eff, 1), -time_shift_max);
     }
-    eff[i] = delta_t_eff;
+    eff[i] = -delta_t_eff;
 
     sum_boost[i] = sum_boost[i - 1] + delta_t_eff;
     p_simulate_price[i] =

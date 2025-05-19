@@ -30,7 +30,8 @@ export default function AuctionHistory() {
 
   const { data } = useQuery({
     queryKey: ["/pad/auction/history", state],
-    queryFn: async () => http.post("/pad/auction/history", state)
+    queryFn: async () => http.post("/pad/auction/history", state),
+    staleTime: 0
   });
 
   const [items, setItems] = useState<any[]>([]);
@@ -86,7 +87,7 @@ export default function AuctionHistory() {
     return () => {
       source.close();
     };
-  }, []);
+  }, [active, publicKey, params.id]);
 
   return (
     <div className="flex flex-col gap-6">

@@ -1,19 +1,17 @@
 "use client";
-import CopyIcon from "@/app/components/icons/CopyIcon";
+import CopyText from "@/app/components/common/CopyText";
 import { useProjectDetail } from "@/app/store";
 import { formatNumber, formatStr } from "@/utils";
 import { http } from "@/utils/http";
 import { Skeleton } from "@chakra-ui/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { match } from "ts-pattern";
 import { logoMap } from "./AuctionCard";
-import CopyText from "@/app/components/common/CopyText";
 
 export default function BasicInfo() {
   const params = useParams();
-  const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
     queryKey: ["/project/:id", params.id],
@@ -55,7 +53,11 @@ export default function BasicInfo() {
           <>
             <div className="flex items-center gap-2 font-medium text-2xl mb-6">
               <span>Token Name</span>
-              <img className="size-12" src={detail.token_icon} alt="sonic" />
+              <img
+                className="size-12 rounded-full"
+                src={detail.token_icon}
+                alt="sonic"
+              />
               <span>
                 {detail?.token_name} ({detail?.token_symbol})
               </span>

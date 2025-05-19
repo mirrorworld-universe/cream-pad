@@ -97,6 +97,7 @@ export function simulate({
 
   let boost = new Array(T_max).fill(0);
   let sum_boost = new Array(T_max).fill(0);
+  let eff = new Array(T_max).fill(0);
   let p_simulate_price = new Array(T_max).fill(P0);
 
   for (let i = 1; i < T_max; i++) {
@@ -114,6 +115,7 @@ export function simulate({
     if (time_shift_max !== null) {
       delta_t_eff = Math.max(Math.min(delta_t_eff, 1), -time_shift_max);
     }
+    eff[i] = delta_t_eff;
 
     sum_boost[i] = sum_boost[i - 1] + delta_t_eff;
     p_simulate_price[i] =
@@ -131,7 +133,7 @@ export function simulate({
     Theoretical_Price: p_theoretical[i].toFixed(2),
     Sales_Ratio: sales_ratio_period[i].toFixed(2),
     Sales_Amount: sales_per_period[i].toFixed(0),
-    Boost_Factor: boost[i].toFixed(2),
+    Boost_Factor: eff[i].toFixed(2),
     Actual_Price: p_simulate_price[i].toFixed(2),
     Sales_Ratio_Percentage: Math.round(sales_ratio_period[i] * 100) + "%"
   }));

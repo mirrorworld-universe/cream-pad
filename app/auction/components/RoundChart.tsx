@@ -168,7 +168,7 @@ const RoundChart = ({ data, isLoading }: { data: any; isLoading: boolean }) => {
         (round) => round.round === currentRound
       );
       const currentPercent = currentRoundInfo?.percent ?? 0;
-      if (currentPercent >= 1) {
+      if (currentPercent >= 100) {
         dotPrice = originalRoundInfo?.price.max;
       } else {
         dotPrice = originalRoundInfo?.price.min;

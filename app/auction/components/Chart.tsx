@@ -34,7 +34,7 @@ const options = [
 export default function Chart() {
   const params = useParams();
   const wallet = useWallet();
-  const { publicKey, signTransaction } = wallet;
+  const { publicKey } = wallet;
 
   const { connection } = useConnection();
   const { projectDetail } = useProjectDetail();

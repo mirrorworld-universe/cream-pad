@@ -7,9 +7,21 @@ import { toast } from "@/app/components/common/toast";
 export async function triggerTransaction(
   transactionStr: string,
   connection: Connection,
-  signTransaction: WalletContextState["signTransaction"]
+  wallet: WalletContextState
 ) {
+  const { publicKey, signTransaction } = wallet;
   const tx = Transaction.from(Buffer.from(transactionStr, "base64"));
+  const balance = await connection.getBalance(publicKey);
+  const fee = await connection.getFeeForMessage(tx.compileMessage());
+
+  if (balance < fee.value) {
+    toast({
+      title: "Insufficient balance",
+      status: "error"
+    });
+    return null;
+  }
+
   const signedTx = await signTransaction(tx);
   try {
     const txid = await connection.sendRawTransaction(signedTx.serialize());

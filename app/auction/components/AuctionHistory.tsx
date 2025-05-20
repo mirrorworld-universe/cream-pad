@@ -55,7 +55,6 @@ export default function AuctionHistory() {
 
     // 自定义事件: update
     source.addEventListener("update", (e) => {
-      console.log(`🔄 更新事件: ${e.data}`);
       try {
         const newItem = JSON.parse(e.data);
         const id = `${newItem.address}_${newItem.date}`;
@@ -64,6 +63,10 @@ export default function AuctionHistory() {
             return;
           }
         }
+        if (state.page > 1) {
+          return;
+        }
+
         setItems((prev) => {
           const updated = [{ ...newItem, _highlight: id }, ...prev];
           return updated.slice(0, 10);
@@ -87,7 +90,7 @@ export default function AuctionHistory() {
     return () => {
       source.close();
     };
-  }, [active, publicKey, params.id]);
+  }, [active, publicKey, params.id, state.page]);
 
   return (
     <div className="flex flex-col gap-6">

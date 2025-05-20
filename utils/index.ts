@@ -123,6 +123,7 @@ export function refetchQueries() {
   const queryClient = getQueryClient();
   const queryKeys = [
     // ["/pad/auction/history"],
+    ["/pad/round/buy/info"],
     ["/pad/round/info"],
     ["/pad/price"],
     ["/token/balance"],

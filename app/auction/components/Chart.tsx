@@ -33,7 +33,8 @@ const options = [
 ];
 export default function Chart() {
   const params = useParams();
-  const { publicKey, signTransaction } = useWallet();
+  const wallet = useWallet();
+  const { publicKey, signTransaction } = wallet;
 
   const { connection } = useConnection();
   const { projectDetail } = useProjectDetail();
@@ -140,7 +141,7 @@ export default function Chart() {
         const hash = await triggerTransaction(
           res.data.hash,
           connection,
-          signTransaction
+          wallet
         );
 
         const result = await connection.confirmTransaction({

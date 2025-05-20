@@ -18,7 +18,7 @@ export default function Card({ data }: { data: any }) {
       className="py-5 pl-5 pr-8 rounded-[40px] bg-white flex items-center gap-10 hover:bg-[#ECECEC] cursor-pointer transition-colors group/card"
     >
       <img
-        className="h-[320px] w-[535px] rounded-[50px]"
+        className="h-[320px] w-[535px] rounded-[50px] shrink-0"
         src={data.image}
         alt=""
       />

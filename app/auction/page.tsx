@@ -27,7 +27,7 @@ export default function Home() {
         bg={"linear-gradient(180deg, #6457FD 0%, #E2A9FE 50%, #FFF1E5 100%);"}
       >
         <img
-          className="max-w-view w-full mx-auto shrink-0"
+          className="max-w-view w-full mx-auto"
           src="/images/banner.png"
           alt=""
         />

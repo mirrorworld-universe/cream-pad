@@ -203,7 +203,9 @@ export default function Chart() {
                 placeholder={
                   projectDetail == null
                     ? ""
-                    : `${projectDetail?.buy_limit} ${projectDetail?.token_symbol} Limited`
+                    : `${projectDetail?.buy_limit - buyInfo?.data.bought} ${
+                        projectDetail?.token_symbol
+                      } Limited`
                 }
                 {...register("amount")}
               />

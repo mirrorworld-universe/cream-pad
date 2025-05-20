@@ -163,6 +163,7 @@ export default function Chart() {
             status: "success"
           });
           refetchQueries();
+          setValue("amount", undefined);
         }
       } catch (error) {
         console.log(error);

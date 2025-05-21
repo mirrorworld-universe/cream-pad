@@ -26,7 +26,7 @@ export default function Home() {
   useEffect(() => {
     const eyes = document.querySelectorAll(".eye");
 
-    document.addEventListener("mousemove", (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       eyes.forEach((eye) => {
         const pupil: any = eye.querySelector(".pupil");
         const rect = eye.getBoundingClientRect();
@@ -47,7 +47,12 @@ export default function Home() {
 
         pupil.style.transform = `translate(${x}px, ${y}px)`;
       });
-    });
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
   }, []);
 
   return (

@@ -41,23 +41,13 @@ export default function AuctionHistory() {
     setItems(data?.data?.data || []);
   }, [data]);
 
+  const [source, setSource] = useState<EventSource | null>(null);
+
   useEffect(() => {
-    if (!projectDetail || projectDetail?.status === "closed") {
+    if (!source) {
       return;
     }
-    const source = new EventSource(
-      `${process.env.NEXT_PUBLIC_API_URL}/history/events?projectId=${params.id}`
-    );
-    source.onmessage = (event) => {
-      console.log(event);
-    };
-    // 自定义事件: connected
-    source.addEventListener("connected", (e) => {
-      console.log(`✅ 连接成功事件: ${e.data}`);
-    });
-
-    // 自定义事件: update
-    source.addEventListener("update", (e) => {
+    const handleUpdate = (e: MessageEvent) => {
       try {
         const newItem = JSON.parse(e.data);
         const id = `${newItem.address}_${newItem.date}`;
@@ -84,6 +74,28 @@ export default function AuctionHistory() {
       } catch (err) {
         console.error("解析更新事件数据失败", err);
       }
+    };
+    // 自定义事件: update
+    source.addEventListener("update", handleUpdate);
+    return () => {
+      source?.removeEventListener("update", handleUpdate);
+    };
+  }, [active, publicKey, params.id, state.page, projectDetail, source]);
+
+  useEffect(() => {
+    if (!projectDetail || projectDetail?.status === "closed") {
+      return;
+    }
+    const source = new EventSource(
+      `${process.env.NEXT_PUBLIC_API_URL}/history/events?projectId=${params.id}`
+    );
+    setSource(source);
+    source.onmessage = (event) => {
+      console.log(event);
+    };
+    // 自定义事件: connected
+    source.addEventListener("connected", (e) => {
+      console.log(`✅ 连接成功事件: ${e.data}`);
     });
 
     source.onerror = (e) => {
@@ -91,9 +103,10 @@ export default function AuctionHistory() {
     };
 
     return () => {
+      console.log("关闭连接");
       source.close();
     };
-  }, [active, publicKey, params.id, state.page, projectDetail]);
+  }, [projectDetail]);
 
   return (
     <div className="flex flex-col gap-6">

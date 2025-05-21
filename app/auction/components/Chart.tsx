@@ -77,7 +77,8 @@ export default function Chart() {
 
   const { data: priceResult } = useQuery({
     queryKey: ["/pad/price", params.id],
-    queryFn: async () => http.get("/pad/price", { project_id: params.id })
+    queryFn: async () => http.get("/pad/price", { project_id: params.id }),
+    refetchInterval: 5000
   });
 
   const { data: balanceResult } = useQuery({
@@ -341,6 +342,7 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
       return +percent.toFixed(2);
     }
   }, [priceResult]);
+
   return (
     <div className="flex flex-col">
       <div className="font-medium flex flex-col gap-2">
@@ -361,22 +363,25 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
         <div className="flex items-center gap-2 w-full relative">
           <span className="text-xs text-[#666]">0%</span>
           <div className="h-3 bg-[#F6F6F3] rounded-full grow relative">
-            <div
-              className="flex items-center gap-0.5 justify-between text-xs absolute -top-5 text-[#7500FF]"
-              style={{
-                left: `calc(${Math.min(percentage * 100, 100)}% - 10px)`
-              }}
-            >
-              {Math.min(
-                priceResult?.data.next_price.realtime.toFixed(2),
-                priceResult?.data.next_price.max.toFixed(2)
-              )}{" "}
-              <img
-                className="size-2.5 inline-block"
-                src="/images/sonic-token.png"
-                alt="sonic-token"
-              />
-            </div>
+            {percentage < 1 && (
+              <div
+                className="flex items-center gap-0.5 justify-between text-xs transition-all duration-300 absolute -top-5 text-[#7500FF]"
+                style={{
+                  left: `calc(${Math.min(percentage * 100, 100)}% - 10px)`
+                }}
+              >
+                {Math.min(
+                  priceResult?.data.next_price.realtime.toFixed(2),
+                  priceResult?.data.next_price.max.toFixed(2)
+                )}{" "}
+                <img
+                  className="size-2.5 inline-block"
+                  src="/images/sonic-token.png"
+                  alt="sonic-token"
+                />
+              </div>
+            )}
+
             <Box
               bg={"linear-gradient(90deg, #C59AFC 0%, #FFB056 100%)"}
               className="h-full rounded-full"

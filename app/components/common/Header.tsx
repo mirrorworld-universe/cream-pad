@@ -41,7 +41,7 @@ export default function Header() {
           onClick={() => window.open(whitepaper, "_blank")}
           className="font-bold px-6 py-2 cursor-pointer"
         >
-          whitepaper
+          Whitepaper
         </div>
       </div>
 

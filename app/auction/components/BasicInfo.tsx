@@ -38,9 +38,7 @@ export default function BasicInfo() {
 
   return (
     <>
-      <p className="text-3xl font-baloo2 font-bold mb-8">
-        Basic Information Module
-      </p>
+      <p className="text-3xl font-baloo2 font-bold mb-8">Basic Information</p>
       {match(isLoading)
         .with(true, () => (
           <div className="flex flex-col gap-6 h-[200px] mb-12">
@@ -58,9 +56,7 @@ export default function BasicInfo() {
                 src={detail.token_icon}
                 alt="sonic"
               />
-              <span>
-                {detail?.token_name} ({detail?.token_symbol})
-              </span>
+              <span>{detail?.token_name}</span>
             </div>
             <div className="grid grid-cols-3 gap-x-[100px] gap-y-6 mb-11">
               <div className="flex flex-col gap-6">
@@ -104,7 +100,7 @@ export default function BasicInfo() {
                     alt="social"
                   />
                   <div className="space-y-2">
-                    <p className="text-[#666] text-sm">Social media:</p>
+                    <p className="text-[#666] text-sm">Social Media :</p>
                     <div className="font-baloo2 font-semibold flex items-center gap-2">
                       {detail.social?.map((social) => (
                         <a
@@ -149,6 +145,7 @@ export default function BasicInfo() {
                   <div className="space-y-2">
                     <p className="text-[#666] text-sm">FDV:</p>
                     <p className="font-baloo2 font-semibold">
+                      $
                       {contractInfo?.data?.FDV &&
                         formatNumber(contractInfo.data.FDV)}
                     </p>
@@ -162,7 +159,7 @@ export default function BasicInfo() {
                   />
                   <div className="space-y-2">
                     <p className="text-[#666] text-sm">
-                      Current Auction Rounds/Total Rounds:
+                      Current Auction Round / Total Rounds:
                     </p>
                     <p className="font-baloo2 font-semibold">
                       {contractInfo?.data?.cur_round}/

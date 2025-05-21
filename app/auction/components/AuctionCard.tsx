@@ -34,7 +34,7 @@ export default function Card({ data }: { data: any }) {
             <span className="text-2xl font-bold font-baloo2">{data.name}</span>
             <div
               className={cn(
-                "py-2.5 px-4 ml-auto bg-[#DEF26B] rounded-full cursor-pointer font-semibold",
+                "py-2.5 px-4 ml-auto bg-[#DEF26B] rounded-full cursor-pointer font-semibold capitalize",
                 data.status === "closed" && "bg-[#F5F5F7]"
               )}
             >
@@ -97,7 +97,7 @@ export default function Card({ data }: { data: any }) {
                 <span>Price</span>
               </div>
               <div className="font-baloo2 font-semibold text-[28px]/[1.1]">
-                {data.price} <span className="text-base">sonic</span>
+                {data.price} <span className="text-base">$SONIC</span>
               </div>
             </div>
           </div>

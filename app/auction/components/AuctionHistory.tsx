@@ -42,6 +42,9 @@ export default function AuctionHistory() {
   }, [data]);
 
   useEffect(() => {
+    if (!projectDetail || projectDetail?.status === "closed") {
+      return;
+    }
     const source = new EventSource(
       `${process.env.NEXT_PUBLIC_API_URL}/history/events?projectId=${params.id}`
     );
@@ -90,7 +93,7 @@ export default function AuctionHistory() {
     return () => {
       source.close();
     };
-  }, [active, publicKey, params.id, state.page]);
+  }, [active, publicKey, params.id, state.page, projectDetail]);
 
   return (
     <div className="flex flex-col gap-6">

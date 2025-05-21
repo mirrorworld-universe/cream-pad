@@ -100,7 +100,7 @@ export default function BasicInfo() {
                     alt="social"
                   />
                   <div className="space-y-2">
-                    <p className="text-[#666] text-sm">Social Media :</p>
+                    <p className="text-[#666] text-sm">Social Media:</p>
                     <div className="font-baloo2 font-semibold flex items-center gap-2">
                       {detail.social?.map((social) => (
                         <a
@@ -126,7 +126,7 @@ export default function BasicInfo() {
                   />
                   <div className="space-y-2">
                     <p className="text-[#666] text-sm">
-                      Remaining Token in the Sale
+                      Remaining Token in the Sale:
                     </p>
                     <p className="font-baloo2 font-semibold">
                       {contractInfo?.data?.remaining_token &&

@@ -3,13 +3,11 @@ import { http } from "@/utils/http";
 import { useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
 import Countdown from "react-countdown";
 import { match, P } from "ts-pattern";
 
 export default function CountDownTime() {
   const params = useParams();
-  const [isDone, setIsDone] = useState(false);
 
   const { data: contractInfo } = useQuery({
     queryKey: ["/pad/project/contract/info", params.id],
@@ -21,10 +19,7 @@ export default function CountDownTime() {
   const curRound = contractInfo?.data?.cur_round;
   const totalRound = contractInfo?.data?.total_round;
   const isLastRound = curRound === totalRound && curRound != null;
-
-  const isOver = useMemo(() => {
-    return isLastRound && isDone;
-  }, [isLastRound, isDone]);
+  const isOver = contractInfo?.data?.status === "closed";
 
   const nextAuction = match(Number(contractInfo?.data?.next_auction))
     .with(P.number.lt(86400), (time) => (
@@ -34,7 +29,6 @@ export default function CountDownTime() {
         onComplete={() => {
           setTimeout(() => {
             refetchQueries();
-            setIsDone(true);
           }, 5000);
         }}
         renderer={({ hours, minutes, seconds, completed }) => (
@@ -83,8 +77,8 @@ export default function CountDownTime() {
           isOver && "bg-white"
         )}
       >
-        {isLastRound ? (
-          <div>Auction Ends {nextAuction}</div>
+        {isLastRound || isOver ? (
+          <div>Auction Ends {!isOver && nextAuction}</div>
         ) : (
           <div className="min-w-[235px]">Next Round Starts{nextAuction}</div>
         )}

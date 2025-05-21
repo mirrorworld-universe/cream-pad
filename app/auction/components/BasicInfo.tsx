@@ -22,7 +22,8 @@ export default function BasicInfo() {
     queryKey: ["/pad/project/contract/info", params.id],
     queryFn: async () =>
       http.get(`/pad/project/contract/info`, { project_id: params.id }),
-    enabled: !!params.id
+    enabled: !!params.id,
+    refetchInterval: 5000
   });
 
   useEffect(() => {

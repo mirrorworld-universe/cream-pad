@@ -106,7 +106,7 @@ export default function AuctionHistory() {
       console.log("关闭连接");
       source.close();
     };
-  }, [projectDetail]);
+  }, [projectDetail?.status]);
 
   return (
     <div className="flex flex-col gap-6">

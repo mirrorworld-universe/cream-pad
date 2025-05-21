@@ -183,7 +183,7 @@ export default function Chart() {
         projectDetail?.token_symbol || ""
       } Limited`;
     }
-  }, [projectDetail]);
+  }, [projectDetail, buyInfo]);
 
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">

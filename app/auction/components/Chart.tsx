@@ -424,7 +424,7 @@ function BuyInfo({
           {truncateToDecimals(
             projectDetail?.buy_limit * priceResult?.data?.current_price
           )}{" "}
-          {currentToken?.token_symbol})
+          ${currentToken?.token_symbol})
         </span>
       </p>
       {connected && (
@@ -450,7 +450,7 @@ function BuyInfo({
               )
               .otherwise(() => 0)}
           </span>{" "}
-          {currentToken?.token_symbol}
+          ${currentToken?.token_symbol}
         </span>
       </p>
       <p className="text-base font-medium flex justify-between">

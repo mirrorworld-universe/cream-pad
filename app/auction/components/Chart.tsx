@@ -444,9 +444,10 @@ function BuyInfo({
           <span className="text-[#FF9011]">
             {match(projectDetail?.token_type)
               .with("token", () => watch("amount"))
-              .with(
-                "nft",
-                () => watch("amount") * priceResult?.data?.current_price
+              .with("nft", () =>
+                truncateToDecimals(
+                  (watch("amount") || 0) * priceResult?.data?.current_price
+                )
               )
               .otherwise(() => 0)}
           </span>{" "}
@@ -459,7 +460,7 @@ function BuyInfo({
           {match(projectDetail?.token_type)
             .with("token", () =>
               truncateToDecimals(
-                +watch("amount") / priceResult?.data?.current_price
+                +(watch("amount") || 0) / priceResult?.data?.current_price
               )
             )
             .with("nft", () => watch("amount") || 0)

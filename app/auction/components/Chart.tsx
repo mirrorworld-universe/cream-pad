@@ -77,7 +77,8 @@ export default function Chart() {
 
   const { data: priceResult } = useQuery({
     queryKey: ["/pad/price", params.id],
-    queryFn: async () => http.get("/pad/price", { project_id: params.id })
+    queryFn: async () => http.get("/pad/price", { project_id: params.id }),
+    refetchInterval: 5000
   });
 
   const { data: balanceResult } = useQuery({

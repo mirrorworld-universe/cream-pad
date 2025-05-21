@@ -24,7 +24,9 @@ export async function triggerTransaction(
 
   const signedTx = await signTransaction(tx);
   try {
-    const txid = await connection.sendRawTransaction(signedTx.serialize());
+    const txid = await connection.sendRawTransaction(signedTx.serialize(), {
+      skipPreflight: true
+    });
     console.log("✅ Transaction sent. Signature:", txid);
     return txid;
   } catch (error) {

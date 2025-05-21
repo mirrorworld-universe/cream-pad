@@ -173,6 +173,18 @@ export default function Chart() {
     })();
   };
 
+  const placeholder = useMemo(() => {
+    if (buyInfo?.data.buy_limit) {
+      return `${buyInfo?.data.buy_limit - buyInfo?.data.bought} ${
+        projectDetail?.token_symbol || ""
+      } Limited`;
+    } else {
+      return `${projectDetail?.buy_limit || ""} ${
+        projectDetail?.token_symbol || ""
+      } Limited`;
+    }
+  }, [projectDetail]);
+
   return (
     <div className="flex flex-col gap-6 mb-8 font-inter">
       <div className="flex items-center justify-between">
@@ -201,13 +213,7 @@ export default function Chart() {
                 type="number"
                 min={projectDetail?.token_type === "nft" ? 1 : undefined}
                 step={projectDetail?.token_type === "nft" ? 1 : undefined}
-                placeholder={
-                  projectDetail == null
-                    ? ""
-                    : `${projectDetail?.buy_limit - buyInfo?.data.bought} ${
-                        projectDetail?.token_symbol
-                      } Limited`
-                }
+                placeholder={placeholder}
                 {...register("amount")}
               />
               <div

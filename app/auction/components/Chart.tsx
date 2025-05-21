@@ -343,8 +343,6 @@ function AuctionPrice({ priceResult }: { priceResult: any }) {
     }
   }, [priceResult]);
 
-  console.log(percentage, "p");
-
   return (
     <div className="flex flex-col">
       <div className="font-medium flex flex-col gap-2">

@@ -126,7 +126,7 @@ export default function BasicInfo() {
                   />
                   <div className="space-y-2">
                     <p className="text-[#666] text-sm">
-                      Remaining Token in the Sale:
+                      Remaining / Total Token in the Sale:
                     </p>
                     <p className="font-baloo2 font-semibold">
                       {contractInfo?.data?.remaining_token &&

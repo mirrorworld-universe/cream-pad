@@ -58,7 +58,7 @@ export default function Home() {
     <Box
       bg={"url(/images/bg.png) no-repeat"}
       style={{
-        backgroundSize: "100% auto", // 第一层图片宽度铺满，第二层渐变全屏
+        backgroundSize: "100% 100%", // 第一层图片宽度铺满，第二层渐变全屏
         backgroundPosition: "bottom, center" // 图片底部对齐，渐变居中
       }}
       className="w-full h-screen relative bg-cover flex items-center justify-between min-w-[1280px] overflow-x-auto"
@@ -96,7 +96,7 @@ export default function Home() {
             Auction Now
           </PrimaryButton>
         </div>
-        <div className="absolute -right-24 top-0 w-[727px] h-[765px]">
+        <div className="absolute -right-16 top-0 w-[727px] h-[765px]">
           <div className="eye left">
             <div className="pupil"></div>
           </div>

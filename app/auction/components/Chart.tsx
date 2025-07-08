@@ -321,7 +321,7 @@ function ActionButton({
   });
 
   useEffect(() => {
-    if (!data?.data?.eligibility) {
+    if (data && !data?.data?.eligibility) {
       openModalDirectly(MODAL_HASH_MAP.whitelist);
     }
   }, [data]);

@@ -2,7 +2,6 @@
 import { Box } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 import PrimaryButton from "./components/common/PrimaryButton";
-import { cn } from "@/utils";
 import Link from "next/link";
 import { whitepaper } from "./data/auctions";
 import FallingBall from "./components/common/FallingBall";
@@ -84,15 +83,6 @@ export default function Home() {
         </div>
         <div className="ml-20 flex flex-col gap-24">
           <img className="w-[672px]" src="/images/welcome.png" alt="" />
-          {/* <div
-            className={cn(
-              "rounded-full relative z-30 cursor-not-allowed w-fit flex items-center gap-8 bg-white py-2 text-black pl-8 pr-3 font-baloo2 font-bold text-[32px]"
-            )}
-            id="action-button"
-          >
-            Coming Soon
-            <img src="/images/coffee.svg" alt="" className="size-[54px]" />
-          </div> */}
           <PrimaryButton
             id="action-button"
             onClick={() => router.push("/auction")}

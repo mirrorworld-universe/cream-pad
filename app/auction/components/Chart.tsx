@@ -307,19 +307,50 @@ function ActionButton({
   isLoading: boolean;
 }) {
   const { projectDetail } = useProjectDetail();
+  const { id } = useParams();
+  const { publicKey } = useWallet();
+
+  const { data } = useQuery({
+    queryKey: ["/pad/whitelist/eligibility", id, publicKey?.toBase58()],
+    queryFn: () =>
+      http.get("/pad/whitelist/eligibility", {
+        project_id: id,
+        wallet: publicKey?.toBase58()
+      }),
+    enabled: !!publicKey
+  });
+
+  useEffect(() => {
+    if (!data?.data?.eligibility) {
+      openModalDirectly(MODAL_HASH_MAP.whitelist);
+    }
+  }, [data]);
   return (
     <div className="mt-auto flex flex-col gap-8">
       {match(projectDetail?.status)
-        .with("open", () => (
-          <PrimaryButton
-            loadingText={<span className="font-baloo2 text-2xl">loading</span>}
-            isLoading={isLoading}
-            className=""
-            onClick={handleBuy}
-          >
-            Buy
-          </PrimaryButton>
-        ))
+        .with("open", () =>
+          data?.data?.eligibility ? (
+            <PrimaryButton
+              loadingText={
+                <span className="font-baloo2 text-2xl">loading</span>
+              }
+              isLoading={isLoading}
+              className=""
+              onClick={handleBuy}
+            >
+              Buy
+            </PrimaryButton>
+          ) : (
+            <div
+              className={cn(
+                "flex items-center justify-center bg-[#E1E1E1] rounded-full h-[50px] text-white cursor-not-allowed font-baloo2 font-bold",
+                "text-2xl"
+              )}
+            >
+              Not Whitelisted
+            </div>
+          )
+        )
         .with("closed", () => (
           <div
             className={cn(

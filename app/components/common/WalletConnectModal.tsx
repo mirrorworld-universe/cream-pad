@@ -1,27 +1,21 @@
 "use client";
+import useModalHash, { MODAL_HASH_MAP } from "@/app/hooks/useModalHash";
 import { walletList } from "@/app/wallet/wallet-list";
 import {
   Box,
-  Button,
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerOverlay,
   Flex,
   Image,
   Modal,
   ModalBody,
   ModalContent,
   ModalOverlay,
-  Show,
   Text
 } from "@chakra-ui/react";
 import { WalletReadyState } from "@solana/wallet-adapter-base";
 import { useWallet } from "@solana/wallet-adapter-react";
 import clsx from "clsx";
-import CloseIcon from "../icons/CloseIcon";
 import { useEffect } from "react";
-import useModalHash, { MODAL_HASH_MAP } from "@/app/hooks/useModalHash";
+import CloseIcon from "../icons/CloseIcon";
 import PrimaryButton from "./PrimaryButton";
 
 export default function WalletConnectModal() {

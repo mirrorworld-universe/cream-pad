@@ -32,13 +32,20 @@ export default function Card({ data }: { data: any }) {
               alt=""
             />
             <span className="text-2xl font-bold font-baloo2">{data.name}</span>
-            <div
-              className={cn(
-                "py-2.5 px-4 ml-auto bg-[#DEF26B] rounded-full cursor-pointer font-semibold capitalize",
-                data.status === "closed" && "bg-[#F5F5F7]"
+            <div className="flex items-center gap-2 ml-auto">
+              {data.whitelist_only && (
+                <span className="px-4 py-2.5 rounded-full bg-[#FFF1E5] font-semibold text-[#121212]">
+                  Whitelist Only
+                </span>
               )}
-            >
-              {data.status}
+              <div
+                className={cn(
+                  "py-2.5 px-4 bg-[#DEF26B] rounded-full cursor-pointer font-semibold capitalize",
+                  data.status === "closed" && "bg-[#F5F5F7]"
+                )}
+              >
+                {data.status}
+              </div>
             </div>
           </div>
           <div className="text-[#666] text-sm/[1.2] font-inter">

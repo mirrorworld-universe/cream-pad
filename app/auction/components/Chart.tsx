@@ -134,7 +134,10 @@ export default function Chart() {
       try {
         const balance = await connection.getBalance(publicKey);
 
-        if (balance < 0.02 * LAMPORTS_PER_SOL * amount) {
+        if (
+          projectDetail?.token_type === "nft" &&
+          balance < 0.02 * LAMPORTS_PER_SOL * amount
+        ) {
           toast({
             title: "Insufficient balance",
             status: "error"

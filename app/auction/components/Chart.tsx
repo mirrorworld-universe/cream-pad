@@ -139,7 +139,8 @@ export default function Chart() {
           balance < 0.02 * LAMPORTS_PER_SOL * amount
         ) {
           toast({
-            title: "Insufficient balance",
+            title:
+              "Insufficient gas. A minimum of 0.02 SOL is required to purchase each NFT.",
             status: "error"
           });
           return;

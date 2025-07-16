@@ -17,6 +17,7 @@ import CountDownTime from "./CountDown";
 import RoundInfo from "./RoundInfo";
 import { TokenSelect } from "./TokenSelect";
 import InfoIcon from "@/app/components/icons/InfoIcon";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 const options = [
   {
     label: "25%",
@@ -131,6 +132,16 @@ export default function Chart() {
     handleSubmit(async (data) => {
       setIsLoading(true);
       try {
+        const balance = await connection.getBalance(publicKey);
+
+        if (balance < 0.02 * LAMPORTS_PER_SOL * amount) {
+          toast({
+            title: "Insufficient balance",
+            status: "error"
+          });
+          return;
+        }
+
         const res: any = await buildTransaction({
           project_id: params.id,
           amount,

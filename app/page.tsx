@@ -66,7 +66,7 @@ export default function Home() {
       <div className="fixed z-20">
         <FallingBall />
       </div>
-      <div className="flex items-center justify-between min-w-[1280px] max-w-[1728px] w-full mx-auto h-full relative">
+      <div className="flex items-center justify-between min-w-[1280px] max-w-[1440px] w-full mx-auto h-full relative">
         <img
           onClick={() => router.push("/")}
           className="h-10 absolute top-5 left-20"

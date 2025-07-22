@@ -85,7 +85,7 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <div className="ml-20 flex flex-col gap-24">
+        <div className="ml-20 flex flex-col gap-[50px]">
           <img className="w-[672px]" src="/images/welcome.png" alt="" />
           <PrimaryButton
             id="action-button"
@@ -96,14 +96,38 @@ export default function Home() {
             Auction Now
           </PrimaryButton>
         </div>
-        <div className="absolute -right-16 top-0 w-[727px] h-[765px]">
+        <div className="absolute right-0 top-0 w-[636px] h-[740px]">
           <div className="eye left">
             <div className="pupil"></div>
           </div>
           <div className="eye right">
             <div className="pupil"></div>
           </div>
-          <img className="size-full" src="/images/cloud.png" alt="" />
+          <div className="relative">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="363"
+              height="330"
+              viewBox="0 0 363 330"
+              fill="none"
+              style={{ mixBlendMode: "multiply" }}
+              className="absolute top-0 left-0"
+            >
+              <g>
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M337.086 224.216C335.017 235.4 331.333 245.986 326.816 255.296C319.97 269.402 309.406 284.251 295.058 294.02C261.641 316.773 227.653 317.262 203.174 313.46C193.247 311.919 184.467 309.606 177.965 307.758C175.049 310.44 171.929 313.522 169.011 316.545C148.071 338.244 108.644 333.578 97.0391 299.814C96.7536 298.983 96.4679 298.143 96.1828 297.296C91.2724 296.785 86.1012 296.042 80.8092 294.983C63.1409 291.447 39.9779 283.574 21.8566 264.717C1.33858 243.366 -1.59645 216.692 0.626878 197.011C1.68719 187.625 3.96774 178.817 6.74727 171.054C3.54118 160.848 1.55996 148.504 3.01707 135.026C6.58048 102.066 25.0764 79.355 42.854 65.4383C53.5546 57.0615 64.9782 51.0155 75.3098 46.8923C87.3734 28.8751 108.316 12.3733 141.419 4.24024C203.329 -10.9702 249.316 19.9101 271.903 44.386C299.347 52.1737 321.462 65.3035 337.284 84.1342C355.795 106.165 362.28 131.923 362.688 155.239C363.228 186.178 350.031 209.641 337.086 224.216Z"
+                  fill="#959595"
+                />
+              </g>
+            </svg>
+            <img
+              className="size-full relative z-20"
+              src="/images/cloud.png"
+              alt=""
+            />
+          </div>
         </div>
       </div>
     </Box>

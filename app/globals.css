@@ -74,6 +74,7 @@ body {
 }
 
 .eye {
+  z-index: 30;
   width: 58px;
   height: 70px;
   border-radius: 50%;
@@ -87,12 +88,12 @@ body {
   background: linear-gradient(180deg, #5446ff 0%, #d277ff 50%, #ffe0c6 100%);
 }
 .eye.left {
-  left: 120px;
-  top: 370px;
+  left: 130px;
+  top: 350px;
 }
 .eye.right {
-  left: 235px;
-  top: 370px;
+  left: 245px;
+  top: 350px;
 }
 
 .pupil {

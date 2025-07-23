@@ -88,12 +88,12 @@ body {
   background: linear-gradient(180deg, #5446ff 0%, #d277ff 50%, #ffe0c6 100%);
 }
 .eye.left {
-  left: 130px;
-  top: 350px;
+  left: 80px;
+  top: 80px;
 }
 .eye.right {
-  left: 245px;
-  top: 350px;
+  left: 180px;
+  top: 80px;
 }
 
 .pupil {

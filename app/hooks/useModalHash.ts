@@ -64,7 +64,8 @@ export default function useModalHash(addToHistory = false) {
 
 export const MODAL_HASH_MAP = {
   empty: "#",
-  walletConnect: "#/modal/walletConnect"
+  walletConnect: "#/modal/walletConnect",
+  whitelist: "#/modal/whitelist"
 } as const;
 
 export type ModalHashValues =

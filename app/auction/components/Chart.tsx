@@ -17,6 +17,7 @@ import CountDownTime from "./CountDown";
 import RoundInfo from "./RoundInfo";
 import { TokenSelect } from "./TokenSelect";
 import InfoIcon from "@/app/components/icons/InfoIcon";
+import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 const options = [
   {
     label: "25%",
@@ -131,6 +132,20 @@ export default function Chart() {
     handleSubmit(async (data) => {
       setIsLoading(true);
       try {
+        const balance = await connection.getBalance(publicKey);
+
+        if (
+          projectDetail?.token_type === "nft" &&
+          balance < 0.02 * LAMPORTS_PER_SOL * amount
+        ) {
+          toast({
+            title:
+              "Insufficient gas. A minimum of 0.02 SOL is required to purchase each NFT.",
+            status: "error"
+          });
+          return;
+        }
+
         const res: any = await buildTransaction({
           project_id: params.id,
           amount,
@@ -307,19 +322,50 @@ function ActionButton({
   isLoading: boolean;
 }) {
   const { projectDetail } = useProjectDetail();
+  const { id } = useParams();
+  const { publicKey } = useWallet();
+
+  const { data } = useQuery({
+    queryKey: ["/pad/whitelist/eligibility", id, publicKey?.toBase58()],
+    queryFn: () =>
+      http.get("/pad/whitelist/eligibility", {
+        project_id: id,
+        wallet: publicKey?.toBase58()
+      }),
+    enabled: !!publicKey
+  });
+
+  useEffect(() => {
+    if (data && !data?.data?.eligibility) {
+      openModalDirectly(MODAL_HASH_MAP.whitelist);
+    }
+  }, [data]);
   return (
     <div className="mt-auto flex flex-col gap-8">
       {match(projectDetail?.status)
-        .with("open", () => (
-          <PrimaryButton
-            loadingText={<span className="font-baloo2 text-2xl">loading</span>}
-            isLoading={isLoading}
-            className=""
-            onClick={handleBuy}
-          >
-            Buy
-          </PrimaryButton>
-        ))
+        .with("open", () =>
+          data?.data?.eligibility ? (
+            <PrimaryButton
+              loadingText={
+                <span className="font-baloo2 text-2xl">loading</span>
+              }
+              isLoading={isLoading}
+              className=""
+              onClick={handleBuy}
+            >
+              Buy
+            </PrimaryButton>
+          ) : (
+            <div
+              className={cn(
+                "flex items-center justify-center bg-[#E1E1E1] rounded-full h-[50px] text-white cursor-not-allowed font-baloo2 font-bold",
+                "text-2xl"
+              )}
+            >
+              Not Whitelisted
+            </div>
+          )
+        )
         .with("closed", () => (
           <div
             className={cn(

@@ -63,10 +63,10 @@ export default function Home() {
       }}
       className="w-full h-screen relative bg-cover flex items-center justify-between min-w-[1280px] overflow-x-auto"
     >
-      <div className="fixed z-20">
-        <FallingBall />
-      </div>
       <div className="flex items-center justify-between min-w-[1280px] max-w-[1440px] w-full mx-auto h-full relative">
+        <div className="fixed z-[80]">
+          <FallingBall />
+        </div>
         <img
           onClick={() => router.push("/")}
           className="h-10 absolute top-5 left-20"
@@ -85,12 +85,16 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <div className="ml-20 flex flex-col gap-[50px] relative z-[50]">
-          <img className="w-[672px]" src="/images/welcome.png" alt="" />
+        <div className="ml-20 flex flex-col gap-[50px] relative">
+          <img
+            className="w-[672px] relative z-20"
+            src="/images/welcome.png"
+            alt=""
+          />
           <PrimaryButton
             id="action-button"
             onClick={() => router.push("/auction")}
-            className="h-[66px] w-[414px] text-[32px]/normal border-none gap-4 font-baloo2 relative z-30"
+            className="h-[66px] w-[414px] text-[32px]/normal border-none gap-4 font-baloo2 relative z-[100]"
           >
             <img src="/images/action.svg" alt="" />
             Auction Now

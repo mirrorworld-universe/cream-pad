@@ -85,7 +85,7 @@ export default function Home() {
             </Link>
           ))}
         </div>
-        <div className="ml-20 flex flex-col gap-[50px] relative z-10">
+        <div className="ml-20 flex flex-col gap-[50px] relative z-[50]">
           <img className="w-[672px]" src="/images/welcome.png" alt="" />
           <PrimaryButton
             id="action-button"

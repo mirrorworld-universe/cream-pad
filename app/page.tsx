@@ -106,7 +106,7 @@ export default function Home() {
                 viewBox="0 0 363 330"
                 fill="none"
                 style={{ mixBlendMode: "multiply" }}
-                className="absolute"
+                className="absolute top-1 left-1"
               >
                 <g>
                   <path
